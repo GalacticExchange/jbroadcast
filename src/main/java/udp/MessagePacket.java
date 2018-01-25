@@ -9,10 +9,11 @@ import org.apache.commons.lang3.ArrayUtils;
 public class MessagePacket implements Comparable<MessagePacket> {
 
 
-    //    public static final int MESSAGE_LENGTH = 1024;
+//        public static final int MESSAGE_LENGTH = 1024;
     public static final int MESSAGE_LENGTH = 16;
     public static final int HEADER_LENGTH = 10;
     public static final int DATA_LENGTH = MESSAGE_LENGTH - HEADER_LENGTH;
+    public static final int NONCE_LENGTH = 4;
 
 
     //    public static final int HEADER_LENGTH = 8;
@@ -90,6 +91,9 @@ public class MessagePacket implements Comparable<MessagePacket> {
         byte[] indexAmountNonceCommand = ArrayUtils.addAll(indexAmountNonce, command);
         byte[] total = ArrayUtils.addAll(indexAmountNonceCommand, data);
 
+//        String s = byteArrToString(index) + byteArrToString(amount) + byteArrToString(nonce) +
+//                byteArrToString(command) + byteArrToString(data);
+
 
 //        return ArrayUtils.addAll(
 //                ArrayUtils.addAll(
@@ -97,6 +101,7 @@ public class MessagePacket implements Comparable<MessagePacket> {
 //                                ArrayUtils.addAll(index, amount), nonce),
 //                        command), data);
         return total;
+//        return s.getBytes();
     }
 
     private String fillLack(String str, int size) {
@@ -112,6 +117,10 @@ public class MessagePacket implements Comparable<MessagePacket> {
         return str;
     }
 
+
+    public String getNonce() {
+        return byteArrToString(trim(nonce));
+    }
 
     public int getAmount() {
         return Integer.parseInt(byteArrToString(amount));
