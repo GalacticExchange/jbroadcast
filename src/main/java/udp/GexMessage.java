@@ -4,9 +4,9 @@ package udp;
 import java.util.Arrays;
 
 
-public class GexPacket {
+public class GexMessage {
 
-    public static final int PACKET_LENGTH = 1024;
+    public static final int MESSAGE_LENGTH = 1024;
     public static final int HEADER_LENGTH = 8;
 
     public static String parsePacket(byte[] msg) {
@@ -40,7 +40,7 @@ public class GexPacket {
 
         String index = "01"; // TODO
 
-        String length = String.valueOf(bMsg.length) ;
+        String length = String.valueOf(bMsg.length / MESSAGE_LENGTH);
         if (length.length() < 2) {
             length = "0" + length;
         }
@@ -49,6 +49,10 @@ public class GexPacket {
         String sPacket = index + length + nonce + msg;
 
         return sPacket.getBytes();
+    }
+
+    public static String messageLength(){
+        return "";
     }
 
     public static void main(String[] args) {
