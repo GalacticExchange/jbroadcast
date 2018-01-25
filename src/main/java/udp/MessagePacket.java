@@ -1,15 +1,19 @@
 package udp;
 
-import javax.swing.*;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-public class MessagePacket {
+public class MessagePacket implements Comparable<MessagePacket> {
 
 
     //    public static final int MESSAGE_LENGTH = 1024;
-    public static final int MESSAGE_LENGTH = 30;
+    public static final int MESSAGE_LENGTH = 16;
+    public static final int HEADER_LENGTH = 10;
+    public static final int DATA_LENGTH = MESSAGE_LENGTH - HEADER_LENGTH;
+
 
     //    public static final int HEADER_LENGTH = 8;
     public static final int COMMAND_LENGTH = 2;
@@ -23,6 +27,7 @@ public class MessagePacket {
 
     /**
      * @param msg - [index,amount,nonce,command,data] byte message
+     *            <p>
      *            Parses incoming message
      */
     public MessagePacket(byte[] msg) throws Exception {
@@ -36,22 +41,22 @@ public class MessagePacket {
      * Creates message packet from raw byte chunk of
      * message and header info
      */
-    public MessagePacket(byte[] msg, int index, int totalAmount, String cmd) throws Exception {
-        checkLength(msg);
-        data = msg;
-        createHeader(index, totalAmount, cmd);
+    public MessagePacket(byte[] msg, int index, int totalAmount, String nonce, String command) throws Exception {
+        checkLength(msg); // TODO it should check DATA_LENGTH
+        this.data = msg;
+        createHeader(index, totalAmount, nonce, command);
     }
 
-    private void createHeader(int i, int totalAmount, String cmd) {
-        index = fillLack(String.valueOf(i), 2).getBytes();
-        amount = fillLack(String.valueOf(totalAmount), 2).getBytes();
-
-        nonce = String.valueOf("zcq4").getBytes(); //TODO pass/generate nonce?
-        command = cmd.getBytes();
+    private void createHeader(int index, int totalAmount, String nonce, String command) {
+        this.index = fillLack(String.valueOf(index), 2).getBytes();
+        this.amount = fillLack(String.valueOf(totalAmount), 2).getBytes();
+        this.nonce = String.valueOf(nonce).getBytes();
+        this.command = command.getBytes();
     }
 
 
     private void parseHeader(byte[] bMsg) {
+        // TODO use ${FIELD}_LENGTH logic instead of hardcoded positions
         index = Arrays.copyOfRange(bMsg, 0, 2);
         amount = Arrays.copyOfRange(bMsg, 2, 4);
         nonce = Arrays.copyOfRange(bMsg, 4, 8);
@@ -117,23 +122,74 @@ public class MessagePacket {
     }
 
     public String getData() {
-        return byteArrToString(data);
+        return byteArrToString(trim(data));
+    }
+
+    public static MessagePacket[] splitMessage(String msg, String nonce, String command) throws Exception {
+        byte[] bMsg = msg.getBytes();
+        int amountPackages = ((bMsg.length) / DATA_LENGTH) + 1;
+        MessagePacket[] packets = new MessagePacket[amountPackages];
+
+        for (int i = 0; i < amountPackages; i++) {
+            int from = i * DATA_LENGTH;
+            int to = i * DATA_LENGTH + DATA_LENGTH;
+            byte[] chunk = Arrays.copyOfRange(bMsg, from, to);
+            packets[i] = new MessagePacket(chunk, i, amountPackages, nonce, command);
+        }
+
+
+        return packets;
+    }
+
+    static byte[] trim(byte[] bytes) {
+        int i = bytes.length - 1;
+        while (i >= 0 && bytes[i] == 0) {
+            --i;
+        }
+
+        return Arrays.copyOf(bytes, i + 1);
+    }
+
+    public static String assembleMessage(MessagePacket[] packets) throws Exception {
+        Arrays.sort(packets);
+        StringBuilder msg = new StringBuilder();
+        for (int i = 0; i < packets.length; i++) {
+            if (i != packets[i].getIndex()) {
+                throw new Exception(String.format("Packet Index Mismatch, %s != %s", i, packets[i].getIndex()));
+            }
+            msg.append(packets[i].getData());
+        }
+
+        return String.valueOf(msg);
     }
 
 
     public static void main(String[] args) throws Exception {
 
-        MessagePacket mp = new MessagePacket("Hello world!".getBytes(), 1, 1, "sg");
-        System.out.println("Created Message Packet: {" + mp + "}");
+//        String msg = "Hello world!";
+        String msg = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eget odio eu elit rhoncus consequat ut ut quam.";
+        String nonce = "qt8l";
 
-        MessagePacket parsed = new MessagePacket(mp.getBytes());
-        System.out.println("Parsed Message Packet: {" + parsed + "}");
+        String cmd = "sg";
+        MessagePacket[] packets = splitMessage(msg, nonce, cmd);
 
-        System.out.println("Amount: {" + parsed.getAmount() + "}");
-        System.out.println("Index: {" + parsed.getIndex() + "}");
-        System.out.println("Data: {" + parsed.getData() + "}");
+        MessagePacket[] parsed = new MessagePacket[packets.length];
+
+        int i = 0;
+        for (MessagePacket mp : packets) {
+            parsed[i] = new MessagePacket(mp.getBytes());
+            i++;
+        }
+
+        String parsedMsg = assembleMessage(parsed);
+        System.out.println(parsedMsg);
 
     }
 
 
+    @Override
+    public int compareTo(MessagePacket messagePacket) {
+        //ascending order
+        return this.getIndex() - messagePacket.getIndex();
+    }
 }

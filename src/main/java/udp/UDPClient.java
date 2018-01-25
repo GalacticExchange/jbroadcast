@@ -2,6 +2,7 @@ package udp;
 
 import java.io.IOException;
 import java.net.*;
+import udp.MessagePacket;
 
 public class UDPClient {
 
@@ -21,6 +22,11 @@ public class UDPClient {
 
         DatagramPacket packet = new DatagramPacket(msgBytes, msgBytes.length, address, port);
         socket.send(packet);
+    }
+
+    //TODO throws Exception -> change to customException
+    public void sendMsg(String msg, String addr, int port) throws Exception {
+//        MessagePacket mp = new MessagePacket(msg);
     }
 
 
