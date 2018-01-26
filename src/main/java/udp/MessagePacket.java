@@ -5,11 +5,12 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
+import utils.ByteUtils;
 
 public class MessagePacket implements Comparable<MessagePacket> {
 
 
-//        public static final int MESSAGE_LENGTH = 1024;
+    //        public static final int MESSAGE_LENGTH = 1024;
     public static final int MESSAGE_LENGTH = 16;
     public static final int HEADER_LENGTH = 10;
     public static final int DATA_LENGTH = MESSAGE_LENGTH - HEADER_LENGTH;
@@ -76,14 +77,14 @@ public class MessagePacket implements Comparable<MessagePacket> {
     }
 
     public String toString() {
-        return byteArrToString(index) + " " + byteArrToString(amount) + " " + byteArrToString(nonce)
-                + " " + byteArrToString(command) + " " + byteArrToString(data);
+        return ByteUtils.byteArrToString(index) + " " + ByteUtils.byteArrToString(amount) + " " + ByteUtils.byteArrToString(nonce)
+                + " " + ByteUtils.byteArrToString(command) + " " + ByteUtils.byteArrToString(data);
     }
 
 
-    public static String byteArrToString(byte[] arr) {
-        return new String(arr, 0, arr.length);
-    }
+//    public static String byteArrToString(byte[] arr) {
+//        return new String(arr, 0, arr.length);
+//    }
 
     public byte[] getBytes() {
         byte[] indexAmount = ArrayUtils.addAll(index, amount);
@@ -119,19 +120,19 @@ public class MessagePacket implements Comparable<MessagePacket> {
 
 
     public String getNonce() {
-        return byteArrToString(trim(nonce));
+        return ByteUtils.byteArrToString(trim(nonce));
     }
 
     public int getAmount() {
-        return Integer.parseInt(byteArrToString(amount));
+        return Integer.parseInt(ByteUtils.byteArrToString(amount));
     }
 
     public int getIndex() {
-        return Integer.parseInt(byteArrToString(index));
+        return Integer.parseInt(ByteUtils.byteArrToString(index));
     }
 
     public String getData() {
-        return byteArrToString(trim(data));
+        return ByteUtils.byteArrToString(trim(data));
     }
 
     public static MessagePacket[] splitMessage(String msg, String nonce, String command) throws Exception {
