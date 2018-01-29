@@ -18,7 +18,7 @@ Party:
 Message should implement some sort of protocol.  
 
 Message(GexPacket) consists of [HEADER(10 bytes), DATA]:
- - header = [INDEX(2 bytes), LENGTH(2 bytes), NONCE(4 bytes), COMMAND(2 bytes)]
+ - header = [INDEX(4 bytes), AMOUNT(4 bytes), NONCE(4 bytes), COMMAND(2 bytes)]
  - command = {"sg", "ch"} // sign, check
  - data
  
