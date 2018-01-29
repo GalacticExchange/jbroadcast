@@ -131,6 +131,10 @@ public class MessagePacket implements Comparable<MessagePacket> {
         return Integer.parseInt(ByteUtils.byteArrToString(index));
     }
 
+    public String getCommand() {
+        return ByteUtils.byteArrToString(command);
+    }
+
     public String getData() {
         return ByteUtils.byteArrToString(trim(data));
     }

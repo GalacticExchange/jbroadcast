@@ -1,19 +1,16 @@
 package ecdsa;
 
-
-import utils.ByteUtils;
 import utils.FileUtils;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.security.*;
 import java.security.spec.*;
 import java.util.Base64;
 
 public class GexECDSA {
 
-    public static final String ALGORITHM = "EC";
-    public static final String SIGN_ALGORITHM = "SHA1withECDSA";
+    private static final String ALGORITHM = "EC";
+    private static final String SIGN_ALGORITHM = "SHA1withECDSA";
 
     private KeyPair pair;
 
@@ -27,17 +24,15 @@ public class GexECDSA {
         pair = keyGen.generateKeyPair();
     }
 
+    /**
+     * Parses existing key pair.
+     */
     public GexECDSA(String privateKeyPath, String publicKeyPath) throws InvalidKeySpecException,
             NoSuchAlgorithmException, IOException {
         readKeys(privateKeyPath, publicKeyPath);
     }
 
-
-    public KeyPair getPair() {
-        return pair;
-    }
-
-    public void readKeys(String privateKeyPath, String publicKeyPath) throws InvalidKeySpecException,
+    private void readKeys(String privateKeyPath, String publicKeyPath) throws InvalidKeySpecException,
             NoSuchAlgorithmException, IOException {
 
         KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
@@ -47,32 +42,21 @@ public class GexECDSA {
         this.pair = new KeyPair(pubKey, privateKey);
     }
 
+
+    /**
+     * Saves keys as Base64 encoded strings
+     */
     public void saveKeys(String privateKeyPath, String publicKeyPath) throws IOException {
-
-//        FileUtils.writeFile(privateKeyPath, pair.getPrivate().getEncoded());
-//        FileUtils.writeFile(publicKeyPath, pair.getPublic().getEncoded());
-
-//        PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(
-//                pair.getPrivate().getEncoded());
-//        FileUtils.writeFile(privateKeyPath, pkcs8EncodedKeySpec.getEncoded());
-//
-//
-//        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(
-//                pair.getPublic().getEncoded());
-//        FileUtils.writeFile(publicKeyPath, x509EncodedKeySpec.getEncoded());
-
         String pubKeyString = Base64.getEncoder().encodeToString(pair.getPublic().getEncoded());
         String privKeyString = Base64.getEncoder().encodeToString(pair.getPrivate().getEncoded());
 
-        FileUtils.writeFile(privateKeyPath, pubKeyString.getBytes());
-        FileUtils.writeFile(publicKeyPath, privKeyString.getBytes());
+        FileUtils.writeFile(publicKeyPath, pubKeyString.getBytes());
+        FileUtils.writeFile(privateKeyPath, privKeyString.getBytes());
+
     }
 
     private PublicKey readPublicKey(String pubKeyPath, KeyFactory keyFactory) throws InvalidKeySpecException, IOException {
-//        byte[] publicKeyBytes = FileUtils.readFile(pubKeyPath);
-        byte[] publicKeyBytes = Base64.getDecoder().decode(FileUtils.readFileString(pubKeyPath));
-        X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(publicKeyBytes);
-        return keyFactory.generatePublic(pubKeySpec);
+        return parsePublicKey(FileUtils.readFileString(pubKeyPath), keyFactory);
     }
 
     private PrivateKey readPrivateKey(String privateKeyPath, KeyFactory keyFactory) throws InvalidKeySpecException, IOException {
@@ -83,37 +67,13 @@ public class GexECDSA {
     }
 
 
-//    public PublicKey getPublicKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
-//        PrivateKey privateKey = pair.getPrivate();
-//        KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
-//
-////        ECNamedCurveParameterSpec parameterSpec = ECNamedCurveTable.getParameterSpec(ALGORITHM);
-//        ECNamedCurveParameterSpec parameterSpec = ECNamedCurveTable.getParameterSpec("secp192r1");
-//
-//        ECDomainParameters ecDomainParameters =
-//                new ECDomainParameters(
-//                        parameterSpec.getCurve(),
-//                        parameterSpec.getG(),
-//                parameterSpec.getN(), parameterSpec.getH(), parameterSpec.getSeed());
-//
-//        byte[] privateKeyBytes = privateKey.getEncoded();
-//
-//        ECPoint ecPoint = ecDomainParameters.getG().multiply(new BigInteger(privateKeyBytes));
-//
-//
-//        X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(ecPoint.getEncoded());
-//        return keyFactory.generatePublic(pubKeySpec);
-//
-//    }
-
-    public byte[] sign(String msg) throws UnsupportedEncodingException, NoSuchAlgorithmException,
+    public byte[] sign(byte[] msg) throws NoSuchAlgorithmException,
             InvalidKeyException, SignatureException {
 
-        byte[] bMsg = msg.getBytes("UTF-8");
         Signature sig = Signature.getInstance(SIGN_ALGORITHM);
 
         sig.initSign(pair.getPrivate());
-        sig.update(bMsg);
+        sig.update(msg);
 
         return sig.sign();
     }
@@ -127,25 +87,18 @@ public class GexECDSA {
         return sig.verify(sign);
     }
 
-    public static void main(String[] args) throws NoSuchAlgorithmException, IOException, InvalidKeyException, SignatureException, InvalidKeySpecException {
-        GexECDSA gexECDSA = new GexECDSA();
-        String str = "Hello world!";
+    public PublicKey getPublic() {
+        return pair.getPublic();
+    }
 
-        byte[] sign = gexECDSA.sign(str);
+    public PrivateKey getPrivate() {
+        return pair.getPrivate();
+    }
 
-        boolean verified = gexECDSA.verifySign(str.getBytes("UTF-8"), sign, gexECDSA.getPair().getPublic());
-        System.out.println("Verified: " + verified);
-        gexECDSA.saveKeys("private", "public");
-
-        GexECDSA parsed = new GexECDSA("private", "public");
-        boolean verifiedParsed = parsed.verifySign(str.getBytes("UTF-8"), sign, parsed.getPair().getPublic());
-        System.out.println("Verified2: " + verifiedParsed);
-//        System.out.println("Parsed public key: " + ByteUtils.byteArrToString(parsed.getPair().getPrivate().getEncoded()));
-
-        String strKey = Base64.getEncoder().encodeToString(parsed.getPair().getPublic().getEncoded());
-
-        System.out.println("Parsed public key: " + strKey);
-
+    public static PublicKey parsePublicKey(String publicKey, KeyFactory keyFactory) throws InvalidKeySpecException {
+        byte[] publicKeyBytes = Base64.getDecoder().decode(publicKey);
+        X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(publicKeyBytes);
+        return keyFactory.generatePublic(pubKeySpec);
     }
 
 
