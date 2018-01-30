@@ -13,22 +13,22 @@ public class Party {
 
     private UDPClient udpClient;
     private GexECDSA gexECDSA;
-    private Map<String, ArrayList<MessagePacket>> received;
+    private Map<Integer, ArrayList<MessagePacket>> received;
 
     // Todo: party.yml constructor?
 
     public Party(String addr, int port) throws SocketException, UnknownHostException, NoSuchAlgorithmException {
         udpClient = new UDPClient(addr, port);
-        received = new HashMap<String, ArrayList<MessagePacket>>();
+        received = new HashMap<>();
         // TODO ECDSA keyPair ?
         gexECDSA = new GexECDSA();
     }
 
-    public Party(String configPath){
+    public Party(String configPath) {
 
     }
 
-    private void saveConfig(){
+    private void saveConfig() {
 
     }
 
@@ -46,30 +46,32 @@ public class Party {
         while (true) {
             MessagePacket mp = udpClient.receiveMessage();
 //            System.out.println("Received MessagePacket: " + mp);
+            int nonceHashCode = mp.getNonceHashCode();
 
-            if (!received.containsKey(mp.getNonce())) {
+            if (!received.containsKey(nonceHashCode)) {
 //                System.out.println("Creating new key: " + mp.getNonce());
-                received.put(mp.getNonce(), new ArrayList<MessagePacket>());
+                received.put(nonceHashCode, new ArrayList<MessagePacket>());
             }
 
-            received.get(mp.getNonce()).add(mp);
+            received.get(nonceHashCode).add(mp);
 
             processMessage(mp);
         }
 
     }
 
-    public void processMessage(MessagePacket mp) throws Exception {
+    private void processMessage(MessagePacket mp) throws Exception {
 
         // TODO the order could not be guaranteed.. check HashMap[nonce] length or smth...
         if (mp.getIndex() + 1 == mp.getAmount()) {
 
+            int nonceHashCode = mp.getNonceHashCode();
             String command = mp.getCommand();
 
-            MessagePacket[] packets = new MessagePacket[received.get(mp.getNonce()).size()];
+            MessagePacket[] packets = new MessagePacket[received.get(nonceHashCode).size()];
 
             // ArrayList to Array
-            received.get(mp.getNonce()).toArray(packets);
+            received.get(nonceHashCode).toArray(packets);
 
             String assembled = MessagePacket.assembleMessage(packets);
             System.out.println("GOT assembled message: " + assembled);
@@ -84,7 +86,7 @@ public class Party {
 //        }
 //    }
 
-    public String sign(String msg){
+    public String sign(String msg) {
         return msg;
     }
 
