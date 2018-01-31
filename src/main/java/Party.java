@@ -1,5 +1,6 @@
 import ecdsa.GexECDSA;
-import udp.MessagePacket;
+import udp.FramePacket;
+import udp.GexMessage;
 import udp.UDPClient;
 
 import java.net.SocketException;
@@ -13,7 +14,7 @@ public class Party {
 
     private UDPClient udpClient;
     private GexECDSA gexECDSA;
-    private Map<Integer, ArrayList<MessagePacket>> received;
+    private Map<Integer, ArrayList<FramePacket>> received;
 
     // Todo: party.yml constructor?
 
@@ -44,36 +45,36 @@ public class Party {
     // TODO throws Exception -> change to some customException
     public void receiveMessage() throws Exception {
         while (true) {
-            MessagePacket mp = udpClient.receiveMessage();
+            FramePacket fp = udpClient.receiveMessage();
 //            System.out.println("Received MessagePacket: " + mp);
-            int nonceHashCode = mp.getNonceHashCode();
+            int nonceHashCode = fp.getNonceHashCode();
 
             if (!received.containsKey(nonceHashCode)) {
 //                System.out.println("Creating new key: " + mp.getNonce());
-                received.put(nonceHashCode, new ArrayList<MessagePacket>());
+                received.put(nonceHashCode, new ArrayList<>());
             }
 
-            received.get(nonceHashCode).add(mp);
+            received.get(nonceHashCode).add(fp);
 
-            processMessage(mp);
+            processMessage(fp);
         }
 
     }
 
-    private void processMessage(MessagePacket mp) throws Exception {
+    private void processMessage(FramePacket fp) throws Exception {
 
         // TODO the order could not be guaranteed.. check HashMap[nonce] length or smth...
-        if (mp.getIndex() + 1 == mp.getAmount()) {
+        if (fp.getIndex() + 1 == fp.getAmount()) {
 
-            int nonceHashCode = mp.getNonceHashCode();
-            String command = mp.getCommand();
+            int nonceHashCode = fp.getNonceHashCode();
+            String command = fp.getCommand();
 
-            MessagePacket[] packets = new MessagePacket[received.get(nonceHashCode).size()];
+            FramePacket[] packets = new FramePacket[received.get(nonceHashCode).size()];
 
             // ArrayList to Array
             received.get(nonceHashCode).toArray(packets);
 
-            String assembled = MessagePacket.assembleMessage(packets);
+            GexMessage assembled = FramePacket.assembleMessage(packets);
             System.out.println("GOT assembled message: " + assembled);
         }
     }

@@ -1,5 +1,6 @@
 package udp;
 
+
 import java.io.IOException;
 import java.net.*;
 import java.util.Arrays;
@@ -15,15 +16,15 @@ public class UDPClient {
 
     //TODO throws Exception -> change to customException
     public void sendMessage(String msg, String command, String addr, int port) throws Exception {
-        //String NONCE = RandomGenerator.generateString(MessagePacket.NONCE_LEN);
-        byte[] NONCE = RandomGenerator.generateByteArray(MessagePacket.NONCE_LEN);
-        System.out.println("NONCE: " + NONCE);
-        System.out.println("NONCE hashCode: " + Arrays.hashCode(NONCE));
-        System.out.println("NONCE length: " + NONCE.length);
+        byte[] NONCE = RandomGenerator.generateByteArray(FramePacket.NONCE_LEN);
 
-        MessagePacket[] mPackets = MessagePacket.splitMessage(msg, NONCE, command);
-        for (MessagePacket mp : mPackets) {
-            sendData(mp.getBytes(), addr, port);
+        System.out.println("NONCE hashCode: " + Arrays.hashCode(NONCE));
+
+        GexMessage gm = new GexMessage(msg);
+        FramePacket[] fPackets = FramePacket.splitMessage(gm, NONCE, command);
+
+        for (FramePacket fp : fPackets) {
+            sendData(fp.getBytes(), addr, port);
         }
     }
 
@@ -40,14 +41,14 @@ public class UDPClient {
      * @return messagePacket
      */
     // TODO throws Exception -> change to customException
-    public MessagePacket receiveMessage() throws Exception {
-        byte[] buffer = new byte[MessagePacket.PACKET_LEN];
+    public FramePacket receiveMessage() throws Exception {
+        byte[] buffer = new byte[FramePacket.PACKET_LEN];
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
         socket.receive(packet);
 
 //        System.out.println(parsePacket(packet));
 
-        return new MessagePacket(packet.getData());
+        return new FramePacket(packet.getData());
     }
 
 

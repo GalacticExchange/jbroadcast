@@ -1,9 +1,8 @@
-package udp;
+package udp.__old;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-import org.apache.commons.lang3.ArrayUtils;
 import utils.ByteUtils;
 
 public class MessagePacket implements Comparable<MessagePacket> {

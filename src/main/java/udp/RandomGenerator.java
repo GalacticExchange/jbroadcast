@@ -2,7 +2,6 @@ package udp;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Arrays;
 
 public class RandomGenerator {
 
@@ -25,8 +24,8 @@ public class RandomGenerator {
     }
 
 
-    public static void main(String[] args) throws NoSuchAlgorithmException {
-//        System.out.println(generateString(4));
-        System.out.println(Arrays.hashCode(generateByteArray(4)));
-    }
+//    public static void main(String[] args) throws NoSuchAlgorithmException {
+////        System.out.println(generateString(4));
+//        System.out.println(Arrays.hashCode(generateByteArray(4)));
+//    }
 }

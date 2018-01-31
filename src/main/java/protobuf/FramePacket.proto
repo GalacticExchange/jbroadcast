@@ -3,15 +3,17 @@ syntax = "proto2";
 package udp;
 
 option java_package = "udp";
-option java_outer_classname = "MessagePacketProto";
+option java_outer_classname = "FramePacketProto";
 
 message Frame {
     required fixed32 version = 1;
     required fixed32 index = 2;
     required fixed32 amount = 3;
-    required bytes command = 4;
-    required bytes nonce = 5;
-    required bytes data = 6;
+    required fixed32 lengthTotal = 4;
+    required bytes command = 5;
+    required bytes nonce = 6;
+    required bytes data = 7;
+
 }
 
 message GexMessage {
