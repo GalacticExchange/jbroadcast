@@ -8,7 +8,7 @@ public class PartySend {
 
         String msg = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
         System.out.println(msg.getBytes().length);
-        party.sendSignMessage(msg, "localhost", 1400);
+        party.sendSignMessage(msg, "localhost", 1414);
 
     }
 }

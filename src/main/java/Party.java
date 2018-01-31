@@ -3,39 +3,67 @@ import udp.FragmentPacket;
 import udp.GexMessage;
 import udp.UDPClient;
 
+import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Party {
 
+    private static final String PUBLIC_KEY_NAME = "publicKey";
+    private static final String PRIVATE_KEY_NAME = "privateKey";
+
     private UDPClient udpClient;
     private GexECDSA gexECDSA;
     private Map<Integer, ArrayList<FragmentPacket>> received;
+    private ArrayList<PublicKey> publicKeys;
 
     // Todo: party.yml constructor?
 
+    /**
+     * Creates new ECDSA keys
+     */
     public Party(String addr, int port) throws SocketException, UnknownHostException, NoSuchAlgorithmException {
         udpClient = new UDPClient(addr, port);
-        received = new HashMap<>();
-        // TODO ECDSA keyPair ?
         gexECDSA = new GexECDSA();
+        received = new HashMap<>();
+        publicKeys = new ArrayList<>();
     }
 
-    public Party(String configPath) {
 
+    public Party(String keysDir, String addr, int port) throws IOException,
+            InvalidKeySpecException, NoSuchAlgorithmException {
+
+        String privateKeyPath = Paths.get(keysDir, PRIVATE_KEY_NAME).toString();
+        String publicKeyPath = Paths.get(keysDir, PUBLIC_KEY_NAME).toString();
+
+        udpClient = new UDPClient(addr, port);
+        gexECDSA = new GexECDSA(privateKeyPath, publicKeyPath);
+        received = new HashMap<>();
+        publicKeys = new ArrayList<>();
     }
 
-    private void saveConfig() {
 
+    public void addPublicKeyToList(String publicKeyPath) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+        PublicKey key = (PublicKey) GexECDSA.readKey(publicKeyPath, PublicKey.class);
+        publicKeys.add(key);
+    }
+
+    public void saveKeys(String keysDir) throws IOException {
+        String privateKeyPath = Paths.get(keysDir, PRIVATE_KEY_NAME).toString();
+        String publicKeyPath = Paths.get(keysDir, PUBLIC_KEY_NAME).toString();
+        gexECDSA.saveKeys(privateKeyPath, publicKeyPath);
     }
 
 
     // TODO throws Exception -> change to some customException
-    public void sendSignMessage(String msg, String addr, int port) throws Exception {
+    public void sendSignMessage(String msg, String addr, int port) throws IOException, NoSuchAlgorithmException {
         udpClient.sendMessage(msg, "sg", addr, port);
     }
 
