@@ -3,9 +3,9 @@ syntax = "proto2";
 package udp;
 
 option java_package = "udp";
-option java_outer_classname = "FramePacketProto";
+option java_outer_classname = "FragmentProto";
 
-message Frame {
+message Fragment {
     required fixed32 version = 1;
     required fixed32 index = 2;
     required fixed32 amount = 3;

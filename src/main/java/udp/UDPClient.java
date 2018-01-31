@@ -1,8 +1,8 @@
 package udp;
 
-
 import java.io.IOException;
 import java.net.*;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 public class UDPClient {
@@ -15,15 +15,15 @@ public class UDPClient {
     }
 
     //TODO throws Exception -> change to customException
-    public void sendMessage(String msg, String command, String addr, int port) throws Exception {
-        byte[] NONCE = RandomGenerator.generateByteArray(FramePacket.NONCE_LEN);
+    public void sendMessage(String msg, String command, String addr, int port) throws NoSuchAlgorithmException, IOException {
+        byte[] NONCE = RandomGenerator.generateByteArray(FragmentPacket.NONCE_LEN);
 
         System.out.println("NONCE hashCode: " + Arrays.hashCode(NONCE));
 
         GexMessage gm = new GexMessage(msg);
-        FramePacket[] fPackets = FramePacket.splitMessage(gm, NONCE, command);
+        FragmentPacket[] fPackets = FragmentPacket.splitMessage(gm, NONCE, command);
 
-        for (FramePacket fp : fPackets) {
+        for (FragmentPacket fp : fPackets) {
             sendData(fp.getBytes(), addr, port);
         }
     }
@@ -36,19 +36,17 @@ public class UDPClient {
 
 
     /**
-     * blocks thread until message is received
-     *
-     * @return messagePacket
+     * blocks thread until message is received*
      */
     // TODO throws Exception -> change to customException
-    public FramePacket receiveMessage() throws Exception {
-        byte[] buffer = new byte[FramePacket.PACKET_LEN];
+    public FragmentPacket receiveMessage() throws IOException {
+        byte[] buffer = new byte[FragmentPacket.PACKET_LEN];
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
         socket.receive(packet);
 
 //        System.out.println(parsePacket(packet));
 
-        return new FramePacket(packet.getData());
+        return new FragmentPacket(packet.getData());
     }
 
 

@@ -1,11 +1,11 @@
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-import udp.FramePacketProto;
+import udp.FragmentProto;
 
 public class ProtoBufTest {
 
     public static void main(String[] args) throws InvalidProtocolBufferException {
-//        Builder builder = FramePacketProto.MessagePacket.newBuilder();
+//        Builder builder = FragmentProto.MessagePacket.newBuilder();
 //        String val = "Hello protobuf!";
 //        ByteString value = ByteString.copyFrom(val.getBytes());
 //
@@ -40,14 +40,14 @@ public class ProtoBufTest {
         String cmd1 = "zz";
         String nonce1 = "zz";
 
-        FramePacketProto.GexMessage.Builder frameBuilder = FramePacketProto.GexMessage.newBuilder();
+        FragmentProto.GexMessage.Builder frameBuilder = FragmentProto.GexMessage.newBuilder();
         frameBuilder.setMessage(str1);
         frameBuilder.addSigns("123213");
         frameBuilder.addSigns("567123");
-        FramePacketProto.GexMessage gm = frameBuilder.build();
+        FragmentProto.GexMessage gm = frameBuilder.build();
         gm.toByteString();
 
-        FramePacketProto.Frame.Builder builder = FramePacketProto.Frame.newBuilder();
+        FragmentProto.Fragment.Builder builder = FragmentProto.Fragment.newBuilder();
 
 
 //        ByteString bStr1 = ByteString.copyFrom(str1.getBytes());
@@ -63,7 +63,7 @@ public class ProtoBufTest {
         builder.setData(ByteString.copyFrom(str1.getBytes())); // (2 + 1024) 1026
         // total bytes = 32
 
-        FramePacketProto.Frame fm = builder.build();
+        FragmentProto.Fragment fm = builder.build();
 
         System.out.println("Total byte[] length: " + fm.toByteArray().length + "\n");
         int dataKeyLength = fm.toByteArray().length - 28 - str1.getBytes().length;
@@ -82,7 +82,7 @@ public class ProtoBufTest {
 //        ByteBuffer buffer = ByteBuffer.wrap(total);
 //        buffer.put(data);
 //
-//        FramePacketProto.GexMessage gm2 = FramePacketProto.GexMessage.parseFrom(total);
+//        FragmentProto.GexMessage gm2 = FragmentProto.GexMessage.parseFrom(total);
 //
 //        System.out.println(gm2);
 //        for (String s : gm.getSignsList()) {

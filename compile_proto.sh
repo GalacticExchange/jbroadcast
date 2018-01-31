@@ -7,7 +7,7 @@ SCRIPT_PATH=$(dirname "$0")
 
 cd ${SCRIPT_PATH}/src/main/java
 
-protoc -I=. --java_out=. ./protobuf/FramePacket.proto
+protoc -I=. --java_out=. ./protobuf/Fragment.proto
 
 cd -
 

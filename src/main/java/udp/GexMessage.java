@@ -4,19 +4,19 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import java.util.ArrayList;
 
 public class GexMessage {
-    private FramePacketProto.GexMessage gexMessage;
+    private FragmentProto.GexMessage gexMessage;
 
     /**
      * Creates new gexMessage
      */
     public GexMessage(String message) {
-        FramePacketProto.GexMessage.Builder builder = FramePacketProto.GexMessage.newBuilder();
+        FragmentProto.GexMessage.Builder builder = FragmentProto.GexMessage.newBuilder();
         builder.setMessage(message);
         gexMessage = builder.build();
     }
 
     public GexMessage(String message, ArrayList<String> signs) {
-        FramePacketProto.GexMessage.Builder builder = FramePacketProto.GexMessage.newBuilder();
+        FragmentProto.GexMessage.Builder builder = FragmentProto.GexMessage.newBuilder();
         builder.setMessage(message);
         builder.addAllSigns(signs);
         gexMessage = builder.build();
@@ -27,7 +27,7 @@ public class GexMessage {
      * Parses GexMessage
      */
     public GexMessage(byte[] msg) throws InvalidProtocolBufferException {
-        gexMessage = FramePacketProto.GexMessage.parseFrom(msg);
+        gexMessage = FragmentProto.GexMessage.parseFrom(msg);
     }
 
     public String toString(){

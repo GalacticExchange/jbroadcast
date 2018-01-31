@@ -1,5 +1,5 @@
 import ecdsa.GexECDSA;
-import udp.FramePacket;
+import udp.FragmentPacket;
 import udp.GexMessage;
 import udp.UDPClient;
 
@@ -14,7 +14,7 @@ public class Party {
 
     private UDPClient udpClient;
     private GexECDSA gexECDSA;
-    private Map<Integer, ArrayList<FramePacket>> received;
+    private Map<Integer, ArrayList<FragmentPacket>> received;
 
     // Todo: party.yml constructor?
 
@@ -45,7 +45,7 @@ public class Party {
     // TODO throws Exception -> change to some customException
     public void receiveMessage() throws Exception {
         while (true) {
-            FramePacket fp = udpClient.receiveMessage();
+            FragmentPacket fp = udpClient.receiveMessage();
 //            System.out.println("Received MessagePacket: " + mp);
             int nonceHashCode = fp.getNonceHashCode();
 
@@ -61,7 +61,7 @@ public class Party {
 
     }
 
-    private void processMessage(FramePacket fp) throws Exception {
+    private void processMessage(FragmentPacket fp) throws Exception {
 
         // TODO the order could not be guaranteed.. check HashMap[nonce] length or smth...
         if (fp.getIndex() + 1 == fp.getAmount()) {
@@ -69,12 +69,12 @@ public class Party {
             int nonceHashCode = fp.getNonceHashCode();
             String command = fp.getCommand();
 
-            FramePacket[] packets = new FramePacket[received.get(nonceHashCode).size()];
+            FragmentPacket[] packets = new FragmentPacket[received.get(nonceHashCode).size()];
 
             // ArrayList to Array
             received.get(nonceHashCode).toArray(packets);
 
-            GexMessage assembled = FramePacket.assembleMessage(packets);
+            GexMessage assembled = FragmentPacket.assembleMessage(packets);
             System.out.println("GOT assembled message: " + assembled);
         }
     }
@@ -87,6 +87,7 @@ public class Party {
 //        }
 //    }
 
+    // Todo
     public String sign(String msg) {
         return msg;
     }
