@@ -55,29 +55,20 @@ public final class FragmentProto {
     int getLengthTotal();
 
     /**
-     * <code>required bytes command = 5;</code>
-     */
-    boolean hasCommand();
-    /**
-     * <code>required bytes command = 5;</code>
-     */
-    com.google.protobuf.ByteString getCommand();
-
-    /**
-     * <code>required bytes nonce = 6;</code>
+     * <code>required bytes nonce = 5;</code>
      */
     boolean hasNonce();
     /**
-     * <code>required bytes nonce = 6;</code>
+     * <code>required bytes nonce = 5;</code>
      */
     com.google.protobuf.ByteString getNonce();
 
     /**
-     * <code>required bytes data = 7;</code>
+     * <code>required bytes data = 6;</code>
      */
     boolean hasData();
     /**
-     * <code>required bytes data = 7;</code>
+     * <code>required bytes data = 6;</code>
      */
     com.google.protobuf.ByteString getData();
   }
@@ -98,7 +89,6 @@ public final class FragmentProto {
       index_ = 0;
       amount_ = 0;
       lengthTotal_ = 0;
-      command_ = com.google.protobuf.ByteString.EMPTY;
       nonce_ = com.google.protobuf.ByteString.EMPTY;
       data_ = com.google.protobuf.ByteString.EMPTY;
     }
@@ -156,16 +146,11 @@ public final class FragmentProto {
             }
             case 42: {
               bitField0_ |= 0x00000010;
-              command_ = input.readBytes();
+              nonce_ = input.readBytes();
               break;
             }
             case 50: {
               bitField0_ |= 0x00000020;
-              nonce_ = input.readBytes();
-              break;
-            }
-            case 58: {
-              bitField0_ |= 0x00000040;
               data_ = input.readBytes();
               break;
             }
@@ -254,46 +239,31 @@ public final class FragmentProto {
       return lengthTotal_;
     }
 
-    public static final int COMMAND_FIELD_NUMBER = 5;
-    private com.google.protobuf.ByteString command_;
+    public static final int NONCE_FIELD_NUMBER = 5;
+    private com.google.protobuf.ByteString nonce_;
     /**
-     * <code>required bytes command = 5;</code>
+     * <code>required bytes nonce = 5;</code>
      */
-    public boolean hasCommand() {
+    public boolean hasNonce() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>required bytes command = 5;</code>
-     */
-    public com.google.protobuf.ByteString getCommand() {
-      return command_;
-    }
-
-    public static final int NONCE_FIELD_NUMBER = 6;
-    private com.google.protobuf.ByteString nonce_;
-    /**
-     * <code>required bytes nonce = 6;</code>
-     */
-    public boolean hasNonce() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <code>required bytes nonce = 6;</code>
+     * <code>required bytes nonce = 5;</code>
      */
     public com.google.protobuf.ByteString getNonce() {
       return nonce_;
     }
 
-    public static final int DATA_FIELD_NUMBER = 7;
+    public static final int DATA_FIELD_NUMBER = 6;
     private com.google.protobuf.ByteString data_;
     /**
-     * <code>required bytes data = 7;</code>
+     * <code>required bytes data = 6;</code>
      */
     public boolean hasData() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
+      return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>required bytes data = 7;</code>
+     * <code>required bytes data = 6;</code>
      */
     public com.google.protobuf.ByteString getData() {
       return data_;
@@ -318,10 +288,6 @@ public final class FragmentProto {
         return false;
       }
       if (!hasLengthTotal()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasCommand()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -352,13 +318,10 @@ public final class FragmentProto {
         output.writeFixed32(4, lengthTotal_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeBytes(5, command_);
+        output.writeBytes(5, nonce_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeBytes(6, nonce_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeBytes(7, data_);
+        output.writeBytes(6, data_);
       }
       unknownFields.writeTo(output);
     }
@@ -386,15 +349,11 @@ public final class FragmentProto {
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, command_);
+          .computeBytesSize(5, nonce_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(6, nonce_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(7, data_);
+          .computeBytesSize(6, data_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -432,11 +391,6 @@ public final class FragmentProto {
         result = result && (getLengthTotal()
             == other.getLengthTotal());
       }
-      result = result && (hasCommand() == other.hasCommand());
-      if (hasCommand()) {
-        result = result && getCommand()
-            .equals(other.getCommand());
-      }
       result = result && (hasNonce() == other.hasNonce());
       if (hasNonce()) {
         result = result && getNonce()
@@ -473,10 +427,6 @@ public final class FragmentProto {
       if (hasLengthTotal()) {
         hash = (37 * hash) + LENGTHTOTAL_FIELD_NUMBER;
         hash = (53 * hash) + getLengthTotal();
-      }
-      if (hasCommand()) {
-        hash = (37 * hash) + COMMAND_FIELD_NUMBER;
-        hash = (53 * hash) + getCommand().hashCode();
       }
       if (hasNonce()) {
         hash = (37 * hash) + NONCE_FIELD_NUMBER;
@@ -623,12 +573,10 @@ public final class FragmentProto {
         bitField0_ = (bitField0_ & ~0x00000004);
         lengthTotal_ = 0;
         bitField0_ = (bitField0_ & ~0x00000008);
-        command_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000010);
         nonce_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000010);
         data_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -672,13 +620,9 @@ public final class FragmentProto {
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.command_ = command_;
+        result.nonce_ = nonce_;
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000020;
-        }
-        result.nonce_ = nonce_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000040;
         }
         result.data_ = data_;
         result.bitField0_ = to_bitField0_;
@@ -735,9 +679,6 @@ public final class FragmentProto {
         if (other.hasLengthTotal()) {
           setLengthTotal(other.getLengthTotal());
         }
-        if (other.hasCommand()) {
-          setCommand(other.getCommand());
-        }
         if (other.hasNonce()) {
           setNonce(other.getNonce());
         }
@@ -760,9 +701,6 @@ public final class FragmentProto {
           return false;
         }
         if (!hasLengthTotal()) {
-          return false;
-        }
-        if (!hasCommand()) {
           return false;
         }
         if (!hasNonce()) {
@@ -921,71 +859,36 @@ public final class FragmentProto {
         return this;
       }
 
-      private com.google.protobuf.ByteString command_ = com.google.protobuf.ByteString.EMPTY;
+      private com.google.protobuf.ByteString nonce_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>required bytes command = 5;</code>
+       * <code>required bytes nonce = 5;</code>
        */
-      public boolean hasCommand() {
+      public boolean hasNonce() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>required bytes command = 5;</code>
-       */
-      public com.google.protobuf.ByteString getCommand() {
-        return command_;
-      }
-      /**
-       * <code>required bytes command = 5;</code>
-       */
-      public Builder setCommand(com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000010;
-        command_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required bytes command = 5;</code>
-       */
-      public Builder clearCommand() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        command_ = getDefaultInstance().getCommand();
-        onChanged();
-        return this;
-      }
-
-      private com.google.protobuf.ByteString nonce_ = com.google.protobuf.ByteString.EMPTY;
-      /**
-       * <code>required bytes nonce = 6;</code>
-       */
-      public boolean hasNonce() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
-      }
-      /**
-       * <code>required bytes nonce = 6;</code>
+       * <code>required bytes nonce = 5;</code>
        */
       public com.google.protobuf.ByteString getNonce() {
         return nonce_;
       }
       /**
-       * <code>required bytes nonce = 6;</code>
+       * <code>required bytes nonce = 5;</code>
        */
       public Builder setNonce(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000020;
+  bitField0_ |= 0x00000010;
         nonce_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required bytes nonce = 6;</code>
+       * <code>required bytes nonce = 5;</code>
        */
       public Builder clearNonce() {
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000010);
         nonce_ = getDefaultInstance().getNonce();
         onChanged();
         return this;
@@ -993,34 +896,34 @@ public final class FragmentProto {
 
       private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>required bytes data = 7;</code>
+       * <code>required bytes data = 6;</code>
        */
       public boolean hasData() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
-       * <code>required bytes data = 7;</code>
+       * <code>required bytes data = 6;</code>
        */
       public com.google.protobuf.ByteString getData() {
         return data_;
       }
       /**
-       * <code>required bytes data = 7;</code>
+       * <code>required bytes data = 6;</code>
        */
       public Builder setData(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000040;
+  bitField0_ |= 0x00000020;
         data_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required bytes data = 7;</code>
+       * <code>required bytes data = 6;</code>
        */
       public Builder clearData() {
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000020);
         data_ = getDefaultInstance().getData();
         onChanged();
         return this;
@@ -1093,6 +996,20 @@ public final class FragmentProto {
         getMessageBytes();
 
     /**
+     * <code>required string command = 5;</code>
+     */
+    boolean hasCommand();
+    /**
+     * <code>required string command = 5;</code>
+     */
+    java.lang.String getCommand();
+    /**
+     * <code>required string command = 5;</code>
+     */
+    com.google.protobuf.ByteString
+        getCommandBytes();
+
+    /**
      * <code>repeated string signs = 2;</code>
      */
     java.util.List<java.lang.String>
@@ -1125,6 +1042,7 @@ public final class FragmentProto {
     }
     private GexMessage() {
       message_ = "";
+      command_ = "";
       signs_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     }
 
@@ -1167,11 +1085,17 @@ public final class FragmentProto {
             }
             case 18: {
               com.google.protobuf.ByteString bs = input.readBytes();
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
                 signs_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000002;
+                mutable_bitField0_ |= 0x00000004;
               }
               signs_.add(bs);
+              break;
+            }
+            case 42: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000002;
+              command_ = bs;
               break;
             }
           }
@@ -1182,7 +1106,7 @@ public final class FragmentProto {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
           signs_ = signs_.getUnmodifiableView();
         }
         this.unknownFields = unknownFields.build();
@@ -1244,6 +1168,48 @@ public final class FragmentProto {
       }
     }
 
+    public static final int COMMAND_FIELD_NUMBER = 5;
+    private volatile java.lang.Object command_;
+    /**
+     * <code>required string command = 5;</code>
+     */
+    public boolean hasCommand() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required string command = 5;</code>
+     */
+    public java.lang.String getCommand() {
+      java.lang.Object ref = command_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          command_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string command = 5;</code>
+     */
+    public com.google.protobuf.ByteString
+        getCommandBytes() {
+      java.lang.Object ref = command_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        command_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     public static final int SIGNS_FIELD_NUMBER = 2;
     private com.google.protobuf.LazyStringList signs_;
     /**
@@ -1283,6 +1249,10 @@ public final class FragmentProto {
         memoizedIsInitialized = 0;
         return false;
       }
+      if (!hasCommand()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -1294,6 +1264,9 @@ public final class FragmentProto {
       }
       for (int i = 0; i < signs_.size(); i++) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, signs_.getRaw(i));
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, command_);
       }
       unknownFields.writeTo(output);
     }
@@ -1313,6 +1286,9 @@ public final class FragmentProto {
         }
         size += dataSize;
         size += 1 * getSignsList().size();
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, command_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1335,6 +1311,11 @@ public final class FragmentProto {
         result = result && getMessage()
             .equals(other.getMessage());
       }
+      result = result && (hasCommand() == other.hasCommand());
+      if (hasCommand()) {
+        result = result && getCommand()
+            .equals(other.getCommand());
+      }
       result = result && getSignsList()
           .equals(other.getSignsList());
       result = result && unknownFields.equals(other.unknownFields);
@@ -1351,6 +1332,10 @@ public final class FragmentProto {
       if (hasMessage()) {
         hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
         hash = (53 * hash) + getMessage().hashCode();
+      }
+      if (hasCommand()) {
+        hash = (37 * hash) + COMMAND_FIELD_NUMBER;
+        hash = (53 * hash) + getCommand().hashCode();
       }
       if (getSignsCount() > 0) {
         hash = (37 * hash) + SIGNS_FIELD_NUMBER;
@@ -1487,8 +1472,10 @@ public final class FragmentProto {
         super.clear();
         message_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        signs_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        command_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
+        signs_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -1517,9 +1504,13 @@ public final class FragmentProto {
           to_bitField0_ |= 0x00000001;
         }
         result.message_ = message_;
-        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.command_ = command_;
+        if (((bitField0_ & 0x00000004) == 0x00000004)) {
           signs_ = signs_.getUnmodifiableView();
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000004);
         }
         result.signs_ = signs_;
         result.bitField0_ = to_bitField0_;
@@ -1569,10 +1560,15 @@ public final class FragmentProto {
           message_ = other.message_;
           onChanged();
         }
+        if (other.hasCommand()) {
+          bitField0_ |= 0x00000002;
+          command_ = other.command_;
+          onChanged();
+        }
         if (!other.signs_.isEmpty()) {
           if (signs_.isEmpty()) {
             signs_ = other.signs_;
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000004);
           } else {
             ensureSignsIsMutable();
             signs_.addAll(other.signs_);
@@ -1586,6 +1582,9 @@ public final class FragmentProto {
 
       public final boolean isInitialized() {
         if (!hasMessage()) {
+          return false;
+        }
+        if (!hasCommand()) {
           return false;
         }
         return true;
@@ -1686,11 +1685,87 @@ public final class FragmentProto {
         return this;
       }
 
+      private java.lang.Object command_ = "";
+      /**
+       * <code>required string command = 5;</code>
+       */
+      public boolean hasCommand() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required string command = 5;</code>
+       */
+      public java.lang.String getCommand() {
+        java.lang.Object ref = command_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            command_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string command = 5;</code>
+       */
+      public com.google.protobuf.ByteString
+          getCommandBytes() {
+        java.lang.Object ref = command_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          command_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string command = 5;</code>
+       */
+      public Builder setCommand(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        command_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string command = 5;</code>
+       */
+      public Builder clearCommand() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        command_ = getDefaultInstance().getCommand();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string command = 5;</code>
+       */
+      public Builder setCommandBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        command_ = value;
+        onChanged();
+        return this;
+      }
+
       private com.google.protobuf.LazyStringList signs_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureSignsIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
           signs_ = new com.google.protobuf.LazyStringArrayList(signs_);
-          bitField0_ |= 0x00000002;
+          bitField0_ |= 0x00000004;
          }
       }
       /**
@@ -1761,7 +1836,7 @@ public final class FragmentProto {
        */
       public Builder clearSigns() {
         signs_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000004);
         onChanged();
         return this;
       }
@@ -1846,11 +1921,11 @@ public final class FragmentProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\027protobuf/Fragment.proto\022\003udp\"}\n\010Fragme" +
+      "\n\027protobuf/Fragment.proto\022\003udp\"l\n\010Fragme" +
       "nt\022\017\n\007version\030\001 \002(\007\022\r\n\005index\030\002 \002(\007\022\016\n\006am" +
-      "ount\030\003 \002(\007\022\023\n\013lengthTotal\030\004 \002(\007\022\017\n\007comma" +
-      "nd\030\005 \002(\014\022\r\n\005nonce\030\006 \002(\014\022\014\n\004data\030\007 \002(\014\",\n" +
-      "\nGexMessage\022\017\n\007message\030\001 \002(\t\022\r\n\005signs\030\002 " +
+      "ount\030\003 \002(\007\022\023\n\013lengthTotal\030\004 \002(\007\022\r\n\005nonce" +
+      "\030\005 \002(\014\022\014\n\004data\030\006 \002(\014\"=\n\nGexMessage\022\017\n\007me" +
+      "ssage\030\001 \002(\t\022\017\n\007command\030\005 \002(\t\022\r\n\005signs\030\002 " +
       "\003(\tB\024\n\003udpB\rFragmentProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
@@ -1870,13 +1945,13 @@ public final class FragmentProto {
     internal_static_udp_Fragment_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_udp_Fragment_descriptor,
-        new java.lang.String[] { "Version", "Index", "Amount", "LengthTotal", "Command", "Nonce", "Data", });
+        new java.lang.String[] { "Version", "Index", "Amount", "LengthTotal", "Nonce", "Data", });
     internal_static_udp_GexMessage_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_udp_GexMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_udp_GexMessage_descriptor,
-        new java.lang.String[] { "Message", "Signs", });
+        new java.lang.String[] { "Message", "Command", "Signs", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

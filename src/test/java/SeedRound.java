@@ -2,7 +2,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
-public class GenerateParties {
+public class SeedRound {
 
     public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
 

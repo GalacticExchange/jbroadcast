@@ -78,6 +78,17 @@ public class GexECDSA {
         }
     }
 
+    public String sign(String msg) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        byte[] sig = sign(msg.getBytes());
+        return Base64.getEncoder().encodeToString(sig);
+    }
+
+    public boolean verifySign(String msg, String sig, PublicKey publicKey) throws NoSuchAlgorithmException,
+            InvalidKeyException, SignatureException {
+        byte[] bSig = Base64.getDecoder().decode(sig);
+
+        return verifySign(msg.getBytes(), bSig, publicKey);
+    }
 
     public byte[] sign(byte[] msg) throws NoSuchAlgorithmException,
             InvalidKeyException, SignatureException {

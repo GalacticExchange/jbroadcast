@@ -14,21 +14,7 @@ public class UDPClient {
         socket = new DatagramSocket(port, address);
     }
 
-    //TODO throws Exception -> change to customException
-    public void sendMessage(String msg, String command, String addr, int port) throws NoSuchAlgorithmException, IOException {
-        byte[] NONCE = RandomGenerator.generateByteArray(FragmentPacket.NONCE_LEN);
-
-        System.out.println("NONCE hashCode: " + Arrays.hashCode(NONCE));
-
-        GexMessage gm = new GexMessage(msg);
-        FragmentPacket[] fPackets = FragmentPacket.splitMessage(gm, NONCE, command);
-
-        for (FragmentPacket fp : fPackets) {
-            sendData(fp.getBytes(), addr, port);
-        }
-    }
-
-    private void sendData(byte[] data, String addr, int port) throws IOException {
+    public void sendData(byte[] data, String addr, int port) throws IOException {
         InetAddress address = InetAddress.getByName(addr);
         DatagramPacket packet = new DatagramPacket(data, data.length, address, port);
         socket.send(packet);
@@ -38,15 +24,20 @@ public class UDPClient {
     /**
      * blocks thread until message is received*
      */
-    // TODO throws Exception -> change to customException
     public FragmentPacket receiveMessage() throws IOException {
         byte[] buffer = new byte[FragmentPacket.PACKET_LEN];
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
         socket.receive(packet);
 
-//        System.out.println(parsePacket(packet));
+        return new FragmentPacket(packet.getData(), packet.getAddress().toString(), packet.getPort());
+    }
 
-        return new FragmentPacket(packet.getData());
+    public String getAddress() {
+        return socket.getInetAddress().toString();
+    }
+
+    public int getPort() {
+        return socket.getPort();
     }
 
 

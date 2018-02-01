@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class GenerateRound {
+public class VerificationRound {
 
     public static void main(String[] args) throws Exception {
 
@@ -21,5 +21,9 @@ public class GenerateRound {
                 }
             }).start();
         }
+
+        Client c = new Client("127.0.0.1", 1515);
+
+
     }
 }

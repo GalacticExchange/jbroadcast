@@ -3,6 +3,7 @@ package udp;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -14,23 +15,26 @@ public class FragmentPacket {
     public static final int DATA_LEN = 1024;
     private static final int DATA_KEY_LEN = 3; // ProtoBuf key length for bytes > 127
 
-    public static final int HEADER_LEN = 34 + DATA_KEY_LEN; // 5+5+5+5+4+10 = 34
+    //    public static final int HEADER_LEN = 34 + DATA_KEY_LEN; // 5+5+5+5+4+10 = 34
+    public static final int HEADER_LEN = 30 + DATA_KEY_LEN; // 5+5+5+5+10 = 30
     public static final int PACKET_LEN = DATA_LEN + HEADER_LEN;
 
     private FragmentProto.Fragment fragment;
 
+    private String address;
+    private int port;
+
     /**
      * Creates new FP
      */
-    public FragmentPacket(byte[] dataChunk, int index, int totalAmount, int lengthTotal, byte[] nonce, String command) {
+    public FragmentPacket(byte[] dataChunk, int index, int totalAmount, int lengthTotal, byte[] nonce) {
         FragmentProto.Fragment.Builder builder = FragmentProto.Fragment.newBuilder();
-        ByteString cmd = ByteString.copyFrom(command.getBytes());
 
         builder.setVersion(VERSION); // 5
         builder.setIndex(index); // 5
         builder.setAmount(totalAmount); // 5
         builder.setLengthTotal(lengthTotal); // 5
-        builder.setCommand(cmd); // 4
+//        builder.setCommand(cmd); // 4
         builder.setNonce(ByteString.copyFrom(nonce)); // 10
         builder.setData(ByteString.copyFrom(dataChunk)); // 1024 + 3
 
@@ -40,8 +44,10 @@ public class FragmentPacket {
     /**
      * Parses incoming FP
      */
-    public FragmentPacket(byte[] mpBytes) throws InvalidProtocolBufferException {
+    public FragmentPacket(byte[] mpBytes, String address, int port) throws InvalidProtocolBufferException {
         fragment = FragmentProto.Fragment.parseFrom(mpBytes);
+        this.address = address;
+        this.port = port;
     }
 
 
@@ -69,15 +75,15 @@ public class FragmentPacket {
         return fragment.getAmount();
     }
 
-    public String getCommand() {
-        return fragment.getCommand().toStringUtf8();
-    }
+//    public String getCommand() {
+//        return fragment.getCommand().toStringUtf8();
+//    }
 
     public FragmentProto.Fragment getFragment() {
         return fragment;
     }
 
-    public static FragmentPacket[] splitMessage(GexMessage gm, byte[] nonce, String command) {
+    public static FragmentPacket[] splitMessage(GexMessage gm, byte[] nonce) {
         byte[] gmBytes = gm.getBytes();
 
         int amountPackages = ((gmBytes.length) / DATA_LEN) + 1;
@@ -89,7 +95,7 @@ public class FragmentPacket {
             int from = i * DATA_LEN;
             int to = i * DATA_LEN + DATA_LEN;
             byte[] chunk = Arrays.copyOfRange(gmBytes, from, to);
-            packets[i] = new FragmentPacket(chunk, i, amountPackages, lengthTotal, nonce, command);
+            packets[i] = new FragmentPacket(chunk, i, amountPackages, lengthTotal, nonce);
         }
 
 
@@ -97,10 +103,10 @@ public class FragmentPacket {
     }
 
     public static GexMessage assembleMessage(FragmentPacket[] packets) throws InvalidProtocolBufferException {
-        Arrays.sort(packets); // todo Comparable!
+//        Arrays.sort(packets); // todo Comparable!
 
         int lengthTotal = packets[0].getLengthTotal();
-        byte[] total = new byte[DATA_LEN];
+        byte[] total = new byte[DATA_LEN * packets[0].getAmount()];
         ByteBuffer buffer = ByteBuffer.wrap(total);
 
         for (int i = 0; i < packets.length; i++) {
@@ -113,6 +119,14 @@ public class FragmentPacket {
         }
         byte[] assembled = Arrays.copyOfRange(total, 0, lengthTotal);
         return new GexMessage(assembled);
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public int getPort() {
+        return port;
     }
 
 

@@ -1,4 +1,5 @@
 import ecdsa.GexECDSA;
+import utils.ByteUtils;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
@@ -15,6 +16,7 @@ public class ECDSATest {
         byte[] strBytes = str.getBytes("UTF-8");
 
         byte[] sign = gexECDSA.sign(strBytes);
+        System.out.println(Base64.getEncoder().encodeToString(sign));
 
         boolean verified = gexECDSA.verifySign(strBytes, sign, gexECDSA.getPublic());
         System.out.println("Verified: " + verified);
