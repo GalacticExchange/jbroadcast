@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class VerificationRound {
 
@@ -23,7 +24,7 @@ public class VerificationRound {
         }
 
         Client c = new Client("127.0.0.1", 1515);
-
+        c.sendSignMessage("TESTMESSAGE", parties);
 
     }
 }

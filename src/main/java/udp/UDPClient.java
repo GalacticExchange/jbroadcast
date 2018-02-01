@@ -29,21 +29,15 @@ public class UDPClient {
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
         socket.receive(packet);
 
-        return new FragmentPacket(packet.getData(), packet.getAddress().toString(), packet.getPort());
+        return new FragmentPacket(packet.getData(), packet.getAddress().getHostAddress(), packet.getPort());
     }
 
     public String getAddress() {
-        return socket.getInetAddress().toString();
+        return socket.getLocalAddress().getHostAddress();
     }
 
     public int getPort() {
-        return socket.getPort();
+        return socket.getLocalPort();
     }
-
-
-    private String parsePacket(DatagramPacket p) {
-        return new String(p.getData(), 0, p.getLength());
-    }
-
 
 }

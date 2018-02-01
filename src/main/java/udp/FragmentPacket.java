@@ -15,7 +15,6 @@ public class FragmentPacket {
     public static final int DATA_LEN = 1024;
     private static final int DATA_KEY_LEN = 3; // ProtoBuf key length for bytes > 127
 
-    //    public static final int HEADER_LEN = 34 + DATA_KEY_LEN; // 5+5+5+5+4+10 = 34
     public static final int HEADER_LEN = 30 + DATA_KEY_LEN; // 5+5+5+5+10 = 30
     public static final int PACKET_LEN = DATA_LEN + HEADER_LEN;
 
@@ -34,7 +33,6 @@ public class FragmentPacket {
         builder.setIndex(index); // 5
         builder.setAmount(totalAmount); // 5
         builder.setLengthTotal(lengthTotal); // 5
-//        builder.setCommand(cmd); // 4
         builder.setNonce(ByteString.copyFrom(nonce)); // 10
         builder.setData(ByteString.copyFrom(dataChunk)); // 1024 + 3
 
@@ -79,10 +77,6 @@ public class FragmentPacket {
 //        return fragment.getCommand().toStringUtf8();
 //    }
 
-    public FragmentProto.Fragment getFragment() {
-        return fragment;
-    }
-
     public static FragmentPacket[] splitMessage(GexMessage gm, byte[] nonce) {
         byte[] gmBytes = gm.getBytes();
 
@@ -114,7 +108,6 @@ public class FragmentPacket {
 //            if (i != packets[i].getIndex()) {
 //                throw new Exception(String.format("Packet Index Mismatch, %s != %s", i, packets[i].getIndex()));
 //            }
-            System.out.println(packets[i].getData().length);
             buffer.put(packets[i].getData());
         }
         byte[] assembled = Arrays.copyOfRange(total, 0, lengthTotal);

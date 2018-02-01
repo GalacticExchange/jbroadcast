@@ -21,18 +21,19 @@ public class Client extends Communicator {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        });
+        }).start();
 
     }
 
-    public void sendSignMessage(String msg, Party[] parties) throws IOException, NoSuchAlgorithmException {
+    public void sendSignMessage(String msg, ArrayList<Party> parties) throws IOException, NoSuchAlgorithmException {
         GexMessage gm = new GexMessage(msg, "sg");
         for (Party p : parties) {
+            System.out.println(p);
             sendMessage(gm, p.getAddress(), p.getPort());
         }
     }
 
-    public void sendCheckMessage(String msg, ArrayList<String> signs, Party[] parties) throws IOException,
+    public void sendCheckMessage(String msg, ArrayList<String> signs, ArrayList<Party> parties) throws IOException,
             NoSuchAlgorithmException {
         GexMessage gm = new GexMessage(msg, "ch", signs);
         for (Party p : parties) {
@@ -42,6 +43,10 @@ public class Client extends Communicator {
 
     @Override
     public void processMessage(GexMessage gm, String address, int port) {
+        System.out.println("------------------------");
+        System.out.println(String.format("CLIENT GOT MESSAGE:\n") + gm);
+        System.out.println("------------------------");
+
 
     }
 }

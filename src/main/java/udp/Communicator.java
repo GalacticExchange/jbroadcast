@@ -38,7 +38,7 @@ public abstract class Communicator {
 
             if (isLastPacket(fp)) {
                 GexMessage gm = assembleMessage(fp.getNonceHashCode());
-                processMessage(gm, fp.getAddress().toString(), fp.getPort());
+                processMessage(gm, fp.getAddress(), fp.getPort());
             }
 
         }
@@ -65,8 +65,6 @@ public abstract class Communicator {
         byte[] NONCE = RandomGenerator.generateByteArray(FragmentPacket.NONCE_LEN);
 
         System.out.println("NONCE hashCode: " + Arrays.hashCode(NONCE));
-
-//        GexMessage gm = new GexMessage(msg, command);
         FragmentPacket[] fPackets = FragmentPacket.splitMessage(gm, NONCE);
 
         for (FragmentPacket fp : fPackets) {
