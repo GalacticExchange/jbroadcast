@@ -73,10 +73,6 @@ public class FragmentPacket {
         return fragment.getAmount();
     }
 
-//    public String getCommand() {
-//        return fragment.getCommand().toStringUtf8();
-//    }
-
     public static FragmentPacket[] splitMessage(GexMessage gm, byte[] nonce) {
         byte[] gmBytes = gm.getBytes();
 

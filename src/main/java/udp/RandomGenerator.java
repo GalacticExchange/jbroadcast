@@ -18,14 +18,8 @@ public class RandomGenerator {
 
     public static byte[] generateByteArray(int len) throws NoSuchAlgorithmException {
         byte[] bytes = new byte[len];
-//        SecureRandom.getInstanceStrong().nextBytes(bytes); // slow: collects entropy
         random.nextBytes(bytes);
         return bytes;
     }
 
-
-//    public static void main(String[] args) throws NoSuchAlgorithmException {
-////        System.out.println(generateString(4));
-//        System.out.println(Arrays.hashCode(generateByteArray(4)));
-//    }
 }

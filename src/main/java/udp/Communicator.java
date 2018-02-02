@@ -7,7 +7,6 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,7 +55,7 @@ public abstract class Communicator {
         receivedFragments.get(nonceHashCode).toArray(packets);
 
         GexMessage assembled = FragmentPacket.assembleMessage(packets);
-        System.out.println("GOT assembled message: " + assembled);
+//        System.out.println("GOT assembled message: " + assembled);
 
         return assembled;
     }
@@ -64,7 +63,7 @@ public abstract class Communicator {
     public void sendMessage(GexMessage gm, String addr, int port) throws NoSuchAlgorithmException, IOException {
         byte[] NONCE = RandomGenerator.generateByteArray(FragmentPacket.NONCE_LEN);
 
-        System.out.println("NONCE hashCode: " + Arrays.hashCode(NONCE));
+//        System.out.println("NONCE hashCode: " + Arrays.hashCode(NONCE));
         FragmentPacket[] fPackets = FragmentPacket.splitMessage(gm, NONCE);
 
         for (FragmentPacket fp : fPackets) {

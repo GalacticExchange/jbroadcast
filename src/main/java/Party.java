@@ -1,6 +1,7 @@
 import ecdsa.GexECDSA;
 import udp.Communicator;
 import udp.GexMessage;
+import udp.RandomGenerator;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -13,17 +14,19 @@ import java.security.PublicKey;
 import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Party extends Communicator {
 
     private static final String PUBLIC_KEY_NAME = "publicKey";
     private static final String PRIVATE_KEY_NAME = "privateKey";
+    private static final int t = 2;
 
     //    private UDPClient udpClient;
     private GexECDSA gexECDSA;
     //    private Map<Integer, ArrayList<FragmentPacket>> received;
     private ArrayList<PublicKey> publicKeys;
-
+    private ArrayList<GexMessage> committedMessages;
     // Todo: party.yml constructor?
 
     /**
@@ -31,7 +34,7 @@ public class Party extends Communicator {
      */
     public Party(String addr, int port) throws SocketException, UnknownHostException, NoSuchAlgorithmException {
         super(addr, port);
-
+        committedMessages = new ArrayList<>();
         gexECDSA = new GexECDSA();
         publicKeys = new ArrayList<>();
     }
@@ -43,6 +46,7 @@ public class Party extends Communicator {
         String privateKeyPath = Paths.get(keysDir, PRIVATE_KEY_NAME).toString();
         String publicKeyPath = Paths.get(keysDir, PUBLIC_KEY_NAME).toString();
 
+        committedMessages = new ArrayList<>();
         gexECDSA = new GexECDSA(privateKeyPath, publicKeyPath);
         publicKeys = new ArrayList<>();
     }
@@ -68,18 +72,41 @@ public class Party extends Communicator {
 
     @Override
     public void processMessage(GexMessage gm, String address, int port) {
-        if (gm.getCommand().equals("sg")) {
-            try {
+        try {
+
+            if (gm.getCommand().equals("sg")) {
+
+
                 String sig = gexECDSA.sign(gm.getMessage());
                 ArrayList<String> arr = new ArrayList<>();
                 arr.add(sig);
-                GexMessage singedMessage = new GexMessage(gm.getMessage(), "sg", arr);
-
+                GexMessage singedMessage = new GexMessage(gm.getMessage(), "sg", gm.getNonce(), arr);
                 sendMessage(singedMessage, address, port);
 
-            } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException | IOException e) {
-                e.printStackTrace();
+
+            } else if (gm.getCommand().equals("ch")) {
+                System.out.println("Party got check message:\n" + gm);
+                List<String> signs = gm.getSigns();
+                int verifiedSigns = 0;
+
+                for (int i = 0; i < signs.size(); i++) {
+                    for (int j = 0; j < signs.size(); j++) {
+                        if (gexECDSA.verifySign(gm.getMessage(), signs.get(i), publicKeys.get(j))) {
+                            verifiedSigns++;
+
+                        }
+                    }
+
+                }
+
+                if (verifiedSigns >= (2 * t) + 1) {
+                    System.out.println(String.format("Party %s : committing message", this));
+                    committedMessages.add(gm);
+                }
             }
+
+        } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException | IOException e) {
+            e.printStackTrace();
         }
     }
 

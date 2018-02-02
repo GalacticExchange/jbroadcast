@@ -17,6 +17,7 @@ message Fragment {
 
 message GexMessage {
     required string message = 1;
-    required string command = 5;
-    repeated string signs = 2;
+    required string command = 2;
+    required string nonce = 3;
+    repeated string signs = 4;
 }

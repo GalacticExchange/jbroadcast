@@ -1,4 +1,5 @@
 import udp.GexMessage;
+import udp.RandomGenerator;
 
 
 public class PartySend {
@@ -9,7 +10,8 @@ public class PartySend {
 
         String msg = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
 //        party.sendSignMessage(msg, "localhost", 1414);
-        party.sendMessage(new GexMessage(msg, "ch"), "localhost", 1400);
+        party.sendMessage(new GexMessage(msg, "ch", RandomGenerator.generateString(GexMessage.NONCE_LEN)),
+                "localhost", 1400);
 
     }
 }
