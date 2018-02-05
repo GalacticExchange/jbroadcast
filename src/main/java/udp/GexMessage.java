@@ -2,30 +2,36 @@ package udp;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GexMessage {
     private FragmentProto.GexMessage gexMessage;
     public static final int NONCE_LEN = 8;
 
     /**
-     * Creates new gexMessage
+     * Creates new GexMessage
      */
     public GexMessage(String message, String command, String nonce) {
         FragmentProto.GexMessage.Builder builder = FragmentProto.GexMessage.newBuilder();
         builder.setMessage(message);
         builder.setCommand(command);
         builder.setNonce(nonce);
+        builder.setSendTime(Instant.now().toString());
         gexMessage = builder.build();
     }
 
-    public GexMessage(String message, String command, String nonce, ArrayList<String> signs) {
+    /**
+     * Creates new GexMessage with signs
+     */
+    public GexMessage(String message, String command, String nonce, String sendTime, HashMap<String, String> signs) {
         FragmentProto.GexMessage.Builder builder = FragmentProto.GexMessage.newBuilder();
         builder.setMessage(message);
         builder.setCommand(command);
         builder.setNonce(nonce);
-        builder.addAllSigns(signs);
+        builder.setSendTime(sendTime);
+        builder.putAllSigns(signs);
         gexMessage = builder.build();
     }
 
@@ -57,12 +63,28 @@ public class GexMessage {
         return gexMessage.getNonce();
     }
 
-    public List<String> getSigns() {
-        return gexMessage.getSignsList();
+    public Map<String, String> getSigns() {
+        return gexMessage.getSignsMap();
     }
 
-    public String getSign(int index){
-        return gexMessage.getSigns(index);
+    public String getSign(String key) {
+        return gexMessage.getSignsOrThrow(key);
+    }
+
+    public String getSendTime() {
+        return gexMessage.getSendTime();
+    }
+
+    public static void main(String[] args) {
+//        String strDate = new Date().toString();
+//        System.out.println(strDate);
+        String strDate = Instant.now().toString();
+        System.out.println(strDate);
+        System.out.println(Instant.parse(strDate).getEpochSecond());
+
+
+        System.out.println(Instant.now().getEpochSecond());
+        Instant.parse(Instant.now().toString());
     }
 
 

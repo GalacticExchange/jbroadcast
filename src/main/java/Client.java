@@ -34,8 +34,6 @@ public class Client extends Communicator {
     public void sendSignMessage(String msg) throws IOException, NoSuchAlgorithmException {
         String nonce = RandomGenerator.generateString(GexMessage.NONCE_LEN);
         GexMessage gm = new GexMessage(msg, "sg", nonce);
-//        System.out.println("CLIENT NONCE: " + nonce);
-
         receivedSignedMessages.put(gm.getNonce(), new ArrayList<>());
 
         for (Party p : parties) {
@@ -43,12 +41,12 @@ public class Client extends Communicator {
         }
     }
 
-    public void sendCheckMessage(String msg, ArrayList<String> signs) throws IOException,
+    private void sendCheckMessage(String msg, String sendTime, HashMap<String, String> signs) throws IOException,
             NoSuchAlgorithmException {
         String nonce = RandomGenerator.generateString(GexMessage.NONCE_LEN);
-        GexMessage gm = new GexMessage(msg, "ch", nonce, signs);
-        System.out.println(signs);
-        System.out.println("Client is sending check message: " + gm);
+
+        GexMessage gm = new GexMessage(msg, "ch", nonce, sendTime, signs);
+
         for (Party p : parties) {
             sendMessage(gm, p.getAddress(), p.getPort());
         }
@@ -60,19 +58,21 @@ public class Client extends Communicator {
         ArrayList<GexMessage> messages = receivedSignedMessages.get(gm.getNonce());
         messages.add(gm);
 
-//        System.out.println("------------------------");
-//        System.out.println("CLIENT GOT MESSAGE:\n" + gm);
-//        System.out.println("CLIENT SIGNED MESSAGES:\n" + messages.size());
-//        System.out.println("------------------------");
-
         if (messages.size() == parties.size()) {
-            ArrayList<String> signs = new ArrayList<>();
+            HashMap<String, String> signs = new HashMap<>();
+
             for (GexMessage msg : messages) {
-                signs.add(msg.getSign(0));
+
+                String key = (String) msg.getSigns().keySet().toArray()[0];
+                String value = (String) msg.getSigns().values().toArray()[0];
+
+                signs.put(key, value);
+//                signs.add(msg.getSigns().values().toArray()[0]);
+
             }
 
             try {
-                sendCheckMessage(gm.getMessage(), signs);
+                sendCheckMessage(gm.getMessage(), gm.getSendTime(), signs);
             } catch (IOException | NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }

@@ -42,8 +42,8 @@ public class ProtoBufTest {
 
         FragmentProto.GexMessage.Builder frameBuilder = FragmentProto.GexMessage.newBuilder();
         frameBuilder.setMessage(str1);
-        frameBuilder.addSigns("123213");
-        frameBuilder.addSigns("567123");
+//        frameBuilder.addSigns("123213");
+//        frameBuilder.addSigns("567123");
         FragmentProto.GexMessage gm = frameBuilder.build();
         gm.toByteString();
 

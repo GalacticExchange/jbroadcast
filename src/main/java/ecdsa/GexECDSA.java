@@ -22,7 +22,7 @@ public class GexECDSA {
     public GexECDSA() throws NoSuchAlgorithmException {
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ALGORITHM);
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
-        keyGen.initialize(256, random);
+        keyGen.initialize(160, random);
         pair = keyGen.generateKeyPair();
     }
 

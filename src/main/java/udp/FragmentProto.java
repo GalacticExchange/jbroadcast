@@ -1024,23 +1024,72 @@ public final class FragmentProto {
         getNonceBytes();
 
     /**
-     * <code>repeated string signs = 4;</code>
+     * <code>required string sendTime = 4;</code>
      */
-    java.util.List<java.lang.String>
-        getSignsList();
+    boolean hasSendTime();
     /**
-     * <code>repeated string signs = 4;</code>
+     * <code>required string sendTime = 4;</code>
+     */
+    java.lang.String getSendTime();
+    /**
+     * <code>required string sendTime = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getSendTimeBytes();
+
+    /**
+     * <pre>
+     *    repeated string signs = 5;
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; signs = 5;</code>
      */
     int getSignsCount();
     /**
-     * <code>repeated string signs = 4;</code>
+     * <pre>
+     *    repeated string signs = 5;
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; signs = 5;</code>
      */
-    java.lang.String getSigns(int index);
+    boolean containsSigns(
+        java.lang.String key);
     /**
-     * <code>repeated string signs = 4;</code>
+     * Use {@link #getSignsMap()} instead.
      */
-    com.google.protobuf.ByteString
-        getSignsBytes(int index);
+    @java.lang.Deprecated
+    java.util.Map<java.lang.String, java.lang.String>
+    getSigns();
+    /**
+     * <pre>
+     *    repeated string signs = 5;
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; signs = 5;</code>
+     */
+    java.util.Map<java.lang.String, java.lang.String>
+    getSignsMap();
+    /**
+     * <pre>
+     *    repeated string signs = 5;
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; signs = 5;</code>
+     */
+
+    java.lang.String getSignsOrDefault(
+        java.lang.String key,
+        java.lang.String defaultValue);
+    /**
+     * <pre>
+     *    repeated string signs = 5;
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; signs = 5;</code>
+     */
+
+    java.lang.String getSignsOrThrow(
+        java.lang.String key);
   }
   /**
    * Protobuf type {@code udp.GexMessage}
@@ -1058,7 +1107,7 @@ public final class FragmentProto {
       message_ = "";
       command_ = "";
       nonce_ = "";
-      signs_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      sendTime_ = "";
     }
 
     @java.lang.Override
@@ -1112,11 +1161,21 @@ public final class FragmentProto {
             }
             case 34: {
               com.google.protobuf.ByteString bs = input.readBytes();
-              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-                signs_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000008;
+              bitField0_ |= 0x00000008;
+              sendTime_ = bs;
+              break;
+            }
+            case 42: {
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+                signs_ = com.google.protobuf.MapField.newMapField(
+                    SignsDefaultEntryHolder.defaultEntry);
+                mutable_bitField0_ |= 0x00000010;
               }
-              signs_.add(bs);
+              com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
+              signs__ = input.readMessage(
+                  SignsDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
+              signs_.getMutableMap().put(
+                  signs__.getKey(), signs__.getValue());
               break;
             }
           }
@@ -1127,9 +1186,6 @@ public final class FragmentProto {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-          signs_ = signs_.getUnmodifiableView();
-        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -1139,6 +1195,17 @@ public final class FragmentProto {
       return udp.FragmentProto.internal_static_udp_GexMessage_descriptor;
     }
 
+    @SuppressWarnings({"rawtypes"})
+    protected com.google.protobuf.MapField internalGetMapField(
+        int number) {
+      switch (number) {
+        case 5:
+          return internalGetSigns();
+        default:
+          throw new RuntimeException(
+              "Invalid map field number: " + number);
+      }
+    }
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return udp.FragmentProto.internal_static_udp_GexMessage_fieldAccessorTable
@@ -1273,33 +1340,138 @@ public final class FragmentProto {
       }
     }
 
-    public static final int SIGNS_FIELD_NUMBER = 4;
-    private com.google.protobuf.LazyStringList signs_;
+    public static final int SENDTIME_FIELD_NUMBER = 4;
+    private volatile java.lang.Object sendTime_;
     /**
-     * <code>repeated string signs = 4;</code>
+     * <code>required string sendTime = 4;</code>
      */
-    public com.google.protobuf.ProtocolStringList
-        getSignsList() {
-      return signs_;
+    public boolean hasSendTime() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>repeated string signs = 4;</code>
+     * <code>required string sendTime = 4;</code>
      */
-    public int getSignsCount() {
-      return signs_.size();
+    public java.lang.String getSendTime() {
+      java.lang.Object ref = sendTime_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          sendTime_ = s;
+        }
+        return s;
+      }
     }
     /**
-     * <code>repeated string signs = 4;</code>
-     */
-    public java.lang.String getSigns(int index) {
-      return signs_.get(index);
-    }
-    /**
-     * <code>repeated string signs = 4;</code>
+     * <code>required string sendTime = 4;</code>
      */
     public com.google.protobuf.ByteString
-        getSignsBytes(int index) {
-      return signs_.getByteString(index);
+        getSendTimeBytes() {
+      java.lang.Object ref = sendTime_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        sendTime_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int SIGNS_FIELD_NUMBER = 5;
+    private static final class SignsDefaultEntryHolder {
+      static final com.google.protobuf.MapEntry<
+          java.lang.String, java.lang.String> defaultEntry =
+              com.google.protobuf.MapEntry
+              .<java.lang.String, java.lang.String>newDefaultInstance(
+                  udp.FragmentProto.internal_static_udp_GexMessage_SignsEntry_descriptor, 
+                  com.google.protobuf.WireFormat.FieldType.STRING,
+                  "",
+                  com.google.protobuf.WireFormat.FieldType.STRING,
+                  "");
+    }
+    private com.google.protobuf.MapField<
+        java.lang.String, java.lang.String> signs_;
+    private com.google.protobuf.MapField<java.lang.String, java.lang.String>
+    internalGetSigns() {
+      if (signs_ == null) {
+        return com.google.protobuf.MapField.emptyMapField(
+            SignsDefaultEntryHolder.defaultEntry);
+      }
+      return signs_;
+    }
+
+    public int getSignsCount() {
+      return internalGetSigns().getMap().size();
+    }
+    /**
+     * <pre>
+     *    repeated string signs = 5;
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; signs = 5;</code>
+     */
+
+    public boolean containsSigns(
+        java.lang.String key) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      return internalGetSigns().getMap().containsKey(key);
+    }
+    /**
+     * Use {@link #getSignsMap()} instead.
+     */
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.String, java.lang.String> getSigns() {
+      return getSignsMap();
+    }
+    /**
+     * <pre>
+     *    repeated string signs = 5;
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; signs = 5;</code>
+     */
+
+    public java.util.Map<java.lang.String, java.lang.String> getSignsMap() {
+      return internalGetSigns().getMap();
+    }
+    /**
+     * <pre>
+     *    repeated string signs = 5;
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; signs = 5;</code>
+     */
+
+    public java.lang.String getSignsOrDefault(
+        java.lang.String key,
+        java.lang.String defaultValue) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      java.util.Map<java.lang.String, java.lang.String> map =
+          internalGetSigns().getMap();
+      return map.containsKey(key) ? map.get(key) : defaultValue;
+    }
+    /**
+     * <pre>
+     *    repeated string signs = 5;
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; signs = 5;</code>
+     */
+
+    public java.lang.String getSignsOrThrow(
+        java.lang.String key) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      java.util.Map<java.lang.String, java.lang.String> map =
+          internalGetSigns().getMap();
+      if (!map.containsKey(key)) {
+        throw new java.lang.IllegalArgumentException();
+      }
+      return map.get(key);
     }
 
     private byte memoizedIsInitialized = -1;
@@ -1320,6 +1492,10 @@ public final class FragmentProto {
         memoizedIsInitialized = 0;
         return false;
       }
+      if (!hasSendTime()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -1335,9 +1511,15 @@ public final class FragmentProto {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, nonce_);
       }
-      for (int i = 0; i < signs_.size(); i++) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, signs_.getRaw(i));
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, sendTime_);
       }
+      com.google.protobuf.GeneratedMessageV3
+        .serializeStringMapTo(
+          output,
+          internalGetSigns(),
+          SignsDefaultEntryHolder.defaultEntry,
+          5);
       unknownFields.writeTo(output);
     }
 
@@ -1355,13 +1537,18 @@ public final class FragmentProto {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, nonce_);
       }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < signs_.size(); i++) {
-          dataSize += computeStringSizeNoTag(signs_.getRaw(i));
-        }
-        size += dataSize;
-        size += 1 * getSignsList().size();
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, sendTime_);
+      }
+      for (java.util.Map.Entry<java.lang.String, java.lang.String> entry
+           : internalGetSigns().getMap().entrySet()) {
+        com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
+        signs__ = SignsDefaultEntryHolder.defaultEntry.newBuilderForType()
+            .setKey(entry.getKey())
+            .setValue(entry.getValue())
+            .build();
+        size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(5, signs__);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1394,8 +1581,13 @@ public final class FragmentProto {
         result = result && getNonce()
             .equals(other.getNonce());
       }
-      result = result && getSignsList()
-          .equals(other.getSignsList());
+      result = result && (hasSendTime() == other.hasSendTime());
+      if (hasSendTime()) {
+        result = result && getSendTime()
+            .equals(other.getSendTime());
+      }
+      result = result && internalGetSigns().equals(
+          other.internalGetSigns());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -1419,9 +1611,13 @@ public final class FragmentProto {
         hash = (37 * hash) + NONCE_FIELD_NUMBER;
         hash = (53 * hash) + getNonce().hashCode();
       }
-      if (getSignsCount() > 0) {
+      if (hasSendTime()) {
+        hash = (37 * hash) + SENDTIME_FIELD_NUMBER;
+        hash = (53 * hash) + getSendTime().hashCode();
+      }
+      if (!internalGetSigns().getMap().isEmpty()) {
         hash = (37 * hash) + SIGNS_FIELD_NUMBER;
-        hash = (53 * hash) + getSignsList().hashCode();
+        hash = (53 * hash) + internalGetSigns().hashCode();
       }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
@@ -1528,6 +1724,28 @@ public final class FragmentProto {
         return udp.FragmentProto.internal_static_udp_GexMessage_descriptor;
       }
 
+      @SuppressWarnings({"rawtypes"})
+      protected com.google.protobuf.MapField internalGetMapField(
+          int number) {
+        switch (number) {
+          case 5:
+            return internalGetSigns();
+          default:
+            throw new RuntimeException(
+                "Invalid map field number: " + number);
+        }
+      }
+      @SuppressWarnings({"rawtypes"})
+      protected com.google.protobuf.MapField internalGetMutableMapField(
+          int number) {
+        switch (number) {
+          case 5:
+            return internalGetMutableSigns();
+          default:
+            throw new RuntimeException(
+                "Invalid map field number: " + number);
+        }
+      }
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return udp.FragmentProto.internal_static_udp_GexMessage_fieldAccessorTable
@@ -1558,8 +1776,9 @@ public final class FragmentProto {
         bitField0_ = (bitField0_ & ~0x00000002);
         nonce_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
-        signs_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        sendTime_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
+        internalGetMutableSigns().clear();
         return this;
       }
 
@@ -1596,11 +1815,12 @@ public final class FragmentProto {
           to_bitField0_ |= 0x00000004;
         }
         result.nonce_ = nonce_;
-        if (((bitField0_ & 0x00000008) == 0x00000008)) {
-          signs_ = signs_.getUnmodifiableView();
-          bitField0_ = (bitField0_ & ~0x00000008);
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
         }
-        result.signs_ = signs_;
+        result.sendTime_ = sendTime_;
+        result.signs_ = internalGetSigns();
+        result.signs_.makeImmutable();
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1658,16 +1878,13 @@ public final class FragmentProto {
           nonce_ = other.nonce_;
           onChanged();
         }
-        if (!other.signs_.isEmpty()) {
-          if (signs_.isEmpty()) {
-            signs_ = other.signs_;
-            bitField0_ = (bitField0_ & ~0x00000008);
-          } else {
-            ensureSignsIsMutable();
-            signs_.addAll(other.signs_);
-          }
+        if (other.hasSendTime()) {
+          bitField0_ |= 0x00000008;
+          sendTime_ = other.sendTime_;
           onChanged();
         }
+        internalGetMutableSigns().mergeFrom(
+            other.internalGetSigns());
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -1681,6 +1898,9 @@ public final class FragmentProto {
           return false;
         }
         if (!hasNonce()) {
+          return false;
+        }
+        if (!hasSendTime()) {
           return false;
         }
         return true;
@@ -1933,96 +2153,230 @@ public final class FragmentProto {
         return this;
       }
 
-      private com.google.protobuf.LazyStringList signs_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      private void ensureSignsIsMutable() {
-        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
-          signs_ = new com.google.protobuf.LazyStringArrayList(signs_);
-          bitField0_ |= 0x00000008;
-         }
-      }
+      private java.lang.Object sendTime_ = "";
       /**
-       * <code>repeated string signs = 4;</code>
+       * <code>required string sendTime = 4;</code>
        */
-      public com.google.protobuf.ProtocolStringList
-          getSignsList() {
-        return signs_.getUnmodifiableView();
+      public boolean hasSendTime() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>repeated string signs = 4;</code>
+       * <code>required string sendTime = 4;</code>
        */
-      public int getSignsCount() {
-        return signs_.size();
+      public java.lang.String getSendTime() {
+        java.lang.Object ref = sendTime_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            sendTime_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
-       * <code>repeated string signs = 4;</code>
-       */
-      public java.lang.String getSigns(int index) {
-        return signs_.get(index);
-      }
-      /**
-       * <code>repeated string signs = 4;</code>
+       * <code>required string sendTime = 4;</code>
        */
       public com.google.protobuf.ByteString
-          getSignsBytes(int index) {
-        return signs_.getByteString(index);
+          getSendTimeBytes() {
+        java.lang.Object ref = sendTime_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          sendTime_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
       }
       /**
-       * <code>repeated string signs = 4;</code>
+       * <code>required string sendTime = 4;</code>
        */
-      public Builder setSigns(
-          int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureSignsIsMutable();
-        signs_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string signs = 4;</code>
-       */
-      public Builder addSigns(
+      public Builder setSendTime(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  ensureSignsIsMutable();
-        signs_.add(value);
+  bitField0_ |= 0x00000008;
+        sendTime_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>repeated string signs = 4;</code>
+       * <code>required string sendTime = 4;</code>
        */
-      public Builder addAllSigns(
-          java.lang.Iterable<java.lang.String> values) {
-        ensureSignsIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, signs_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string signs = 4;</code>
-       */
-      public Builder clearSigns() {
-        signs_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      public Builder clearSendTime() {
         bitField0_ = (bitField0_ & ~0x00000008);
+        sendTime_ = getDefaultInstance().getSendTime();
         onChanged();
         return this;
       }
       /**
-       * <code>repeated string signs = 4;</code>
+       * <code>required string sendTime = 4;</code>
        */
-      public Builder addSignsBytes(
+      public Builder setSendTimeBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  ensureSignsIsMutable();
-        signs_.add(value);
+  bitField0_ |= 0x00000008;
+        sendTime_ = value;
         onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.MapField<
+          java.lang.String, java.lang.String> signs_;
+      private com.google.protobuf.MapField<java.lang.String, java.lang.String>
+      internalGetSigns() {
+        if (signs_ == null) {
+          return com.google.protobuf.MapField.emptyMapField(
+              SignsDefaultEntryHolder.defaultEntry);
+        }
+        return signs_;
+      }
+      private com.google.protobuf.MapField<java.lang.String, java.lang.String>
+      internalGetMutableSigns() {
+        onChanged();;
+        if (signs_ == null) {
+          signs_ = com.google.protobuf.MapField.newMapField(
+              SignsDefaultEntryHolder.defaultEntry);
+        }
+        if (!signs_.isMutable()) {
+          signs_ = signs_.copy();
+        }
+        return signs_;
+      }
+
+      public int getSignsCount() {
+        return internalGetSigns().getMap().size();
+      }
+      /**
+       * <pre>
+       *    repeated string signs = 5;
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; signs = 5;</code>
+       */
+
+      public boolean containsSigns(
+          java.lang.String key) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        return internalGetSigns().getMap().containsKey(key);
+      }
+      /**
+       * Use {@link #getSignsMap()} instead.
+       */
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.String> getSigns() {
+        return getSignsMap();
+      }
+      /**
+       * <pre>
+       *    repeated string signs = 5;
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; signs = 5;</code>
+       */
+
+      public java.util.Map<java.lang.String, java.lang.String> getSignsMap() {
+        return internalGetSigns().getMap();
+      }
+      /**
+       * <pre>
+       *    repeated string signs = 5;
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; signs = 5;</code>
+       */
+
+      public java.lang.String getSignsOrDefault(
+          java.lang.String key,
+          java.lang.String defaultValue) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        java.util.Map<java.lang.String, java.lang.String> map =
+            internalGetSigns().getMap();
+        return map.containsKey(key) ? map.get(key) : defaultValue;
+      }
+      /**
+       * <pre>
+       *    repeated string signs = 5;
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; signs = 5;</code>
+       */
+
+      public java.lang.String getSignsOrThrow(
+          java.lang.String key) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        java.util.Map<java.lang.String, java.lang.String> map =
+            internalGetSigns().getMap();
+        if (!map.containsKey(key)) {
+          throw new java.lang.IllegalArgumentException();
+        }
+        return map.get(key);
+      }
+
+      public Builder clearSigns() {
+        internalGetMutableSigns().getMutableMap()
+            .clear();
+        return this;
+      }
+      /**
+       * <pre>
+       *    repeated string signs = 5;
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; signs = 5;</code>
+       */
+
+      public Builder removeSigns(
+          java.lang.String key) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        internalGetMutableSigns().getMutableMap()
+            .remove(key);
+        return this;
+      }
+      /**
+       * Use alternate mutation accessors instead.
+       */
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.String>
+      getMutableSigns() {
+        return internalGetMutableSigns().getMutableMap();
+      }
+      /**
+       * <pre>
+       *    repeated string signs = 5;
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; signs = 5;</code>
+       */
+      public Builder putSigns(
+          java.lang.String key,
+          java.lang.String value) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        if (value == null) { throw new java.lang.NullPointerException(); }
+        internalGetMutableSigns().getMutableMap()
+            .put(key, value);
+        return this;
+      }
+      /**
+       * <pre>
+       *    repeated string signs = 5;
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; signs = 5;</code>
+       */
+
+      public Builder putAllSigns(
+          java.util.Map<java.lang.String, java.lang.String> values) {
+        internalGetMutableSigns().getMutableMap()
+            .putAll(values);
         return this;
       }
       public final Builder setUnknownFields(
@@ -2084,6 +2438,11 @@ public final class FragmentProto {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_udp_GexMessage_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_udp_GexMessage_SignsEntry_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_udp_GexMessage_SignsEntry_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -2096,9 +2455,12 @@ public final class FragmentProto {
       "\n\027protobuf/Fragment.proto\022\003udp\"l\n\010Fragme" +
       "nt\022\017\n\007version\030\001 \002(\007\022\r\n\005index\030\002 \002(\007\022\016\n\006am" +
       "ount\030\003 \002(\007\022\023\n\013lengthTotal\030\004 \002(\007\022\r\n\005nonce" +
-      "\030\005 \002(\014\022\014\n\004data\030\006 \002(\014\"L\n\nGexMessage\022\017\n\007me" +
-      "ssage\030\001 \002(\t\022\017\n\007command\030\002 \002(\t\022\r\n\005nonce\030\003 " +
-      "\002(\t\022\r\n\005signs\030\004 \003(\tB\024\n\003udpB\rFragmentProto"
+      "\030\005 \002(\014\022\014\n\004data\030\006 \002(\014\"\250\001\n\nGexMessage\022\017\n\007m" +
+      "essage\030\001 \002(\t\022\017\n\007command\030\002 \002(\t\022\r\n\005nonce\030\003" +
+      " \002(\t\022\020\n\010sendTime\030\004 \002(\t\022)\n\005signs\030\005 \003(\0132\032." +
+      "udp.GexMessage.SignsEntry\032,\n\nSignsEntry\022" +
+      "\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001B\024\n\003udpB\r" +
+      "FragmentProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2123,7 +2485,13 @@ public final class FragmentProto {
     internal_static_udp_GexMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_udp_GexMessage_descriptor,
-        new java.lang.String[] { "Message", "Command", "Nonce", "Signs", });
+        new java.lang.String[] { "Message", "Command", "Nonce", "SendTime", "Signs", });
+    internal_static_udp_GexMessage_SignsEntry_descriptor =
+      internal_static_udp_GexMessage_descriptor.getNestedTypes().get(0);
+    internal_static_udp_GexMessage_SignsEntry_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_udp_GexMessage_SignsEntry_descriptor,
+        new java.lang.String[] { "Key", "Value", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

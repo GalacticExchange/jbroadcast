@@ -22,3 +22,9 @@ Message(GexPacket) consists of [HEADER(14 bytes), DATA]:
  - command = {"sg", "ch"} // sign, check
  - data
  
+ 
+ ---  
+     
+ todo  
+ `sudo sysctl -w net.core.rmem_default=3129920`
+ 

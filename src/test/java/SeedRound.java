@@ -9,7 +9,7 @@ public class SeedRound {
         for (int i = 0; i < 5; i++) {
             File dir = new File("parties/party" + i);
             dir.mkdir();
-            new Party("127.0.0.1", 1414 + i).saveKeys(dir.toString());
+            new Party("127.0.0.1", 1414 + i, "party" + i).saveKeys(dir.toString());
         }
 
 

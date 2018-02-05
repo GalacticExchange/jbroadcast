@@ -19,5 +19,8 @@ message GexMessage {
     required string message = 1;
     required string command = 2;
     required string nonce = 3;
-    repeated string signs = 4;
+    required string sendTime = 4;
+//    repeated string signs = 5;
+    map <string, string> signs = 5;
+
 }
