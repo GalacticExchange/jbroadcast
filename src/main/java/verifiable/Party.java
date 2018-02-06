@@ -1,3 +1,5 @@
+package verifiable;
+
 import ecdsa.GexECDSA;
 import udp.Communicator;
 import udp.GexMessage;
@@ -15,7 +17,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Party extends Communicator {
@@ -23,7 +24,7 @@ public class Party extends Communicator {
     private static final String PUBLIC_KEY_NAME = "publicKey";
     private static final String PRIVATE_KEY_NAME = "privateKey";
     private static final int t = 1;
-    static final int TEST_AMOUNT_MESSAGES = 100;
+    public static final int TEST_AMOUNT_MESSAGES = 100;
 
     //    private UDPClient udpClient;
     private GexECDSA gexECDSA;
