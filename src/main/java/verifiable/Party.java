@@ -24,24 +24,25 @@ public class Party extends Communicator {
     private static final String PUBLIC_KEY_NAME = "publicKey";
     private static final String PRIVATE_KEY_NAME = "privateKey";
     private static final int t = 1;
-    public static final int TEST_AMOUNT_MESSAGES = 100;
+    private static final int n = 5;
+    public static final int TEST_AMOUNT_MESSAGES = 1000;
 
     //    private UDPClient udpClient;
     private GexECDSA gexECDSA;
     //    private Map<Integer, ArrayList<FragmentPacket>> received;
     private HashMap<String, PublicKey> publicKeys;
     private ArrayList<GexMessage> committedMessages;
-    private String name;
+    private String partyID;
 
     // Todo: party.yml constructor?
 
     /**
      * Creates new ECDSA keys
      */
-    public Party(String addr, int port, String name) throws SocketException, UnknownHostException, NoSuchAlgorithmException {
+    public Party(String addr, int port, String partyID) throws SocketException, UnknownHostException, NoSuchAlgorithmException {
         super(addr, port);
 
-        this.name = name;
+        this.partyID = partyID;
         committedMessages = new ArrayList<>();
         gexECDSA = new GexECDSA();
         publicKeys = new HashMap<>();
@@ -54,7 +55,7 @@ public class Party extends Communicator {
         String privateKeyPath = Paths.get(keysDir, PRIVATE_KEY_NAME).toString();
         String publicKeyPath = Paths.get(keysDir, PUBLIC_KEY_NAME).toString();
 
-        this.name = name;
+        this.partyID = name;
 
         committedMessages = new ArrayList<>();
         gexECDSA = new GexECDSA(privateKeyPath, publicKeyPath);
@@ -90,7 +91,7 @@ public class Party extends Communicator {
                 String sig = gexECDSA.sign(gm.getMessage());
 
                 HashMap<String, String> map = new HashMap<>();
-                map.put(name, sig);
+                map.put(partyID, sig);
 
                 GexMessage singedMessage = new GexMessage(gm.getMessage(), "sg",
                         gm.getNonce(), gm.getSendTime(), map);
@@ -108,7 +109,7 @@ public class Party extends Communicator {
                     if (gexECDSA.verifySign(gm.getMessage(), signs.get(key), publicKeys.get(key))) {
                         verifiedSigns++;
 
-                        if (verifiedSigns >= (2 * t) + 1){
+                        if (verifiedSigns >= (n + t +1)/2 ){
                             break;
                         }
 
@@ -125,7 +126,7 @@ public class Party extends Communicator {
 //
 //                }
 
-                if (verifiedSigns >= (2 * t) + 1) {
+                if (verifiedSigns >= (n + t +1)/2) {
 
 //                    System.out.println(String.format("Party %s : committing message, time elapsed: s ms",
 //                            this));

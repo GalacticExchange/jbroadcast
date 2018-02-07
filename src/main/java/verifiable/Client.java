@@ -1,5 +1,6 @@
 package verifiable;
 
+import config.VerifiableSenderConfig;
 import udp.Communicator;
 import udp.GexMessage;
 import udp.RandomGenerator;
@@ -69,7 +70,6 @@ public class Client extends Communicator {
                 String value = (String) msg.getSigns().values().toArray()[0];
 
                 signs.put(key, value);
-//                signs.add(msg.getSigns().values().toArray()[0]);
 
             }
 
@@ -81,5 +81,21 @@ public class Client extends Communicator {
         }
 
 
+    }
+
+    public static Client createClient(VerifiableSenderConfig config) throws SocketException, UnknownHostException,
+            NoSuchAlgorithmException {
+
+        ArrayList<Party> parties = new ArrayList<>();
+
+        for (Map partyConf : config.getParties()) {
+            String addr = (String) partyConf.get("address");
+            Integer p = (Integer) partyConf.get("port");
+            String id = (String) partyConf.get("id");
+            parties.add(new Party(addr, p, id));
+        }
+
+
+        return new Client(config.getAddress(), config.getPort(), parties);
     }
 }

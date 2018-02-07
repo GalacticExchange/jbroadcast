@@ -11,12 +11,14 @@ public class ReliableRound {
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
         ArrayList<Party> parties = new ArrayList<>();
 
-        for (int i = 0; i < 5; i++) {
-            parties.add(new Party("127.0.0.1", 1414 + i));
+        int amountNodes = 5;
+
+        for (int i = 0; i < amountNodes; i++) {
+            parties.add(new Party("127.0.0.1", 1414 + i, "node" + i));
 
         }
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
+        for (int i = 0; i < amountNodes; i++) {
+            for (int j = 0; j < amountNodes; j++) {
                 if (j != i) {
                     parties.get(i).addParty(parties.get(j));
                 }

@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import verifiable.Party;
 
 public class SeedRound {
 

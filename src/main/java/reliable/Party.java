@@ -26,13 +26,17 @@ public class Party extends Communicator {
 
     private ArrayList<GexMessage> committedMessages;
 
+    private String partyID;
+
     private int n = 5;
     private int t = 1;
 
-    public static final int TEST_AMOUNT_MESSAGES = 3500;
+    public static final int TEST_AMOUNT_MESSAGES = 3000;
 
-    public Party(String addr, int port) throws SocketException, UnknownHostException {
+    public Party(String addr, int port, String partyID) throws SocketException, UnknownHostException {
         super(addr, port);
+        this.partyID = partyID;
+
         parties = new ArrayList<>();
 
         receivedEchos = new HashMap<>();
@@ -52,29 +56,18 @@ public class Party extends Communicator {
         try {
 
             switch (gm.getCommand()) {
-                case "in": // todo sendMessage(); echo
+                case "in":
                     GexMessage echo = new GexMessage(gm.getMessage(), "ec", gm.getNonce());
                     sendToParties(echo);
                     break;
 
-                case "ec": //todo check if (n+t+1)/2 echos nonce and not sent Ready -> send ready
+                case "ec":
                     checkEcho(gm);
                     break;
 
-                case "rd": // todo check if t+1 ready nonce and not sent Ready -> ready |||||||  if 2t+1 ready nonce -> commit
+                case "rd":
                     checkReady(gm);
-
-                    if (committedMessages.size() == TEST_AMOUNT_MESSAGES) {
-
-                        Instant startTime = Instant.parse(committedMessages.get(0).getSendTime());
-                        Instant finishTime = Instant.now();
-
-                        Duration timeElapsed = Duration.between(startTime, finishTime);
-
-
-                        System.out.println(String.format("Party %s : %s messages elapsed time: %s ", this,
-                                TEST_AMOUNT_MESSAGES, timeElapsed));
-                    }
+                    checkTime();
 
                     break;
             }
@@ -127,5 +120,24 @@ public class Party extends Communicator {
             sendMessage(gm, p.getAddress(), p.getPort());
         }
     }
+
+    private void checkTime() {
+        if (committedMessages.size() == TEST_AMOUNT_MESSAGES) {
+
+            Instant startTime = Instant.parse(committedMessages.get(0).getSendTime());
+            Instant finishTime = Instant.now();
+
+            Duration timeElapsed = Duration.between(startTime, finishTime);
+
+
+            System.out.println(String.format("Party %s : %s messages elapsed time: %s ", this,
+                    TEST_AMOUNT_MESSAGES, timeElapsed));
+        }
+    }
+
+    public String getPartyID() {
+        return partyID;
+    }
+
 
 }
