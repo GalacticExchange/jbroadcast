@@ -2,6 +2,7 @@ import udp.RandomGenerator;
 import verifiable.Client;
 import verifiable.Party;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class VerificationRound {
@@ -13,8 +14,7 @@ public class VerificationRound {
             String keyDir = "parties/party" + i;
             parties.add(new Party(keyDir, "127.0.0.1", 1414 + i, "party" + i));
             for (int j = 0; j < 5; j++) {
-                // todo add its own pub key? (check if i != j)
-                parties.get(i).addPublicKeyToList("party" + j, "parties/party" + j + "/publicKey");
+                parties.get(i).addPublicKeyToList("party" + j, new File("parties/party" + j + "/publicKey"));
             }
         }
 
@@ -37,8 +37,6 @@ public class VerificationRound {
         }
 
         for (int i = 0; i < Party.TEST_AMOUNT_MESSAGES; i++) {
-//            TimeUnit.MILLISECONDS.sleep(6);
-//            c.sendSignMessage("TESTMESSAGE");
             c.sendSignMessage(msgs[i]);
         }
 

@@ -2,11 +2,13 @@ package utils;
 
 import config.ReliablePartyConfig;
 import config.ReliableSenderConfig;
+import config.VerifiablePartyConfig;
 import config.VerifiableSenderConfig;
 import org.apache.commons.cli.*;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 public class CLIUtils {
 
@@ -37,7 +39,8 @@ public class CLIUtils {
         formatter.printHelp("broadcast", HEADER, options, FOOTER, true);
     }
 
-    public void parse(String[] args) throws ParseException, IOException, NoSuchAlgorithmException {
+    public void parse(String[] args) throws ParseException, IOException, NoSuchAlgorithmException,
+            InvalidKeySpecException {
         CommandLine cmd;
 
         try {
@@ -52,7 +55,7 @@ public class CLIUtils {
         if (cmd.hasOption("s")) {
             runSender(confPath, cmd.getOptionValue("b"));
         } else if (cmd.hasOption("p")) {
-            // run new party
+            runParty(confPath, cmd.getOptionValue("b"));
         } else {
             System.out.println("Either sender or party must be provided as option!\n");
             help();
@@ -64,28 +67,31 @@ public class CLIUtils {
     private void runSender(String confPath, String broadcast) throws IOException, NoSuchAlgorithmException {
         if (broadcast.equals("reliable")) {
 
-            ReliableSenderConfig relConfig = ReliableSenderConfig.load(confPath);
-            reliable.Client client = reliable.Client.createClient(relConfig);
+            ReliableSenderConfig config = ReliableSenderConfig.load(confPath);
+            reliable.Client client = reliable.Client.createClient(config);
             // todo client send N messages
 
         } else if (broadcast.equals("verifiable")) {
-            VerifiableSenderConfig verConfig = VerifiableSenderConfig.load(confPath);
-            verifiable.Client client = verifiable.Client.createClient(verConfig);
+            VerifiableSenderConfig config = VerifiableSenderConfig.load(confPath);
+            verifiable.Client client = verifiable.Client.createClient(config);
             // todo client send N messages
 
         }
     }
 
-//    private void runParty(String confPath, String broadcast) throws IOException {
-//        if (broadcast.equals("reliable")) {
-//            ReliablePartyConfig relConfig = ReliablePartyConfig.load(confPath);
-//            reliable.Party party = reliable.Party.createParty(relConfig);
-//            // todo client send N messages
-//
-//        } else if (broadcast.equals("verifiable")) {
-//
-//            // todo client send N messages
-//
-//        }
-//    }
+    private void runParty(String confPath, String broadcast) throws IOException, InvalidKeySpecException,
+            NoSuchAlgorithmException {
+        if (broadcast.equals("reliable")) {
+            ReliablePartyConfig config = ReliablePartyConfig.load(confPath);
+            System.out.println(config);
+            reliable.Party party = reliable.Party.createParty(config);
+            party.receiveMessage();
+
+        } else if (broadcast.equals("verifiable")) {
+            VerifiablePartyConfig config = VerifiablePartyConfig.load(confPath);
+            System.out.println(config);
+            verifiable.Party party = verifiable.Party.createParty(config);
+            party.receiveMessage();
+        }
+    }
 }

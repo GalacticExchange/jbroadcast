@@ -1,5 +1,6 @@
 package reliable;
 
+import config.ReliablePartyConfig;
 import udp.Communicator;
 import udp.GexMessage;
 
@@ -9,10 +10,7 @@ import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Party extends Communicator {
 
@@ -26,16 +24,16 @@ public class Party extends Communicator {
 
     private ArrayList<GexMessage> committedMessages;
 
-    private String partyID;
+    private String partyId;
 
     private int n = 5;
     private int t = 1;
 
     public static final int TEST_AMOUNT_MESSAGES = 3000;
 
-    public Party(String addr, int port, String partyID) throws SocketException, UnknownHostException {
+    public Party(String addr, int port, String partyId) throws SocketException, UnknownHostException {
         super(addr, port);
-        this.partyID = partyID;
+        this.partyId = partyId;
 
         parties = new ArrayList<>();
 
@@ -135,8 +133,23 @@ public class Party extends Communicator {
         }
     }
 
-    public String getPartyID() {
-        return partyID;
+    public String getPartyId() {
+        return partyId;
+    }
+
+    public static Party createParty(ReliablePartyConfig config) throws SocketException, UnknownHostException {
+
+        Party party = new Party(config.getAddress(), config.getPort(), config.getId());
+
+
+        for (Map partyConf : config.getParties()) {
+            String addr = (String) partyConf.get("address");
+            Integer p = (Integer) partyConf.get("port");
+            String id = (String) partyConf.get("id");
+            party.addParty(new Party(addr, p, id));
+        }
+
+        return party;
     }
 
 

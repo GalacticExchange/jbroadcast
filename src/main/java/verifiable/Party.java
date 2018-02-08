@@ -1,9 +1,11 @@
 package verifiable;
 
+import config.VerifiablePartyConfig;
 import ecdsa.GexECDSA;
 import udp.Communicator;
 import udp.GexMessage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -27,45 +29,64 @@ public class Party extends Communicator {
     private static final int n = 5;
     public static final int TEST_AMOUNT_MESSAGES = 1000;
 
-    //    private UDPClient udpClient;
     private GexECDSA gexECDSA;
-    //    private Map<Integer, ArrayList<FragmentPacket>> received;
     private HashMap<String, PublicKey> publicKeys;
     private ArrayList<GexMessage> committedMessages;
-    private String partyID;
+    private String partyId;
 
     // Todo: party.yml constructor?
 
     /**
      * Creates new ECDSA keys
      */
-    public Party(String addr, int port, String partyID) throws SocketException, UnknownHostException, NoSuchAlgorithmException {
+    public Party(String addr, int port, String partyId) throws SocketException, UnknownHostException, NoSuchAlgorithmException {
         super(addr, port);
 
-        this.partyID = partyID;
+        this.partyId = partyId;
         committedMessages = new ArrayList<>();
         gexECDSA = new GexECDSA();
         publicKeys = new HashMap<>();
     }
 
-    public Party(String keysDir, String addr, int port, String name) throws IOException,
+    /**
+     * Parses keys from directory
+     */
+    public Party(String keysDir, String addr, int port, String partyId) throws IOException,
             InvalidKeySpecException, NoSuchAlgorithmException {
         super(addr, port);
 
         String privateKeyPath = Paths.get(keysDir, PRIVATE_KEY_NAME).toString();
         String publicKeyPath = Paths.get(keysDir, PUBLIC_KEY_NAME).toString();
 
-        this.partyID = name;
+        this.partyId = partyId;
 
         committedMessages = new ArrayList<>();
-        gexECDSA = new GexECDSA(privateKeyPath, publicKeyPath);
+        gexECDSA = new GexECDSA(new File(privateKeyPath), new File(publicKeyPath));
         publicKeys = new HashMap<>();
     }
 
 
-    public void addPublicKeyToList(String name, String publicKeyPath) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
-        PublicKey key = (PublicKey) GexECDSA.readKey(publicKeyPath, PublicKey.class);
-        publicKeys.put(name, key);
+    /**
+     * Parses from strings
+     */
+    public Party(String publicKey, String privateKey, String addr, int port, String partyId) throws InvalidKeySpecException,
+            NoSuchAlgorithmException, SocketException, UnknownHostException {
+        super(addr, port);
+        this.partyId = partyId;
+        committedMessages = new ArrayList<>();
+        gexECDSA = new GexECDSA(publicKey, privateKey);
+        publicKeys = new HashMap<>();
+    }
+
+    public void addPublicKeyToList(String id, File publicKeyPath) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+        PublicKey publicKey = (PublicKey) GexECDSA.readKey(new File(publicKeyPath.getPath()), PublicKey.class);
+        publicKeys.put(id, publicKey);
+    }
+
+    public void addPublicKeyToList(String id, String pubKey) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        PublicKey publicKey = GexECDSA.parsePublicKey(pubKey);
+        publicKeys.put(id, publicKey);
+
     }
 
     public void saveKeys(String keysDir) throws IOException {
@@ -73,12 +94,6 @@ public class Party extends Communicator {
         String publicKeyPath = Paths.get(keysDir, PUBLIC_KEY_NAME).toString();
         gexECDSA.saveKeys(privateKeyPath, publicKeyPath);
     }
-
-
-//    public void sendSignMessage(String msg, String addr, int port) throws IOException, NoSuchAlgorithmException {
-//        GexMessage gm = new GexMessage(msg, "sg");
-//        sendMessage(gm, addr, port);
-//    }
 
 
     @Override
@@ -91,7 +106,7 @@ public class Party extends Communicator {
                 String sig = gexECDSA.sign(gm.getMessage());
 
                 HashMap<String, String> map = new HashMap<>();
-                map.put(partyID, sig);
+                map.put(partyId, sig);
 
                 GexMessage singedMessage = new GexMessage(gm.getMessage(), "sg",
                         gm.getNonce(), gm.getSendTime(), map);
@@ -109,7 +124,7 @@ public class Party extends Communicator {
                     if (gexECDSA.verifySign(gm.getMessage(), signs.get(key), publicKeys.get(key))) {
                         verifiedSigns++;
 
-                        if (verifiedSigns >= (n + t +1)/2 ){
+                        if (verifiedSigns >= (n + t + 1) / 2) {
                             break;
                         }
 
@@ -117,26 +132,9 @@ public class Party extends Communicator {
                 }
 
 
-//                for (int i = 0; i < signs.size(); i++) {
-//                    for (int j = 0; j < signs.size(); j++) {
-//                        if (gexECDSA.verifySign(gm.getMessage(), signs.get(i), publicKeys.get(j))) {
-//                            verifiedSigns++;
-//                        }
-//                    }
-//
-//                }
-
-                if (verifiedSigns >= (n + t +1)/2) {
-
-//                    System.out.println(String.format("Party %s : committing message, time elapsed: s ms",
-//                            this));
-
+                if (verifiedSigns >= (n + t + 1) / 2) {
 
                     committedMessages.add(gm);
-
-//                    System.out.println(String.format("Party %s : committed messages %s",
-//                            this, committedMessages.size()));
-
 
                     if (committedMessages.size() == TEST_AMOUNT_MESSAGES) {
 
@@ -155,6 +153,22 @@ public class Party extends Communicator {
         } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Party createParty(VerifiablePartyConfig config) throws NoSuchAlgorithmException, IOException,
+            InvalidKeySpecException {
+
+        Party party = new Party(config.getPublicKey(), config.getPrivateKey(),
+                config.getAddress(), config.getPort(), config.getId());
+
+
+        for (Map partyConf : config.getParties()) {
+            String id = (String) partyConf.get("id");
+            String pubKey = (String) partyConf.get("public_key");
+            party.addPublicKeyToList(id, pubKey);
+        }
+
+        return party;
     }
 
 

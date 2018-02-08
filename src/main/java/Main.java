@@ -3,15 +3,18 @@ import utils.CLIUtils;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 public class Main {
 
-    public static void main(String[] args) throws ParseException, IOException, NoSuchAlgorithmException {
-        CLIUtils cli = new CLIUtils();
-        String cmdArgs[] = new String[]{"-c", "config/client.yml", "-b", "reliable", "-s"};
-        cli.parse(cmdArgs);
 
-//        String cmdArgs2[] = new String[]{"-c", "config/client.yml", "-b", "verifiable", "-s"};
-//        cli.parse(cmdArgs2);
+    public static void processCmd(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException, ParseException, IOException {
+        CLIUtils cli = new CLIUtils();
+        cli.parse(args);
+    }
+
+    public static void main(String[] args) throws ParseException, IOException, NoSuchAlgorithmException,
+            InvalidKeySpecException {
+        processCmd(args);
     }
 }

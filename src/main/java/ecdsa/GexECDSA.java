@@ -2,6 +2,7 @@ package ecdsa;
 
 import utils.FileUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InvalidClassException;
 import java.security.*;
@@ -27,21 +28,32 @@ public class GexECDSA {
     }
 
     /**
-     * Parses existing key pair.
+     * Parses existing key pair from path.
      */
-    public GexECDSA(String privateKeyPath, String publicKeyPath) throws InvalidKeySpecException,
+    public GexECDSA(File privateKeyFile, File publicKeyFile) throws InvalidKeySpecException,
             NoSuchAlgorithmException, IOException {
-        readKeys(privateKeyPath, publicKeyPath);
+        readKeys(privateKeyFile, publicKeyFile);
     }
 
-    private void readKeys(String privateKeyPath, String publicKeyPath) throws InvalidKeySpecException,
+    /**
+     *
+     */
+    public GexECDSA(String publicKey, String privateKey) throws InvalidKeySpecException, NoSuchAlgorithmException {
+
+        PublicKey pubKey = parsePublicKey(publicKey);
+        PrivateKey privKey = parsePrivateKey(privateKey);
+
+        pair = new KeyPair(pubKey, privKey);
+    }
+
+
+    private void readKeys(File privateKey, File publicKey) throws InvalidKeySpecException,
             NoSuchAlgorithmException, IOException {
 
-//        KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
-        PrivateKey privateKey = (PrivateKey) readKey(privateKeyPath, PrivateKey.class);
-        PublicKey pubKey = (PublicKey) readKey(publicKeyPath, PublicKey.class);
+        PrivateKey privKey = (PrivateKey) readKey(privateKey, PrivateKey.class);
+        PublicKey pubKey = (PublicKey) readKey(publicKey, PublicKey.class);
 
-        this.pair = new KeyPair(pubKey, privateKey);
+        pair = new KeyPair(pubKey, privKey);
     }
 
 
@@ -57,22 +69,19 @@ public class GexECDSA {
 
     }
 
-    public static PublicKey readPublicKey(String pubKeyPath, KeyFactory keyFactory) throws InvalidKeySpecException, IOException {
-        return parsePublicKey(FileUtils.readFileString(pubKeyPath), keyFactory);
+    public static PublicKey readPublicKey(File pubKey) throws InvalidKeySpecException, IOException, NoSuchAlgorithmException {
+        return parsePublicKey(FileUtils.readFileString(pubKey));
     }
 
-    public static PrivateKey readPrivateKey(String privateKeyPath, KeyFactory keyFactory) throws InvalidKeySpecException, IOException {
-        byte[] privateKeyBytes = Base64.getDecoder().decode(FileUtils.readFileString(privateKeyPath));
-        EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-        return keyFactory.generatePrivate(privateKeySpec);
+    public static PrivateKey readPrivateKey(File privateKey) throws InvalidKeySpecException, IOException, NoSuchAlgorithmException {
+        return parsePrivateKey(FileUtils.readFileString(privateKey));
     }
 
-    public static Key readKey(String path, Class keyClass) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-        KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
+    public static Key readKey(File file, Class keyClass) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
         if (keyClass.equals(PublicKey.class)) {
-            return readPublicKey(path, keyFactory);
+            return readPublicKey(file);
         } else if (keyClass.equals(PrivateKey.class)) {
-            return readPrivateKey(path, keyFactory);
+            return readPrivateKey(file);
         } else {
             throw new InvalidClassException("Invalid Key Class: " + keyClass);
         }
@@ -118,10 +127,20 @@ public class GexECDSA {
         return pair.getPrivate();
     }
 
-    public static PublicKey parsePublicKey(String publicKey, KeyFactory keyFactory) throws InvalidKeySpecException {
+    public static PublicKey parsePublicKey(String publicKey) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
+
         byte[] publicKeyBytes = Base64.getDecoder().decode(publicKey);
         X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(publicKeyBytes);
         return keyFactory.generatePublic(pubKeySpec);
+    }
+
+    public static PrivateKey parsePrivateKey(String privateKey) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
+
+        byte[] privateKeyBytes = Base64.getDecoder().decode(privateKey);
+        EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+        return keyFactory.generatePrivate(privateKeySpec);
     }
 
 

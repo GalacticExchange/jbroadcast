@@ -18,11 +18,20 @@ public class ReliablePartyConfig extends BaseConfig {
                                @JsonProperty(value = "parties", required = true) ArrayList<Map> parties,
                                @JsonProperty(value = "id", required = true) String id) {
         super(address, port, parties);
+        this.id = id;
     }
 
     public static ReliablePartyConfig load(String path) throws IOException {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         return mapper.readValue(new File(path), ReliablePartyConfig.class);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

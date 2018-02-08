@@ -75,17 +75,17 @@ public class GexMessage {
         return gexMessage.getSendTime();
     }
 
-    public static void main(String[] args) {
-//        String strDate = new Date().toString();
+//    public static void main(String[] args) {
+////        String strDate = new Date().toString();
+////        System.out.println(strDate);
+//        String strDate = Instant.now().toString();
 //        System.out.println(strDate);
-        String strDate = Instant.now().toString();
-        System.out.println(strDate);
-        System.out.println(Instant.parse(strDate).getEpochSecond());
-
-
-        System.out.println(Instant.now().getEpochSecond());
-        Instant.parse(Instant.now().toString());
-    }
+//        System.out.println(Instant.parse(strDate).getEpochSecond());
+//
+//
+//        System.out.println(Instant.now().getEpochSecond());
+//        Instant.parse(Instant.now().toString());
+//    }
 
 
 }

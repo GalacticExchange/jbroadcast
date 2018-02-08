@@ -1,6 +1,5 @@
 package config;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -9,8 +8,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 
 //@JsonIgnoreProperties(ignoreUnknown = true)
@@ -57,16 +54,11 @@ public class BaseConfig {
         this.parties = parties;
     }
 
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
 
-//    public static void main(String[] args) {
-//        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-//        try {
-//            BaseConfig conf = mapper.readValue(new File("config/client.yml"), BaseConfig.class);
-//            System.out.println(ReflectionToStringBuilder.toString(conf, ToStringStyle.MULTI_LINE_STYLE));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
 
 
 }

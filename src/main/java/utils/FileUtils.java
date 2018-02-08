@@ -1,5 +1,6 @@
 package utils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,8 +17,8 @@ public class FileUtils {
         return encKey;
     }
 
-    public static String readFileString(String filePath) throws IOException {
-        return ByteUtils.byteArrToString(readFile(filePath));
+    public static String readFileString(File file) throws IOException {
+        return ByteUtils.byteArrToString(readFile(file.getPath()));
     }
 
     public static void writeFile(String filePath, byte[] data) throws IOException {
