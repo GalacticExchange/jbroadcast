@@ -15,10 +15,19 @@ public abstract class Communicator {
     private UDPClient udpClient;
     private Map<Integer, ArrayList<FragmentPacket>> receivedFragments;
 
+    private String address;
+    private int port;
 
-    public Communicator(String addr, int port) throws SocketException, UnknownHostException {
-        udpClient = new UDPClient(addr, port);
+    public Communicator(String address, int port) throws SocketException, UnknownHostException {
+        this.address = address;
+        this.port = port;
+
+        udpClient = new UDPClient(address, port);
         receivedFragments = new HashMap<>();
+    }
+
+    public Communicator() {
+
     }
 
     /**
@@ -63,7 +72,6 @@ public abstract class Communicator {
     public void sendMessage(GexMessage gm, String addr, int port) throws NoSuchAlgorithmException, IOException {
         byte[] NONCE = RandomGenerator.generateByteArray(FragmentPacket.NONCE_LEN);
 
-//        System.out.println("NONCE hashCode: " + Arrays.hashCode(NONCE));
         FragmentPacket[] fPackets = FragmentPacket.splitMessage(gm, NONCE);
 
         for (FragmentPacket fp : fPackets) {
@@ -72,11 +80,19 @@ public abstract class Communicator {
     }
 
     public String getAddress() {
-        return udpClient.getAddress();
+        return address;
     }
 
     public int getPort() {
-        return udpClient.getPort();
+        return port;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 
     public abstract void processMessage(GexMessage gm, String address, int port);

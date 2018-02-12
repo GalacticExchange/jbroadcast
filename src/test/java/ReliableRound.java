@@ -20,7 +20,9 @@ public class ReliableRound {
         for (int i = 0; i < amountNodes; i++) {
             for (int j = 0; j < amountNodes; j++) {
                 if (j != i) {
-                    parties.get(i).addParty(parties.get(j));
+                    Party remote = Party.remoteParty(parties.get(j).getAddress(), parties.get(j).getPort(),
+                            parties.get(j).getPartyId());
+                    parties.get(i).addParty(remote);
                 }
             }
         }

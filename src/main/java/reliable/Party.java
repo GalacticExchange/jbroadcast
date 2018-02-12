@@ -44,6 +44,23 @@ public class Party extends Communicator {
 
     }
 
+    private Party() {
+
+    }
+
+    /**
+     * Don't listen on address / port
+     */
+    public static Party remoteParty(String address, int port, String partyId) {
+        Party p = new Party();
+        p.setAddress(address);
+        p.setPort(port);
+        p.setPartyId(partyId);
+
+        return p;
+    }
+
+
     public void addParty(Party p) {
         parties.add(p);
     }
@@ -137,6 +154,10 @@ public class Party extends Communicator {
         return partyId;
     }
 
+    private void setPartyId(String partyId) {
+        this.partyId = partyId;
+    }
+
     public static Party createParty(ReliablePartyConfig config) throws SocketException, UnknownHostException {
 
         Party party = new Party(config.getAddress(), config.getPort(), config.getId());
@@ -146,7 +167,7 @@ public class Party extends Communicator {
             String addr = (String) partyConf.get("address");
             Integer p = (Integer) partyConf.get("port");
             String id = (String) partyConf.get("id");
-            party.addParty(new Party(addr, p, id));
+            party.addParty(remoteParty(addr, p, id));
         }
 
         return party;
