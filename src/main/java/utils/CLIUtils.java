@@ -28,14 +28,15 @@ public class CLIUtils {
 
     private void initOptions() {
         options = new Options();
-        options.addRequiredOption("c", "config", true, "path to config");
+        options.addRequiredOption("c", "config", true, "path to YAML config");
         options.addRequiredOption("b", "broadcast", true, "broadcast type {reliable , verifiable}");
         options.addOption("s", "sender", false, "run sender");
         options.addOption("p", "party", false, "run party");
+        options.addOption("h", "help", false, "show this help");
     }
 
 
-    private void help() {
+    private void showHelp() {
         formatter.printHelp("broadcast", HEADER, options, FOOTER, true);
     }
 
@@ -46,7 +47,7 @@ public class CLIUtils {
         try {
             cmd = parser.parse(options, args);
         } catch (MissingOptionException ignored) {
-            help();
+            showHelp();
             return;
         }
 
@@ -56,9 +57,12 @@ public class CLIUtils {
             runSender(confPath, cmd.getOptionValue("b"));
         } else if (cmd.hasOption("p")) {
             runParty(confPath, cmd.getOptionValue("b"));
-        } else {
+        } else if(cmd.hasOption("h")){
+            showHelp();
+        }
+        else {
             System.out.println("Either sender or party must be provided as option!\n");
-            help();
+            showHelp();
         }
 
 
@@ -92,6 +96,8 @@ public class CLIUtils {
             System.out.println(config);
             verifiable.Party party = verifiable.Party.createParty(config);
             party.receiveMessage();
+        } else {
+            System.out.println("Unknown broadcast type");
         }
     }
 }
