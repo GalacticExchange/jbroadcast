@@ -8,13 +8,13 @@ import java.security.spec.InvalidKeySpecException;
 public class Main {
 
 
-    public static void processCmd(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException, ParseException, IOException {
+    public static void processCmd(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException, ParseException, IOException, InterruptedException {
         CLIUtils cli = new CLIUtils();
         cli.parse(args);
     }
 
     public static void main(String[] args) throws ParseException, IOException, NoSuchAlgorithmException,
-            InvalidKeySpecException {
+            InvalidKeySpecException, InterruptedException {
         processCmd(args);
     }
 }

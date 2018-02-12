@@ -6,7 +6,8 @@ import java.security.spec.InvalidKeySpecException;
 
 public class MainTest {
 
-    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, ParseException, IOException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, ParseException,
+            IOException, InterruptedException {
         String cmdArgs[] = new String[]{"-c", "config_example/party_verifiable.yml", "-b", "verifiable", "-p"};
 
         Main.processCmd(cmdArgs);

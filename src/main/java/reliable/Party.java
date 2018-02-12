@@ -29,7 +29,7 @@ public class Party extends Communicator {
     private int n = 5;
     private int t = 1;
 
-    public static final int TEST_AMOUNT_MESSAGES = 3000;
+    public static final int TEST_AMOUNT_MESSAGES = 10;
 
     public Party(String addr, int port, String partyId) throws SocketException, UnknownHostException {
         super(addr, port);
@@ -67,7 +67,8 @@ public class Party extends Communicator {
 
     @Override
     public void processMessage(GexMessage gm, String address, int port) {
-
+        //todo
+        System.out.println("Got message:\n" + gm);
         try {
 
             switch (gm.getCommand()) {

@@ -27,6 +27,7 @@ public class Client extends Communicator {
         GexMessage gm = new GexMessage(msg, "in", nonce);
 
         for (Party p : parties) {
+//            System.out.println(String.format("Sending message %s to party %s ", gm, p));
             sendMessage(gm, p.getAddress(), p.getPort());
         }
     }
@@ -39,7 +40,7 @@ public class Client extends Communicator {
             String addr = (String) partyConf.get("address");
             Integer p = (Integer) partyConf.get("port");
             String id = (String) partyConf.get("id");
-            parties.add(new Party(addr, p, id));
+            parties.add(Party.remoteParty(addr, p, id));
         }
 
 

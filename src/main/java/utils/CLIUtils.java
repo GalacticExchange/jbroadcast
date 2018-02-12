@@ -9,6 +9,7 @@ import org.apache.commons.cli.*;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.concurrent.TimeUnit;
 
 public class CLIUtils {
 
@@ -41,7 +42,7 @@ public class CLIUtils {
     }
 
     public void parse(String[] args) throws ParseException, IOException, NoSuchAlgorithmException,
-            InvalidKeySpecException {
+            InvalidKeySpecException, InterruptedException {
         CommandLine cmd;
 
         try {
@@ -57,10 +58,9 @@ public class CLIUtils {
             runSender(confPath, cmd.getOptionValue("b"));
         } else if (cmd.hasOption("p")) {
             runParty(confPath, cmd.getOptionValue("b"));
-        } else if(cmd.hasOption("h")){
+        } else if (cmd.hasOption("h")) {
             showHelp();
-        }
-        else {
+        } else {
             System.out.println("Either sender or party must be provided as option!\n");
             showHelp();
         }
@@ -68,12 +68,13 @@ public class CLIUtils {
 
     }
 
-    private void runSender(String confPath, String broadcast) throws IOException, NoSuchAlgorithmException {
+    private void runSender(String confPath, String broadcast) throws IOException, NoSuchAlgorithmException, InterruptedException {
         if (broadcast.equals("reliable")) {
 
             ReliableSenderConfig config = ReliableSenderConfig.load(confPath);
             reliable.Client client = reliable.Client.createClient(config);
             // todo client send N messages
+            runReliableTests(client);
 
         } else if (broadcast.equals("verifiable")) {
             VerifiableSenderConfig config = VerifiableSenderConfig.load(confPath);
@@ -98,6 +99,19 @@ public class CLIUtils {
             party.receiveMessage();
         } else {
             System.out.println("Unknown broadcast type");
+        }
+    }
+
+    public static void runReliableTests(reliable.Client c) throws IOException, NoSuchAlgorithmException, InterruptedException {
+        String msgs[] = new String[reliable.Party.TEST_AMOUNT_MESSAGES];
+        for (int i = 0; i < reliable.Party.TEST_AMOUNT_MESSAGES; i++) {
+            msgs[i] = udp.RandomGenerator.generateString(10);
+        }
+
+        for (int i = 0; i < reliable.Party.TEST_AMOUNT_MESSAGES; i++) {
+            TimeUnit.SECONDS.sleep(1);
+            System.out.println("sending message: " + msgs[i]);
+            c.sendMessage(msgs[i]);
         }
     }
 }
