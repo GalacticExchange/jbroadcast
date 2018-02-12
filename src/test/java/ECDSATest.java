@@ -1,5 +1,4 @@
 import ecdsa.GexECDSA;
-import utils.ByteUtils;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;

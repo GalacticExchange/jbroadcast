@@ -2,8 +2,6 @@ package udp;
 
 import java.io.IOException;
 import java.net.*;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 public class UDPClient {
 
