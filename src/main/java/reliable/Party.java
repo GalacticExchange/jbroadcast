@@ -31,7 +31,7 @@ public class Party extends Communicator {
 
     static int receivedIn = 0;
 
-    public static final int TEST_AMOUNT_MESSAGES = 1000;
+    public static final int TEST_AMOUNT_MESSAGES = 2000;
 
     public Party(String addr, int port, String partyId) throws SocketException, UnknownHostException {
         super(addr, port);
