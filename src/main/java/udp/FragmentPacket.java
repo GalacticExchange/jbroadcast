@@ -11,8 +11,7 @@ public class FragmentPacket {
 
     private static final int VERSION = 1;
     public static final int NONCE_LEN = 8;
-//    public static final int DATA_LEN = 1024;
-    public static final int DATA_LEN = 512;
+    public static final int DATA_LEN = 1024;
     private static final int DATA_KEY_LEN = 3; // ProtoBuf key length for bytes > 127
 
     public static final int HEADER_LEN = 30 + DATA_KEY_LEN; // 5+5+5+5+10 = 30
