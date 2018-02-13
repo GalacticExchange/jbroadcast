@@ -29,7 +29,7 @@ public class Party extends Communicator {
     private int n = 5;
     private int t = 1;
 
-    public static final int TEST_AMOUNT_MESSAGES = 10;
+    public static final int TEST_AMOUNT_MESSAGES = 100;
 
     public Party(String addr, int port, String partyId) throws SocketException, UnknownHostException {
         super(addr, port);
