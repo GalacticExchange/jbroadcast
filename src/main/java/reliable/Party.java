@@ -68,7 +68,7 @@ public class Party extends Communicator {
     @Override
     public void processMessage(GexMessage gm, String address, int port) {
         //todo
-        System.out.println("Got message:\n" + gm);
+//        System.out.println("Got message:\n" + gm);
         try {
 
             switch (gm.getCommand()) {
@@ -111,6 +111,7 @@ public class Party extends Communicator {
     }
 
     private void checkReady(GexMessage gm) throws IOException, NoSuchAlgorithmException {
+        System.out.println(String.format("Committed amount: %s", committedMessages.size()));
         if (!receivedReadies.containsKey(gm.getNonce())) {
             receivedReadies.put(gm.getNonce(), new ArrayList<>());
             return;
@@ -127,6 +128,7 @@ public class Party extends Communicator {
 
         if (readies >= 2 * t + 1) {
             committedMessages.add(gm);
+
         }
     }
 
