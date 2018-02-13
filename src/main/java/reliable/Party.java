@@ -29,6 +29,8 @@ public class Party extends Communicator {
     private int n = 5;
     private int t = 1;
 
+    static int receivedIn = 0;
+
     public static final int TEST_AMOUNT_MESSAGES = 1000;
 
     public Party(String addr, int port, String partyId) throws SocketException, UnknownHostException {
@@ -73,6 +75,8 @@ public class Party extends Communicator {
 
             switch (gm.getCommand()) {
                 case "in":
+                    receivedIn++;
+                    System.out.println("RECEIVED IN AMOUNT: " + receivedIn);
                     GexMessage echo = new GexMessage(gm.getMessage(), "ec", gm.getNonce());
                     sendToParties(echo);
                     break;
