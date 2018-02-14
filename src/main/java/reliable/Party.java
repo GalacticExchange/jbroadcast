@@ -31,7 +31,7 @@ public class Party extends Communicator {
 
     static int receivedIn = 0;
 
-    public static final int TEST_AMOUNT_MESSAGES = 2000;
+    public static final int TEST_AMOUNT_MESSAGES = 20000;
 
     public Party(String addr, int port, String partyId) throws SocketException, UnknownHostException {
         super(addr, port);
@@ -76,7 +76,7 @@ public class Party extends Communicator {
             switch (gm.getCommand()) {
                 case "in":
                     receivedIn++;
-                    System.out.println("RECEIVED IN AMOUNT: " + receivedIn);
+//                    System.out.println("RECEIVED IN AMOUNT: " + receivedIn);
                     GexMessage echo = new GexMessage(gm.getMessage(), "ec", gm.getNonce());
                     sendToParties(echo);
                     break;
@@ -115,7 +115,6 @@ public class Party extends Communicator {
     }
 
     private void checkReady(GexMessage gm) throws IOException, NoSuchAlgorithmException {
-        System.out.println(String.format("Committed amount: %s", committedMessages.size()));
         if (!receivedReadies.containsKey(gm.getNonce())) {
             receivedReadies.put(gm.getNonce(), new ArrayList<>());
             return;
@@ -132,6 +131,7 @@ public class Party extends Communicator {
 
         if (readies >= 2 * t + 1) {
             committedMessages.add(gm);
+            System.out.println(String.format("Committed amount: %s", committedMessages.size()));
 
         }
     }

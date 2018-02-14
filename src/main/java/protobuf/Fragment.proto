@@ -10,7 +10,7 @@ message Fragment {
     required fixed32 index = 2;
     required fixed32 amount = 3;
     required fixed32 lengthTotal = 4;
-    required bytes nonce = 5;
+    required string nonce = 5;
     required bytes data = 6;
 
 }

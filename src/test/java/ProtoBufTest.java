@@ -59,7 +59,7 @@ public class ProtoBufTest {
         builder.setAmount(1); // (1+4)          5
         builder.setLengthTotal(1); // (1+4)     5
 //        builder.setCommand(bCmd1); // (2 + 2)   4
-        builder.setNonce(bNonce1); // (2 + 2)   4
+//        builder.setNonce(bNonce1); // (2 + 2)   4
         builder.setData(ByteString.copyFrom(str1.getBytes())); // (2 + 1024) 1026
         // total bytes = 32
 
@@ -70,11 +70,11 @@ public class ProtoBufTest {
         System.out.println("Data value length:" + str1.getBytes().length + " Data key length:" + dataKeyLength + "\n");
         System.out.println(fm);
 
-        int x = fm.getData().toByteArray().length +
-                fm.getNonce().toByteArray().length;
-
-        System.out.println(fm.toByteArray().length - x);
-        System.out.println(fm.toByteString());
+//        int x = fm.getData().toByteArray().length +
+//                fm.getNonce().toByteArray().length;
+//
+//        System.out.println(fm.toByteArray().length - x);
+//        System.out.println(fm.toByteString());
 
 
 //        byte[] data = fm.getData().toByteArray();

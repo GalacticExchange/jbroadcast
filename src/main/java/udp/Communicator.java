@@ -13,7 +13,7 @@ import java.util.Map;
 public abstract class Communicator {
 
     private UDPClient udpClient;
-    private Map<Integer, ArrayList<FragmentPacket>> receivedFragments;
+    private Map<String, ArrayList<FragmentPacket>> receivedFragments;
 
     private String address;
     private int port;
@@ -36,16 +36,16 @@ public abstract class Communicator {
     public void receiveMessage() throws IOException {
         while (true) {
             FragmentPacket fp = udpClient.receiveMessage();
-            int nonceHashCode = fp.getNonceHashCode();
+            String nonce = fp.getNonce();
 
-            if (!receivedFragments.containsKey(nonceHashCode)) {
-                receivedFragments.put(nonceHashCode, new ArrayList<>());
+            if (!receivedFragments.containsKey(nonce)) {
+                receivedFragments.put(nonce, new ArrayList<>());
             }
 
-            receivedFragments.get(nonceHashCode).add(fp);
+            receivedFragments.get(nonce).add(fp);
 
             if (isLastPacket(fp)) {
-                GexMessage gm = assembleMessage(fp.getNonceHashCode());
+                GexMessage gm = assembleMessage(fp.getNonce());
                 processMessage(gm, fp.getAddress(), fp.getPort());
             }
 
@@ -58,19 +58,19 @@ public abstract class Communicator {
         return fp.getIndex() + 1 == fp.getAmount();
     }
 
-    private GexMessage assembleMessage(int nonceHashCode) throws InvalidProtocolBufferException {
+    private GexMessage assembleMessage(String nonce) throws InvalidProtocolBufferException {
 
-        FragmentPacket[] packets = new FragmentPacket[receivedFragments.get(nonceHashCode).size()];
-        receivedFragments.get(nonceHashCode).toArray(packets);
+        FragmentPacket[] packets = new FragmentPacket[receivedFragments.get(nonce).size()];
+        receivedFragments.get(nonce).toArray(packets);
 
-        GexMessage assembled = FragmentPacket.assembleMessage(packets);
-//        System.out.println("GOT assembled message: " + assembled);
+//        GexMessage assembled = FragmentPacket.assembleMessage(packets);
 
-        return assembled;
+        return FragmentPacket.assembleMessage(packets);
     }
 
     public void sendMessage(GexMessage gm, String addr, int port) throws NoSuchAlgorithmException, IOException {
-        byte[] NONCE = RandomGenerator.generateByteArray(FragmentPacket.NONCE_LEN);
+//        byte[] NONCE = RandomGenerator.generateByteArray(FragmentPacket.NONCE_LEN);
+        String NONCE = RandomGenerator.generateString(FragmentPacket.NONCE_LEN);
 
         FragmentPacket[] fPackets = FragmentPacket.splitMessage(gm, NONCE);
 
