@@ -41,10 +41,10 @@ public class FragmentPacket implements Comparable<FragmentPacket>{
     /**
      * Parses incoming FP
      */
-    public FragmentPacket(byte[] mpBytes, String address, int port) throws InvalidProtocolBufferException {
+    public FragmentPacket(byte[] mpBytes, String sourceAddress, int sourcePort) throws InvalidProtocolBufferException {
         fragment = FragmentProto.Fragment.parseFrom(mpBytes);
-        this.address = address;
-        this.port = port;
+        this.address = sourceAddress;
+        this.port = sourcePort;
     }
 
 

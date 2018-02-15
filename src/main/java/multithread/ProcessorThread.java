@@ -1,80 +1,69 @@
-package reliable;
+package multithread;
 
-import config.ReliablePartyConfig;
-import udp.Communicator;
+import com.google.protobuf.InvalidProtocolBufferException;
+import reliable.Party;
+import udp.FragmentPacket;
 import udp.GexMessage;
 
 import java.io.IOException;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
 
-public class Party extends Communicator {
 
-    private ArrayList<Party> parties;
+/**
+ * Assemble fragments and pass them to Writer
+ */
+public class ProcessorThread extends Messenger implements Runnable {
+
+    private BlockingQueue<FragmentPacket> readerQueue;
+    private BlockingQueue<List<Object>> writerQueue;
 
     private HashMap<String, ArrayList<GexMessage>> receivedEchos;
     private HashMap<String, ArrayList<GexMessage>> receivedReadies;
     private Set<String> sentReadies;
+    private ArrayList<Party> parties;
 
     private ArrayList<GexMessage> committedMessages;
 
-    private String partyId;
-
+    // TODO !
     private int n = 5;
     private int t = 1;
 
-    static int receivedIn = 0;
 
-    public static final int TEST_AMOUNT_MESSAGES = 10500;
-
-    public Party(String addr, int port, String partyId) throws SocketException, UnknownHostException {
-        super(addr, port);
-        this.partyId = partyId;
-
-        parties = new ArrayList<>();
+    public ProcessorThread(BlockingQueue<FragmentPacket> readerQueue, BlockingQueue<List<Object>> writerQueue,
+                           ArrayList<Party> parties, ArrayList<GexMessage> committedMessages) {
+        this.readerQueue = readerQueue;
+        this.writerQueue = writerQueue;
+        this.committedMessages = committedMessages;
+        this.parties = parties;
 
         receivedEchos = new HashMap<>();
         receivedReadies = new HashMap<>();
         sentReadies = new HashSet<>();
-        committedMessages = new ArrayList<>();
-
-    }
-
-    private Party() {
-
-    }
-
-    /**
-     * Don't listen on address / port
-     */
-    public static Party remoteParty(String address, int port, String partyId) {
-        Party p = new Party();
-        p.setAddress(address);
-        p.setPort(port);
-        p.setPartyId(partyId);
-
-        return p;
-    }
-
-
-    public void addParty(Party p) {
-        parties.add(p);
     }
 
     @Override
+    public void run() {
+        while (true) {
+            try {
+                FragmentPacket fp = readerQueue.take();
+                processFragment(fp);
+            } catch (InterruptedException | InvalidProtocolBufferException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+
     public void processMessage(GexMessage gm, String address, int port) {
-        //todo
-//        System.out.println("Got message:\n" + gm);
         try {
 
             switch (gm.getCommand()) {
                 case "in":
-                    receivedIn++;
-//                    System.out.println("RECEIVED IN AMOUNT: " + receivedIn);
                     GexMessage echo = new GexMessage(gm.getMessage(), "ec", gm.getNonce());
                     sendToParties(echo);
                     break;
@@ -93,6 +82,7 @@ public class Party extends Communicator {
             e.printStackTrace();
         }
     }
+
 
     private void checkEcho(GexMessage gm) throws IOException, NoSuchAlgorithmException {
 
@@ -135,14 +125,15 @@ public class Party extends Communicator {
     }
 
 
-    private void sendToParties(GexMessage gm) throws IOException, NoSuchAlgorithmException {
+    private void sendToParties(GexMessage gm) {
         for (Party p : parties) {
-            sendMessage(gm, p.getAddress(), p.getPort());
+            List<Object> list = Arrays.asList(gm, p.getAddress(), p.getPort());
+            writerQueue.add(list);
         }
     }
 
     private void checkTime() {
-        if (committedMessages.size() == TEST_AMOUNT_MESSAGES) {
+        if (committedMessages.size() == Party.TEST_AMOUNT_MESSAGES) {
 
             Instant startTime = Instant.parse(committedMessages.get(0).getSendTime());
             Instant finishTime = Instant.now();
@@ -151,32 +142,8 @@ public class Party extends Communicator {
 
 
             System.out.println(String.format("Party %s : %s messages elapsed time: %s ", this,
-                    TEST_AMOUNT_MESSAGES, timeElapsed));
+                    Party.TEST_AMOUNT_MESSAGES, timeElapsed));
         }
     }
-
-    public String getPartyId() {
-        return partyId;
-    }
-
-    private void setPartyId(String partyId) {
-        this.partyId = partyId;
-    }
-
-    public static Party createParty(ReliablePartyConfig config) throws SocketException, UnknownHostException {
-
-        Party party = new Party(config.getAddress(), config.getPort(), config.getId());
-
-
-        for (Map partyConf : config.getParties()) {
-            String addr = (String) partyConf.get("address");
-            Integer p = (Integer) partyConf.get("port");
-            String id = (String) partyConf.get("id");
-            party.addParty(remoteParty(addr, p, id));
-        }
-
-        return party;
-    }
-
 
 }
