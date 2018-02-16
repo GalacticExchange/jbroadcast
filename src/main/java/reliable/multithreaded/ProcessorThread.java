@@ -1,7 +1,7 @@
-package multithread;
+package reliable.multithreaded;
 
 import com.google.protobuf.InvalidProtocolBufferException;
-import reliable.Party;
+import reliable.PartyMain;
 import udp.FragmentPacket;
 import udp.GexMessage;
 
@@ -19,12 +19,12 @@ import java.util.concurrent.BlockingQueue;
 public class ProcessorThread extends Messenger implements Runnable {
 
     private BlockingQueue<FragmentPacket> readerQueue;
-    private BlockingQueue<List<Object>> writerQueue;
+    private BlockingQueue<HashMap<String, Object>> writerQueue;
 
     private HashMap<String, ArrayList<GexMessage>> receivedEchos;
     private HashMap<String, ArrayList<GexMessage>> receivedReadies;
     private Set<String> sentReadies;
-    private ArrayList<Party> parties;
+    private ArrayList<PartyMain> parties;
 
     private ArrayList<GexMessage> committedMessages;
 
@@ -33,8 +33,8 @@ public class ProcessorThread extends Messenger implements Runnable {
     private int t = 1;
 
 
-    public ProcessorThread(BlockingQueue<FragmentPacket> readerQueue, BlockingQueue<List<Object>> writerQueue,
-                           ArrayList<Party> parties, ArrayList<GexMessage> committedMessages) {
+    public ProcessorThread(BlockingQueue<FragmentPacket> readerQueue, BlockingQueue<HashMap<String, Object>> writerQueue,
+                           ArrayList<PartyMain> parties, ArrayList<GexMessage> committedMessages) {
         this.readerQueue = readerQueue;
         this.writerQueue = writerQueue;
         this.committedMessages = committedMessages;
@@ -84,7 +84,7 @@ public class ProcessorThread extends Messenger implements Runnable {
     }
 
 
-    private void checkEcho(GexMessage gm) throws IOException, NoSuchAlgorithmException {
+    private void checkEcho(GexMessage gm) {
 
         if (!receivedEchos.containsKey(gm.getNonce())) {
             receivedEchos.put(gm.getNonce(), new ArrayList<>());
@@ -126,14 +126,17 @@ public class ProcessorThread extends Messenger implements Runnable {
 
 
     private void sendToParties(GexMessage gm) {
-        for (Party p : parties) {
-            List<Object> list = Arrays.asList(gm, p.getAddress(), p.getPort());
-            writerQueue.add(list);
+        for (PartyMain p : parties) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("message", gm);
+            map.put("address", p.getAddress());
+            map.put("port", p.getPort());
+            writerQueue.add(map);
         }
     }
 
     private void checkTime() {
-        if (committedMessages.size() == Party.TEST_AMOUNT_MESSAGES) {
+        if (committedMessages.size() == PartyMain.TEST_AMOUNT_MESSAGES) {
 
             Instant startTime = Instant.parse(committedMessages.get(0).getSendTime());
             Instant finishTime = Instant.now();
@@ -142,7 +145,7 @@ public class ProcessorThread extends Messenger implements Runnable {
 
 
             System.out.println(String.format("Party %s : %s messages elapsed time: %s ", this,
-                    Party.TEST_AMOUNT_MESSAGES, timeElapsed));
+                    PartyMain.TEST_AMOUNT_MESSAGES, timeElapsed));
         }
     }
 

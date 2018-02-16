@@ -1,4 +1,4 @@
-package multithread;
+package reliable.multithreaded;
 
 import udp.FragmentPacket;
 
@@ -8,15 +8,15 @@ import udp.UDPClient;
 
 
 import java.io.IOException;
-import java.util.List;
+import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 
 public class WriterThread implements Runnable {
 
-    private BlockingQueue<List<Object>> writerQueue;
+    private BlockingQueue<HashMap<String, Object>> writerQueue;
     private UDPClient udpClient;
 
-    public WriterThread(BlockingQueue<List<Object>> writerQueue, UDPClient udpClient) {
+    public WriterThread(BlockingQueue<HashMap<String, Object>> writerQueue, UDPClient udpClient) {
         this.udpClient = udpClient;
         this.writerQueue = writerQueue;
     }
@@ -25,8 +25,12 @@ public class WriterThread implements Runnable {
     public void run() {
         while (true) {
             try {
-                List<Object> l = writerQueue.take();
-                sendMessage((GexMessage) l.get(0), (String) l.get(1), (Integer) l.get(2));
+                HashMap<String, Object> map = writerQueue.take();
+                GexMessage gm = (GexMessage) map.get("message");
+                String address = (String) map.get("address");
+                Integer port = (Integer) map.get("port");
+                sendMessage(gm, address, port);
+
             } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
             }
