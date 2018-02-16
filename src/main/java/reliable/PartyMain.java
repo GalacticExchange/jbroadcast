@@ -1,5 +1,6 @@
 package reliable;
 
+import config.ReliablePartyConfig;
 import reliable.multithreaded.ProcessorThread;
 import reliable.multithreaded.ReaderThread;
 import reliable.multithreaded.WriterThread;
@@ -11,10 +12,9 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.SynchronousQueue;
 
 public class PartyMain {
     private ArrayList<PartyMain> parties;
@@ -122,5 +122,19 @@ public class PartyMain {
         this.partyId = partyId;
     }
 
+    public static PartyMain createParty(ReliablePartyConfig config) throws SocketException, UnknownHostException {
+
+        PartyMain party = new PartyMain(config.getAddress(), config.getPort(), config.getId());
+
+
+        for (Map partyConf : config.getParties()) {
+            String addr = (String) partyConf.get("address");
+            Integer p = (Integer) partyConf.get("port");
+            String id = (String) partyConf.get("id");
+            party.addParty(remoteParty(addr, p, id));
+        }
+
+        return party;
+    }
 
 }

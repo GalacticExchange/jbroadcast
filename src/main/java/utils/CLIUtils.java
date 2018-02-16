@@ -72,9 +72,10 @@ public class CLIUtils {
         if (broadcast.equals("reliable")) {
 
             ReliableSenderConfig config = ReliableSenderConfig.load(confPath);
-            reliable.Client client = reliable.Client.createClient(config);
-            // todo client send N messages
-            runReliableTests(client);
+//            reliable.Client client = reliable.Client.createClient(config);
+            reliable.ClientMain client = reliable.ClientMain.createClient(config);
+//            runReliableTests(client);
+            runReliableTestsThreaded(client);
 
         } else if (broadcast.equals("verifiable")) {
             VerifiableSenderConfig config = VerifiableSenderConfig.load(confPath);
@@ -88,9 +89,10 @@ public class CLIUtils {
             NoSuchAlgorithmException {
         if (broadcast.equals("reliable")) {
             ReliablePartyConfig config = ReliablePartyConfig.load(confPath);
+            reliable.PartyMain party = reliable.PartyMain.createParty(config);
             System.out.println(config);
-            reliable.Party party = reliable.Party.createParty(config);
-            party.receiveMessage();
+//            reliable.Party party = reliable.Party.createParty(config);
+//            party.receiveMessage();
 
         } else if (broadcast.equals("verifiable")) {
             VerifiablePartyConfig config = VerifiablePartyConfig.load(confPath);
@@ -102,7 +104,20 @@ public class CLIUtils {
         }
     }
 
-    public static void runReliableTests(reliable.Client c) throws IOException, NoSuchAlgorithmException, InterruptedException {
+//    public static void runReliableTests(reliable.Client c) throws IOException, NoSuchAlgorithmException, InterruptedException {
+//        String msgs[] = new String[reliable.Party.TEST_AMOUNT_MESSAGES];
+//        for (int i = 0; i < reliable.Party.TEST_AMOUNT_MESSAGES; i++) {
+//            msgs[i] = udp.RandomGenerator.generateString(10);
+//        }
+//
+//        for (int i = 0; i < reliable.Party.TEST_AMOUNT_MESSAGES; i++) {
+//            TimeUnit.NANOSECONDS.sleep(200);
+////            System.out.println("sending message: " + msgs[i]);
+//            c.sendMessage(msgs[i]);
+//        }
+//    }
+
+    public static void runReliableTestsThreaded(reliable.ClientMain c) throws IOException, NoSuchAlgorithmException, InterruptedException {
         String msgs[] = new String[reliable.Party.TEST_AMOUNT_MESSAGES];
         for (int i = 0; i < reliable.Party.TEST_AMOUNT_MESSAGES; i++) {
             msgs[i] = udp.RandomGenerator.generateString(10);
@@ -113,5 +128,7 @@ public class CLIUtils {
 //            System.out.println("sending message: " + msgs[i]);
             c.sendMessage(msgs[i]);
         }
+
     }
+
 }

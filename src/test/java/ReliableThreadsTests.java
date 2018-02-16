@@ -1,4 +1,3 @@
-import reliable.Client;
 import reliable.ClientMain;
 import reliable.PartyMain;
 import udp.RandomGenerator;
@@ -26,17 +25,6 @@ public class ReliableThreadsTests {
                 }
             }
         }
-//        for (PartyMain p : parties) {
-//
-//            new Thread(() -> {
-//                try {
-//                    p.receiveMessage();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }).start();
-//        }
-
 
         ClientMain c = new ClientMain("127.0.0.1", 1515, parties);
 

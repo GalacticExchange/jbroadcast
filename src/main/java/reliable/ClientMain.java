@@ -31,19 +31,19 @@ public class ClientMain extends Communicator {
         }
     }
 
-    public static Client createClient(ReliableSenderConfig config) throws SocketException, UnknownHostException {
+    public static ClientMain createClient(ReliableSenderConfig config) throws SocketException, UnknownHostException {
 
-        ArrayList<Party> parties = new ArrayList<>();
+        ArrayList<PartyMain> parties = new ArrayList<>();
 
         for (Map partyConf : config.getParties()) {
             String addr = (String) partyConf.get("address");
             Integer p = (Integer) partyConf.get("port");
             String id = (String) partyConf.get("id");
-            parties.add(Party.remoteParty(addr, p, id));
+            parties.add(PartyMain.remoteParty(addr, p, id));
         }
 
 
-        return new Client(config.getAddress(), config.getPort(), parties);
+        return new ClientMain(config.getAddress(), config.getPort(), parties);
     }
 
     @Override
