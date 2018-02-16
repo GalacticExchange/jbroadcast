@@ -124,7 +124,7 @@ public class CLIUtils {
         }
 
         for (int i = 0; i < reliable.PartyMain.TEST_AMOUNT_MESSAGES; i++) {
-            TimeUnit.NANOSECONDS.sleep(200);
+            TimeUnit.MILLISECONDS.sleep(1);
 //            System.out.println("sending message: " + msgs[i]);
             c.sendMessage(msgs[i]);
         }

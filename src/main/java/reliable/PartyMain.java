@@ -91,7 +91,9 @@ public class PartyMain {
     }
 
     private void start() {
-        new Thread(reader).start();
+        Thread readerThread = new Thread(reader);
+        readerThread.setPriority(9);
+        readerThread.start();
         new Thread(processor).start();
         new Thread(writer).start();
     }
