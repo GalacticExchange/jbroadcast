@@ -4,26 +4,28 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import udp.FragmentPacket;
 import udp.GexMessage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public abstract class Messenger {
-    protected Map<String, ArrayList<FragmentPacket>> receivedFragments;
+    protected Map<String, LinkedList<FragmentPacket>> receivedFragments;
 
 
     public Messenger(){
-        receivedFragments = new HashMap<>();
+        receivedFragments = new LinkedHashMap<>();
     }
 
     public void processFragment(FragmentPacket fp) throws InvalidProtocolBufferException {
         String nonce = fp.getNonce();
 
         if (!receivedFragments.containsKey(nonce)) {
-            receivedFragments.put(nonce, new ArrayList<>());
+//            receivedFragments.put(nonce, new ArrayList<>());
+            receivedFragments.put(nonce, new LinkedList<>());
         }
 
-        receivedFragments.get(nonce).add(fp);
+        //todo kludge
+        if(receivedFragments.get(nonce).isEmpty()){
+            receivedFragments.get(nonce).add(fp);
+        }
 
         if (isLastPacket(fp)) {
             GexMessage gm = assembleMessage(fp.getNonce());
@@ -35,8 +37,9 @@ public abstract class Messenger {
 
         FragmentPacket[] packets = new FragmentPacket[receivedFragments.get(nonce).size()];
         receivedFragments.get(nonce).toArray(packets);
-
-        return FragmentPacket.assembleMessage(packets);
+        GexMessage gm = FragmentPacket.assembleMessage(packets);
+        receivedFragments.remove(nonce);
+        return gm;
     }
 
 

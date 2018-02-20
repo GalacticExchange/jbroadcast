@@ -5,8 +5,6 @@ import reliable.PartyMain;
 import udp.FragmentPacket;
 import udp.GexMessage;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -21,20 +19,24 @@ public class ProcessorThread extends Messenger implements Runnable {
     private BlockingQueue<FragmentPacket> readerQueue;
     private BlockingQueue<HashMap<String, Object>> writerQueue;
 
-    private HashMap<String, ArrayList<GexMessage>> receivedEchos;
-    private HashMap<String, ArrayList<GexMessage>> receivedReadies;
+    private HashMap<String, Integer> receivedEchos;
+    private HashMap<String, LinkedList<GexMessage>> receivedReadies;
     private Set<String> sentReadies;
     private ArrayList<PartyMain> parties;
 
-    private ArrayList<GexMessage> committedMessages;
+    private LinkedList<GexMessage> committedMessages;
 
     // TODO !
     private int n = 5;
     private int t = 1;
 
 
+    // TODO
+    private int committtedCount = 0;
+
+
     public ProcessorThread(BlockingQueue<FragmentPacket> readerQueue, BlockingQueue<HashMap<String, Object>> writerQueue,
-                           ArrayList<PartyMain> parties, ArrayList<GexMessage> committedMessages) {
+                           ArrayList<PartyMain> parties, LinkedList<GexMessage> committedMessages) {
         this.readerQueue = readerQueue;
         this.writerQueue = writerQueue;
         this.committedMessages = committedMessages;
@@ -60,40 +62,38 @@ public class ProcessorThread extends Messenger implements Runnable {
 
 
     public void processMessage(GexMessage gm, String address, int port) {
-        try {
 
-            switch (gm.getCommand()) {
-                case "in":
-                    GexMessage echo = new GexMessage(gm.getMessage(), "ec", gm.getNonce());
-                    sendToParties(echo);
-                    break;
+        switch (gm.getCommand()) {
+            case "in":
+                GexMessage echo = new GexMessage(gm.getMessage(), "ec", gm.getNonce());
+                sendToParties(echo);
+                break;
 
-                case "ec":
-                    checkEcho(gm);
-                    break;
+            case "ec":
+                checkEcho(gm);
+                break;
 
-                case "rd":
-                    checkReady(gm);
-                    checkTime();
+            case "rd":
+                checkReady(gm);
+                checkTime();
 
-                    break;
-            }
-        } catch (NoSuchAlgorithmException | IOException e) {
-            e.printStackTrace();
+                break;
         }
+
     }
 
 
     private void checkEcho(GexMessage gm) {
 
         if (!receivedEchos.containsKey(gm.getNonce())) {
-            receivedEchos.put(gm.getNonce(), new ArrayList<>());
+//            receivedEchos.put(gm.getNonce(), new ArrayList<>());
+            receivedEchos.put(gm.getNonce(), 1);
             return;
         }
 
-        receivedEchos.get(gm.getNonce()).add(gm);
-
-        int echos = receivedEchos.get(gm.getNonce()).size();
+        int echos = receivedEchos.get(gm.getNonce()) + 1;
+        receivedEchos.put(gm.getNonce(), echos);
+//        int echos = receivedEchos.get(gm.getNonce()).size();
 
         if (echos >= (n + t + 1) / 2 && !sentReadies.contains(gm.getNonce())) {
             GexMessage ready = new GexMessage(gm.getMessage(), "rd", gm.getNonce());
@@ -102,9 +102,10 @@ public class ProcessorThread extends Messenger implements Runnable {
         }
     }
 
-    private void checkReady(GexMessage gm) throws IOException, NoSuchAlgorithmException {
+    private void checkReady(GexMessage gm) {
         if (!receivedReadies.containsKey(gm.getNonce())) {
-            receivedReadies.put(gm.getNonce(), new ArrayList<>());
+//            receivedReadies.put(gm.getNonce(), new ArrayList<>());
+            receivedReadies.put(gm.getNonce(), new LinkedList<>());
             return;
         }
 
@@ -117,9 +118,20 @@ public class ProcessorThread extends Messenger implements Runnable {
             sentReadies.add(gm.getNonce());
         }
 
-        if (readies >= 2 * t + 1) {
+        if (readies == 2 * t + 1) {
+
+//            if (committedMessages.size() == 0) {
+//                committedMessages.add(gm);
+//            }
+//            committtedCount++;
+//            if (committtedCount % 5000 == 0) {
+//                System.out.println(String.format("Committed amount: %s", committtedCount));
+//            }
+
             committedMessages.add(gm);
-            System.out.println(String.format("Committed amount: %s", committedMessages.size()));
+            if (committedMessages.size() % 5000 == 0) {
+                System.out.println(String.format("Committed amount: %s", committedMessages.size()));
+            }
 
         }
     }
@@ -136,7 +148,9 @@ public class ProcessorThread extends Messenger implements Runnable {
     }
 
     private void checkTime() {
+//        TODO
         if (committedMessages.size() == PartyMain.TEST_AMOUNT_MESSAGES) {
+//        if (committtedCount == PartyMain.TEST_AMOUNT_MESSAGES) {
 
             Instant startTime = Instant.parse(committedMessages.get(0).getSendTime());
             Instant finishTime = Instant.now();

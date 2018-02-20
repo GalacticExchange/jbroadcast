@@ -97,14 +97,16 @@ public class FragmentPacket implements Comparable<FragmentPacket>{
         int lengthTotal = packets[0].getLengthTotal();
         byte[] total = new byte[DATA_LEN * packets[0].getAmount()];
         ByteBuffer buffer = ByteBuffer.wrap(total);
-//        if(packets.length != 1){
-//            System.out.println(packets.length);
-//            String a = packets[0].getNonce();
-//            String b = packets[1].getNonce();
-//            GexMessage g1 = new GexMessage(Arrays.copyOfRange(packets[0].getData(), 0, lengthTotal));
-//            GexMessage g2 = new GexMessage(Arrays.copyOfRange(packets[1].getData(), 0, lengthTotal));
-//            System.out.println(a + " " + b );
-//        }
+        if(packets.length != 1){
+            System.out.println(packets.length);
+            String a = packets[0].getNonce();
+            String b = packets[1].getNonce();
+            GexMessage g1 = new GexMessage(Arrays.copyOfRange(packets[0].getData(), 0, lengthTotal));
+            GexMessage g2 = new GexMessage(Arrays.copyOfRange(packets[1].getData(), 0, lengthTotal));
+            System.out.println(a + " " + b );
+            System.out.println(packets[0]);
+            System.out.println(packets[1]);
+        }
         for (int i = 0; i < packets.length; i++) {
             //todo
             if (i != packets[i].getIndex()) {
@@ -125,6 +127,9 @@ public class FragmentPacket implements Comparable<FragmentPacket>{
         return port;
     }
 
+    public String toString() {
+        return fragment.toString();
+    }
 
     @Override
     public int compareTo(FragmentPacket fp) {

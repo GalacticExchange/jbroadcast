@@ -12,6 +12,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -20,7 +21,7 @@ public class PartyMain {
     private ArrayList<PartyMain> parties;
 
 
-    private ArrayList<GexMessage> committedMessages;
+    private LinkedList<GexMessage> committedMessages;
 
     private UDPClient udpClient;
 
@@ -36,11 +37,12 @@ public class PartyMain {
     private String partyId;
 
 
-    public static final int TEST_AMOUNT_MESSAGES = 10000;
+    public static final int TEST_AMOUNT_MESSAGES = 150_000;
 
     public PartyMain(String address, int port, String partyId) throws SocketException, UnknownHostException {
         this.partyId = partyId;
-        committedMessages = new ArrayList<>();
+//        committedMessages = new ArrayList<>();
+        committedMessages = new LinkedList<>();
         parties = new ArrayList<>();
         initQueues();
         initUDP(address, port);
@@ -48,7 +50,7 @@ public class PartyMain {
         start();
     }
 
-    public PartyMain() {
+    private PartyMain() {
 
     }
 
