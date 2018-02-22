@@ -37,7 +37,8 @@ public class PartyMain {
     private String partyId;
 
 
-    public static final int TEST_AMOUNT_MESSAGES = 150_000;
+//    public static final int TEST_AMOUNT_MESSAGES = 150_000;
+    public static final int TEST_AMOUNT_MESSAGES = 10_000;
 
     public PartyMain(String address, int port, String partyId) throws SocketException, UnknownHostException {
         this.partyId = partyId;
