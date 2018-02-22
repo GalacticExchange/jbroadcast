@@ -10,18 +10,15 @@ import udp.UDPClient;
 
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class PartyMain {
-    private ArrayList<PartyMain> parties;
+    private List<PartyMain> parties;
 
 
-    private LinkedList<GexMessage> committedMessages;
+    private List<GexMessage> committedMessages;
 
     private UDPClient udpClient;
 
@@ -44,7 +41,7 @@ public class PartyMain {
         this.partyId = partyId;
 //        committedMessages = new ArrayList<>();
         committedMessages = new LinkedList<>();
-        parties = new ArrayList<>();
+        parties = new LinkedList<>();
         initQueues();
         initUDP(address, port);
         initThreads();

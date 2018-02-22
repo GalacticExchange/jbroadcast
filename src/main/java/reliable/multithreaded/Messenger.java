@@ -7,11 +7,11 @@ import udp.GexMessage;
 import java.util.*;
 
 public abstract class Messenger {
-    protected Map<String, LinkedList<FragmentPacket>> receivedFragments;
+    protected Map<String, List<FragmentPacket>> receivedFragments;
 
 
     public Messenger(){
-        receivedFragments = new LinkedHashMap<>();
+        receivedFragments = new HashMap<>();
     }
 
     public void processFragment(FragmentPacket fp) throws InvalidProtocolBufferException {
@@ -19,7 +19,7 @@ public abstract class Messenger {
 
         if (!receivedFragments.containsKey(nonce)) {
 //            receivedFragments.put(nonce, new ArrayList<>());
-            receivedFragments.put(nonce, new LinkedList<>());
+            receivedFragments.put(nonce, new ArrayList<>());
         }
 
         //todo kludge

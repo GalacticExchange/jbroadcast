@@ -22,9 +22,9 @@ public class ProcessorThread extends Messenger implements Runnable {
     private HashMap<String, Integer> receivedEchos;
     private HashMap<String, LinkedList<GexMessage>> receivedReadies;
     private Set<String> sentReadies;
-    private ArrayList<PartyMain> parties;
+    private List<PartyMain> parties;
 
-    private LinkedList<GexMessage> committedMessages;
+    private List<GexMessage> committedMessages;
 
     // TODO !
     private int n = 5;
@@ -36,7 +36,7 @@ public class ProcessorThread extends Messenger implements Runnable {
 
 
     public ProcessorThread(BlockingQueue<FragmentPacket> readerQueue, BlockingQueue<HashMap<String, Object>> writerQueue,
-                           ArrayList<PartyMain> parties, LinkedList<GexMessage> committedMessages) {
+                           List<PartyMain> parties, List<GexMessage> committedMessages) {
         this.readerQueue = readerQueue;
         this.writerQueue = writerQueue;
         this.committedMessages = committedMessages;
@@ -116,6 +116,7 @@ public class ProcessorThread extends Messenger implements Runnable {
             GexMessage ready = new GexMessage(gm.getMessage(), "rd", gm.getNonce());
             sendToParties(ready);
             sentReadies.add(gm.getNonce());
+            receivedReadies.remove(gm.getNonce());
         }
 
         if (readies == 2 * t + 1) {
@@ -129,9 +130,10 @@ public class ProcessorThread extends Messenger implements Runnable {
 //            }
 
             committedMessages.add(gm);
-            if (committedMessages.size() % 5000 == 0) {
-                System.out.println(String.format("Committed amount: %s", committedMessages.size()));
-            }
+//            if (committedMessages.size() % 5000 == 0) {
+//                System.out.println(String.format("Committed amount: %s", committedMessages.size()));
+//            }
+            System.out.println(String.format("Committed amount: %s", committedMessages.size()));
 
         }
     }
