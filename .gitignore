@@ -5,4 +5,4 @@ out
 parties
 __old
 dependency-reduced-pom.xml
-ops
+ops/ansible/inventory

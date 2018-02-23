@@ -31,10 +31,6 @@ public class ProcessorThread extends Messenger implements Runnable {
     private int t = 1;
 
 
-    // TODO
-    private int committtedCount = 0;
-
-
     public ProcessorThread(BlockingQueue<FragmentPacket> readerQueue, BlockingQueue<HashMap<String, Object>> writerQueue,
                            List<PartyMain> parties, List<GexMessage> committedMessages) {
         this.readerQueue = readerQueue;
@@ -130,10 +126,9 @@ public class ProcessorThread extends Messenger implements Runnable {
 //            }
 
             committedMessages.add(gm);
-//            if (committedMessages.size() % 5000 == 0) {
-//                System.out.println(String.format("Committed amount: %s", committedMessages.size()));
-//            }
-            System.out.println(String.format("Committed amount: %s", committedMessages.size()));
+            if (committedMessages.size() % 10000 == 0) {
+                System.out.println(String.format("Committed amount: %s", committedMessages.size()));
+            }
 
         }
     }

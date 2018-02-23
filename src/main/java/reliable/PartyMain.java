@@ -11,6 +11,7 @@ import udp.UDPClient;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -70,8 +71,8 @@ public class PartyMain {
     }
 
     private void initQueues() {
-//        readerQueue = new ArrayBlockingQueue<>(16000);
-//        writerQueue = new ArrayBlockingQueue<>(16000);
+//        readerQueue = new ArrayBlockingQueue<>(512000);
+//        writerQueue = new ArrayBlockingQueue<>(512000);
 
         readerQueue = new LinkedBlockingQueue<>();
         writerQueue = new LinkedBlockingQueue<>();
