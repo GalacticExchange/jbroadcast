@@ -33,7 +33,7 @@ public class FragmentPacket implements Comparable<FragmentPacket>{
         builder.setIndex(index); // 5
         builder.setAmount(totalAmount); // 5
         builder.setLengthTotal(lengthTotal); // 5
-        builder.setNonce(nonce); // 10
+        builder.setNonce(nonce); // 10 (8+2)
         builder.setData(ByteString.copyFrom(dataChunk)); // 1024 + 3
 
         fragment = builder.build();
@@ -102,8 +102,8 @@ public class FragmentPacket implements Comparable<FragmentPacket>{
             System.out.println(packets.length);
             String a = packets[0].getNonce();
             String b = packets[1].getNonce();
-            GexMessage g1 = new GexMessage(Arrays.copyOfRange(packets[0].getData(), 0, lengthTotal));
-            GexMessage g2 = new GexMessage(Arrays.copyOfRange(packets[1].getData(), 0, lengthTotal));
+//            GexMessage g1 = new GexMessage(Arrays.copyOfRange(packets[0].getMessageData(), 0, lengthTotal));
+//            GexMessage g2 = new GexMessage(Arrays.copyOfRange(packets[1].getMessageData(), 0, lengthTotal));
             System.out.println(a + " " + b );
             System.out.println(packets[0]);
             System.out.println(packets[1]);

@@ -4,6 +4,7 @@ import config.ReliableSenderConfig;
 import udp.Communicator;
 import udp.GexMessage;
 import udp.RandomGenerator;
+import udp.SkaleMessage;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -21,13 +22,13 @@ public class ClientMain extends Communicator {
     }
 
 
-    public void sendMessage(String msg) throws IOException, NoSuchAlgorithmException {
-        String nonce = RandomGenerator.generateString(GexMessage.NONCE_LEN);
-        GexMessage gm = new GexMessage(msg, "in", nonce);
+    public void sendMessage(String msg) throws IOException {
+        String nonce = RandomGenerator.generateString(SkaleMessage.NONCE_LEN);
+        SkaleMessage sm = new SkaleMessage(msg, "in", nonce);
 
         for (PartyMain p : parties) {
 //            System.out.println(String.format("Sending message %s to party %s ", gm, p));
-            sendMessage(gm, p.getAddress(), p.getPort());
+            sendMessage(sm, p.getAddress(), p.getPort());
         }
     }
 

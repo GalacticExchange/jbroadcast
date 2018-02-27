@@ -6,7 +6,6 @@
   OR   
   3 byte key + N byte value if N > 127  
 }   
-2. repeated is optional parameter  by default  
+3. `repeated` and `map` are *optional* parameters  by default  
+4. string = 2 bytes key
 
-Fragment
-FragmentPacket

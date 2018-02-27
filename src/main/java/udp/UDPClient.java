@@ -20,7 +20,7 @@ public class UDPClient {
 
 
     /**
-     * blocks thread until message is received*
+     * blocks thread until message is received
      */
     public FragmentPacket receiveMessage() throws IOException {
         byte[] buffer = new byte[FragmentPacket.PACKET_LEN];
@@ -28,6 +28,16 @@ public class UDPClient {
         socket.receive(packet);
 
         return new FragmentPacket(packet.getData(), packet.getAddress().getHostAddress(), packet.getPort());
+    }
+
+    /**
+     * blocks thread until message is received
+     */
+    public SkaleMessage receiveSkaleMessage() throws IOException {
+        byte[] buffer = new byte[SkaleMessage.PACKET_LEN];
+        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+        socket.receive(packet);
+        return SkaleMessage.parse(packet.getData());
     }
 
     public String getAddress() {

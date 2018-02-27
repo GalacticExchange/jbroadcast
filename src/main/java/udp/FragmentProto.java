@@ -2503,6 +2503,1028 @@ public final class FragmentProto {
 
   }
 
+  public interface SkaleMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:udp.SkaleMessage)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>required bytes message = 1;</code>
+     */
+    boolean hasMessage();
+    /**
+     * <code>required bytes message = 1;</code>
+     */
+    com.google.protobuf.ByteString getMessage();
+
+    /**
+     * <code>required fixed32 message_length = 2;</code>
+     */
+    boolean hasMessageLength();
+    /**
+     * <code>required fixed32 message_length = 2;</code>
+     */
+    int getMessageLength();
+
+    /**
+     * <code>required string command = 3;</code>
+     */
+    boolean hasCommand();
+    /**
+     * <code>required string command = 3;</code>
+     */
+    java.lang.String getCommand();
+    /**
+     * <code>required string command = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getCommandBytes();
+
+    /**
+     * <code>required string nonce = 4;</code>
+     */
+    boolean hasNonce();
+    /**
+     * <code>required string nonce = 4;</code>
+     */
+    java.lang.String getNonce();
+    /**
+     * <code>required string nonce = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getNonceBytes();
+
+    /**
+     * <code>required fixed32 sendTime = 5;</code>
+     */
+    boolean hasSendTime();
+    /**
+     * <code>required fixed32 sendTime = 5;</code>
+     */
+    int getSendTime();
+  }
+  /**
+   * Protobuf type {@code udp.SkaleMessage}
+   */
+  public  static final class SkaleMessage extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:udp.SkaleMessage)
+      SkaleMessageOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use SkaleMessage.newBuilder() to construct.
+    private SkaleMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private SkaleMessage() {
+      message_ = com.google.protobuf.ByteString.EMPTY;
+      messageLength_ = 0;
+      command_ = "";
+      nonce_ = "";
+      sendTime_ = 0;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private SkaleMessage(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              message_ = input.readBytes();
+              break;
+            }
+            case 21: {
+              bitField0_ |= 0x00000002;
+              messageLength_ = input.readFixed32();
+              break;
+            }
+            case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000004;
+              command_ = bs;
+              break;
+            }
+            case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000008;
+              nonce_ = bs;
+              break;
+            }
+            case 45: {
+              bitField0_ |= 0x00000010;
+              sendTime_ = input.readFixed32();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return udp.FragmentProto.internal_static_udp_SkaleMessage_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return udp.FragmentProto.internal_static_udp_SkaleMessage_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              udp.FragmentProto.SkaleMessage.class, udp.FragmentProto.SkaleMessage.Builder.class);
+    }
+
+    private int bitField0_;
+    public static final int MESSAGE_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString message_;
+    /**
+     * <code>required bytes message = 1;</code>
+     */
+    public boolean hasMessage() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required bytes message = 1;</code>
+     */
+    public com.google.protobuf.ByteString getMessage() {
+      return message_;
+    }
+
+    public static final int MESSAGE_LENGTH_FIELD_NUMBER = 2;
+    private int messageLength_;
+    /**
+     * <code>required fixed32 message_length = 2;</code>
+     */
+    public boolean hasMessageLength() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required fixed32 message_length = 2;</code>
+     */
+    public int getMessageLength() {
+      return messageLength_;
+    }
+
+    public static final int COMMAND_FIELD_NUMBER = 3;
+    private volatile java.lang.Object command_;
+    /**
+     * <code>required string command = 3;</code>
+     */
+    public boolean hasCommand() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required string command = 3;</code>
+     */
+    public java.lang.String getCommand() {
+      java.lang.Object ref = command_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          command_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string command = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getCommandBytes() {
+      java.lang.Object ref = command_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        command_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int NONCE_FIELD_NUMBER = 4;
+    private volatile java.lang.Object nonce_;
+    /**
+     * <code>required string nonce = 4;</code>
+     */
+    public boolean hasNonce() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>required string nonce = 4;</code>
+     */
+    public java.lang.String getNonce() {
+      java.lang.Object ref = nonce_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          nonce_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string nonce = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNonceBytes() {
+      java.lang.Object ref = nonce_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        nonce_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int SENDTIME_FIELD_NUMBER = 5;
+    private int sendTime_;
+    /**
+     * <code>required fixed32 sendTime = 5;</code>
+     */
+    public boolean hasSendTime() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>required fixed32 sendTime = 5;</code>
+     */
+    public int getSendTime() {
+      return sendTime_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (!hasMessage()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasMessageLength()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasCommand()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasNonce()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasSendTime()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, message_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeFixed32(2, messageLength_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, command_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, nonce_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeFixed32(5, sendTime_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, message_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFixed32Size(2, messageLength_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, command_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, nonce_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFixed32Size(5, sendTime_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof udp.FragmentProto.SkaleMessage)) {
+        return super.equals(obj);
+      }
+      udp.FragmentProto.SkaleMessage other = (udp.FragmentProto.SkaleMessage) obj;
+
+      boolean result = true;
+      result = result && (hasMessage() == other.hasMessage());
+      if (hasMessage()) {
+        result = result && getMessage()
+            .equals(other.getMessage());
+      }
+      result = result && (hasMessageLength() == other.hasMessageLength());
+      if (hasMessageLength()) {
+        result = result && (getMessageLength()
+            == other.getMessageLength());
+      }
+      result = result && (hasCommand() == other.hasCommand());
+      if (hasCommand()) {
+        result = result && getCommand()
+            .equals(other.getCommand());
+      }
+      result = result && (hasNonce() == other.hasNonce());
+      if (hasNonce()) {
+        result = result && getNonce()
+            .equals(other.getNonce());
+      }
+      result = result && (hasSendTime() == other.hasSendTime());
+      if (hasSendTime()) {
+        result = result && (getSendTime()
+            == other.getSendTime());
+      }
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (hasMessage()) {
+        hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
+        hash = (53 * hash) + getMessage().hashCode();
+      }
+      if (hasMessageLength()) {
+        hash = (37 * hash) + MESSAGE_LENGTH_FIELD_NUMBER;
+        hash = (53 * hash) + getMessageLength();
+      }
+      if (hasCommand()) {
+        hash = (37 * hash) + COMMAND_FIELD_NUMBER;
+        hash = (53 * hash) + getCommand().hashCode();
+      }
+      if (hasNonce()) {
+        hash = (37 * hash) + NONCE_FIELD_NUMBER;
+        hash = (53 * hash) + getNonce().hashCode();
+      }
+      if (hasSendTime()) {
+        hash = (37 * hash) + SENDTIME_FIELD_NUMBER;
+        hash = (53 * hash) + getSendTime();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static udp.FragmentProto.SkaleMessage parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static udp.FragmentProto.SkaleMessage parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static udp.FragmentProto.SkaleMessage parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static udp.FragmentProto.SkaleMessage parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static udp.FragmentProto.SkaleMessage parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static udp.FragmentProto.SkaleMessage parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static udp.FragmentProto.SkaleMessage parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static udp.FragmentProto.SkaleMessage parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static udp.FragmentProto.SkaleMessage parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static udp.FragmentProto.SkaleMessage parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static udp.FragmentProto.SkaleMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static udp.FragmentProto.SkaleMessage parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(udp.FragmentProto.SkaleMessage prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code udp.SkaleMessage}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:udp.SkaleMessage)
+        udp.FragmentProto.SkaleMessageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return udp.FragmentProto.internal_static_udp_SkaleMessage_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return udp.FragmentProto.internal_static_udp_SkaleMessage_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                udp.FragmentProto.SkaleMessage.class, udp.FragmentProto.SkaleMessage.Builder.class);
+      }
+
+      // Construct using udp.FragmentProto.SkaleMessage.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        message_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        messageLength_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        command_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
+        nonce_ = "";
+        bitField0_ = (bitField0_ & ~0x00000008);
+        sendTime_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return udp.FragmentProto.internal_static_udp_SkaleMessage_descriptor;
+      }
+
+      public udp.FragmentProto.SkaleMessage getDefaultInstanceForType() {
+        return udp.FragmentProto.SkaleMessage.getDefaultInstance();
+      }
+
+      public udp.FragmentProto.SkaleMessage build() {
+        udp.FragmentProto.SkaleMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public udp.FragmentProto.SkaleMessage buildPartial() {
+        udp.FragmentProto.SkaleMessage result = new udp.FragmentProto.SkaleMessage(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.message_ = message_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.messageLength_ = messageLength_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.command_ = command_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.nonce_ = nonce_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.sendTime_ = sendTime_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof udp.FragmentProto.SkaleMessage) {
+          return mergeFrom((udp.FragmentProto.SkaleMessage)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(udp.FragmentProto.SkaleMessage other) {
+        if (other == udp.FragmentProto.SkaleMessage.getDefaultInstance()) return this;
+        if (other.hasMessage()) {
+          setMessage(other.getMessage());
+        }
+        if (other.hasMessageLength()) {
+          setMessageLength(other.getMessageLength());
+        }
+        if (other.hasCommand()) {
+          bitField0_ |= 0x00000004;
+          command_ = other.command_;
+          onChanged();
+        }
+        if (other.hasNonce()) {
+          bitField0_ |= 0x00000008;
+          nonce_ = other.nonce_;
+          onChanged();
+        }
+        if (other.hasSendTime()) {
+          setSendTime(other.getSendTime());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasMessage()) {
+          return false;
+        }
+        if (!hasMessageLength()) {
+          return false;
+        }
+        if (!hasCommand()) {
+          return false;
+        }
+        if (!hasNonce()) {
+          return false;
+        }
+        if (!hasSendTime()) {
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        udp.FragmentProto.SkaleMessage parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (udp.FragmentProto.SkaleMessage) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private com.google.protobuf.ByteString message_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>required bytes message = 1;</code>
+       */
+      public boolean hasMessage() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required bytes message = 1;</code>
+       */
+      public com.google.protobuf.ByteString getMessage() {
+        return message_;
+      }
+      /**
+       * <code>required bytes message = 1;</code>
+       */
+      public Builder setMessage(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        message_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required bytes message = 1;</code>
+       */
+      public Builder clearMessage() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        message_ = getDefaultInstance().getMessage();
+        onChanged();
+        return this;
+      }
+
+      private int messageLength_ ;
+      /**
+       * <code>required fixed32 message_length = 2;</code>
+       */
+      public boolean hasMessageLength() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required fixed32 message_length = 2;</code>
+       */
+      public int getMessageLength() {
+        return messageLength_;
+      }
+      /**
+       * <code>required fixed32 message_length = 2;</code>
+       */
+      public Builder setMessageLength(int value) {
+        bitField0_ |= 0x00000002;
+        messageLength_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required fixed32 message_length = 2;</code>
+       */
+      public Builder clearMessageLength() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        messageLength_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object command_ = "";
+      /**
+       * <code>required string command = 3;</code>
+       */
+      public boolean hasCommand() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required string command = 3;</code>
+       */
+      public java.lang.String getCommand() {
+        java.lang.Object ref = command_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            command_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string command = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getCommandBytes() {
+        java.lang.Object ref = command_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          command_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string command = 3;</code>
+       */
+      public Builder setCommand(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        command_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string command = 3;</code>
+       */
+      public Builder clearCommand() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        command_ = getDefaultInstance().getCommand();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string command = 3;</code>
+       */
+      public Builder setCommandBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        command_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object nonce_ = "";
+      /**
+       * <code>required string nonce = 4;</code>
+       */
+      public boolean hasNonce() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>required string nonce = 4;</code>
+       */
+      public java.lang.String getNonce() {
+        java.lang.Object ref = nonce_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            nonce_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string nonce = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNonceBytes() {
+        java.lang.Object ref = nonce_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          nonce_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string nonce = 4;</code>
+       */
+      public Builder setNonce(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        nonce_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string nonce = 4;</code>
+       */
+      public Builder clearNonce() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        nonce_ = getDefaultInstance().getNonce();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string nonce = 4;</code>
+       */
+      public Builder setNonceBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        nonce_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int sendTime_ ;
+      /**
+       * <code>required fixed32 sendTime = 5;</code>
+       */
+      public boolean hasSendTime() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>required fixed32 sendTime = 5;</code>
+       */
+      public int getSendTime() {
+        return sendTime_;
+      }
+      /**
+       * <code>required fixed32 sendTime = 5;</code>
+       */
+      public Builder setSendTime(int value) {
+        bitField0_ |= 0x00000010;
+        sendTime_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required fixed32 sendTime = 5;</code>
+       */
+      public Builder clearSendTime() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        sendTime_ = 0;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:udp.SkaleMessage)
+    }
+
+    // @@protoc_insertion_point(class_scope:udp.SkaleMessage)
+    private static final udp.FragmentProto.SkaleMessage DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new udp.FragmentProto.SkaleMessage();
+    }
+
+    public static udp.FragmentProto.SkaleMessage getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<SkaleMessage>
+        PARSER = new com.google.protobuf.AbstractParser<SkaleMessage>() {
+      public SkaleMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new SkaleMessage(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<SkaleMessage> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SkaleMessage> getParserForType() {
+      return PARSER;
+    }
+
+    public udp.FragmentProto.SkaleMessage getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_udp_Fragment_descriptor;
   private static final 
@@ -2518,6 +3540,11 @@ public final class FragmentProto {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_udp_GexMessage_SignsEntry_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_udp_SkaleMessage_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_udp_SkaleMessage_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -2534,8 +3561,10 @@ public final class FragmentProto {
       "essage\030\001 \002(\t\022\017\n\007command\030\002 \002(\t\022\r\n\005nonce\030\003" +
       " \002(\t\022\020\n\010sendTime\030\004 \002(\t\022)\n\005signs\030\005 \003(\0132\032." +
       "udp.GexMessage.SignsEntry\032,\n\nSignsEntry\022" +
-      "\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001B\024\n\003udpB\r" +
-      "FragmentProto"
+      "\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"i\n\014Skale" +
+      "Message\022\017\n\007message\030\001 \002(\014\022\026\n\016message_leng" +
+      "th\030\002 \002(\007\022\017\n\007command\030\003 \002(\t\022\r\n\005nonce\030\004 \002(\t" +
+      "\022\020\n\010sendTime\030\005 \002(\007B\024\n\003udpB\rFragmentProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2567,6 +3596,12 @@ public final class FragmentProto {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_udp_GexMessage_SignsEntry_descriptor,
         new java.lang.String[] { "Key", "Value", });
+    internal_static_udp_SkaleMessage_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_udp_SkaleMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_udp_SkaleMessage_descriptor,
+        new java.lang.String[] { "Message", "MessageLength", "Command", "Nonce", "SendTime", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

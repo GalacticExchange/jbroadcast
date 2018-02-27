@@ -24,3 +24,15 @@ message GexMessage {
     map <string, string> signs = 5;
 
 }
+
+message SkaleMessage{
+    required bytes message = 1;
+    required fixed32 message_length = 2;
+    required string command = 3;
+    required string nonce = 4;
+    required fixed32 sendTime = 5;
+}
+
+//message Ztest{
+//    required bytes ztest = 1;
+//}

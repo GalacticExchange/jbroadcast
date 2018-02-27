@@ -79,6 +79,12 @@ public abstract class Communicator {
         }
     }
 
+    public void sendMessage(SkaleMessage sm, String addr, int port) throws IOException {
+//        byte[] NONCE = RandomGenerator.generateByteArray(FragmentPacket.NONCE_LEN);
+        int length = sm.getBytes().length;
+        udpClient.sendData(sm.getBytes(), addr, port);
+    }
+
     public String getAddress() {
         return address;
     }

@@ -4,14 +4,13 @@ import config.ReliablePartyConfig;
 import reliable.multithreaded.ProcessorThread;
 import reliable.multithreaded.ReaderThread;
 import reliable.multithreaded.WriterThread;
-import udp.FragmentPacket;
 import udp.GexMessage;
+import udp.SkaleMessage;
 import udp.UDPClient;
 
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -19,11 +18,12 @@ public class PartyMain {
     private List<PartyMain> parties;
 
 
-    private List<GexMessage> committedMessages;
+    private List<SkaleMessage> committedMessages;
 
     private UDPClient udpClient;
 
-    private BlockingQueue<FragmentPacket> readerQueue;
+//    private BlockingQueue<FragmentPacket> readerQueue;
+    private BlockingQueue<SkaleMessage> readerQueue;
     private BlockingQueue<HashMap<String, Object>> writerQueue;
 
     private Runnable reader;
@@ -35,8 +35,8 @@ public class PartyMain {
     private String partyId;
 
 
-//    public static final int TEST_AMOUNT_MESSAGES = 150_000;
-    public static final int TEST_AMOUNT_MESSAGES = 10_000;
+    public static final int TEST_AMOUNT_MESSAGES = 15_000;
+//    public static final int TEST_AMOUNT_MESSAGES = 10_000;
 
     public PartyMain(String address, int port, String partyId) throws SocketException, UnknownHostException {
         this.partyId = partyId;
@@ -71,9 +71,6 @@ public class PartyMain {
     }
 
     private void initQueues() {
-//        readerQueue = new ArrayBlockingQueue<>(512000);
-//        writerQueue = new ArrayBlockingQueue<>(512000);
-
         readerQueue = new LinkedBlockingQueue<>();
         writerQueue = new LinkedBlockingQueue<>();
 
@@ -92,8 +89,12 @@ public class PartyMain {
     }
 
     private void start() {
-        new Thread(reader).start();
-        new Thread(processor).start();
+        Thread r = new Thread(reader);
+        r.start();
+//        r.setPriority(7);
+        Thread p = new Thread(processor);
+        p.start();
+//        p.setPriority(8);
         new Thread(writer).start();
     }
 
