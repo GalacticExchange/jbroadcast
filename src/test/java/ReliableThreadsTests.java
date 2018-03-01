@@ -31,12 +31,12 @@ public class ReliableThreadsTests {
 
         String msgs[] = new String[Party.TEST_AMOUNT_MESSAGES];
         for (int i = 0; i < Party.TEST_AMOUNT_MESSAGES; i++) {
-            msgs[i] = RandomGenerator.generateString(10);
+            msgs[i] = RandomGenerator.generateString(9);
         }
 
         for (int i = 0; i < Party.TEST_AMOUNT_MESSAGES; i++) {
 //            TimeUnit.NANOSECONDS.sleep(1);
-            c.sendMessage(msgs[i]);
+            c.sendMessage(i + msgs[i]);
         }
         System.out.println("Client finished sending messages");
     }

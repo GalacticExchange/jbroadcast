@@ -25,7 +25,7 @@ public class WriterThread implements Runnable {
         while (true) {
 
             ArrayList<HashMap<String, Object>> pendingSend = new ArrayList<>();
-            writerQueue.drainTo(pendingSend, 10);
+            writerQueue.drainTo(pendingSend, 16);
             processPendingSend(pendingSend);
 
 //                HashMap<String, Object> map = writerQueue.take();
