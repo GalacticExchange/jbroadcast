@@ -1,9 +1,9 @@
 package reliable.multithreaded;
 
 import com.google.protobuf.InvalidProtocolBufferException;
-import reliable.PartyMain;
-import udp.FragmentPacket;
-import udp.GexMessage;
+import reliable.Party;
+import udp.BatchMessages;
+import udp.Packet;
 import udp.SkaleMessage;
 
 import java.time.Duration;
@@ -13,19 +13,19 @@ import java.util.concurrent.BlockingQueue;
 
 
 /**
- * Assemble fragments and pass them to Writer
+ * Assemble fragments -> pass them to Writer or Commit
  */
 //public class ProcessorThread extends Messenger implements Runnable {
 public class ProcessorThread implements Runnable {
 
-    //    private BlockingQueue<FragmentPacket> readerQueue;
-    private BlockingQueue<SkaleMessage> readerQueue;
+    private BlockingQueue<Packet> readerQueue;
+    //    private BlockingQueue<SkaleMessage> readerQueue;
     private BlockingQueue<HashMap<String, Object>> writerQueue;
 
     private HashMap<String, Integer> receivedEchos;
     private HashMap<String, LinkedList<SkaleMessage>> receivedReadies;
     private Set<String> sentReadies;
-    private List<PartyMain> parties;
+    private List<Party> parties;
 
     private List<SkaleMessage> committedMessages;
 
@@ -34,8 +34,8 @@ public class ProcessorThread implements Runnable {
     private int t = 1;
 
 
-    public ProcessorThread(BlockingQueue<SkaleMessage> readerQueue, BlockingQueue<HashMap<String, Object>> writerQueue,
-                           List<PartyMain> parties, List<SkaleMessage> committedMessages) {
+    public ProcessorThread(BlockingQueue<Packet> readerQueue, BlockingQueue<HashMap<String, Object>> writerQueue,
+                           List<Party> parties, List<SkaleMessage> committedMessages) {
         this.readerQueue = readerQueue;
         this.writerQueue = writerQueue;
         this.committedMessages = committedMessages;
@@ -46,40 +46,46 @@ public class ProcessorThread implements Runnable {
         sentReadies = new HashSet<>();
     }
 
-//    @Override
-//    public void run() {
-//        while (true) {
-//            try {
-//                FragmentPacket fp = readerQueue.take();
-////                ArrayList<FragmentPacket> arr = new ArrayList<>();
-////                readerQueue.drainTo(arr, 10);
-//
-//                processFragment(fp);
-//            } catch (InterruptedException | InvalidProtocolBufferException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//    }
-
     @Override
     public void run() {
         while (true) {
             try {
-                SkaleMessage sm = readerQueue.take();
-//                ArrayList<FragmentPacket> arr = new ArrayList<>();
+                Packet packet = readerQueue.take();
+//                ArrayList<Packet> arr = new ArrayList<>();
 //                readerQueue.drainTo(arr, 10);
 
-                processMessage(sm);
-            } catch (InterruptedException e) {
+                processPacket(packet);
+            } catch (InterruptedException | InvalidProtocolBufferException e) {
                 e.printStackTrace();
             }
         }
 
     }
 
+//    @Override
+//    public void run() {
+//        while (true) {
+//            try {
+//                SkaleMessage sm = readerQueue.take();
+////                ArrayList<Packet> arr = new ArrayList<>();
+////                readerQueue.drainTo(arr, 10);
+//
+//                processMessage(sm);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//    }
+
+    private void processPacket(Packet packet) throws InvalidProtocolBufferException {
+        BatchMessages batchMessages = BatchMessages.parse(packet.getData());
+        batchMessages.getMessages().forEach((this::processMessage));
+    }
+
+
     //    public void processMessage(GexMessage gm, String address, int port) {
-    public void processMessage(SkaleMessage gm) {
+    private void processMessage(SkaleMessage gm) {
 
         switch (gm.getCommand()) {
             case "in":
@@ -149,10 +155,10 @@ public class ProcessorThread implements Runnable {
 
 
     //    private void sendToParties(GexMessage gm) {
-    private void sendToParties(SkaleMessage gm) {
-        for (PartyMain p : parties) {
+    private void sendToParties(SkaleMessage sm) {
+        for (Party p : parties) {
             HashMap<String, Object> map = new HashMap<>();
-            map.put("message", gm);
+            map.put("message", sm);
             map.put("address", p.getAddress());
             map.put("port", p.getPort());
             writerQueue.add(map);
@@ -161,8 +167,8 @@ public class ProcessorThread implements Runnable {
 
     private void checkTime() {
 //        TODO
-        if (committedMessages.size() == PartyMain.TEST_AMOUNT_MESSAGES) {
-//        if (committtedCount == PartyMain.TEST_AMOUNT_MESSAGES) {
+        if (committedMessages.size() == Party.TEST_AMOUNT_MESSAGES) {
+//        if (committtedCount == Party.TEST_AMOUNT_MESSAGES) {
 
             Instant startTime = Instant.parse(committedMessages.get(0).getSendTime());
             Instant finishTime = Instant.now();
@@ -171,7 +177,7 @@ public class ProcessorThread implements Runnable {
 
 
             System.out.println(String.format("Party %s : %s messages elapsed time: %s ", this,
-                    PartyMain.TEST_AMOUNT_MESSAGES, timeElapsed));
+                    Party.TEST_AMOUNT_MESSAGES, timeElapsed));
         }
     }
 

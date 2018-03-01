@@ -5,6 +5,8 @@ import config.ReliableSenderConfig;
 import config.VerifiablePartyConfig;
 import config.VerifiableSenderConfig;
 import org.apache.commons.cli.*;
+import reliable.Client;
+import reliable.Party;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -73,7 +75,7 @@ public class CLIUtils {
 
             ReliableSenderConfig config = ReliableSenderConfig.load(confPath);
 //            reliable.Client client = reliable.Client.createClient(config);
-            reliable.ClientMain client = reliable.ClientMain.createClient(config);
+            Client client = Client.createClient(config);
 //            runReliableTests(client);
             runReliableTestsThreaded(client);
 
@@ -89,10 +91,10 @@ public class CLIUtils {
             NoSuchAlgorithmException {
         if (broadcast.equals("reliable")) {
             ReliablePartyConfig config = ReliablePartyConfig.load(confPath);
-            reliable.PartyMain party = reliable.PartyMain.createParty(config);
+            Party party = Party.createParty(config);
             System.out.println(config);
 //            reliable.Party party = reliable.Party.createParty(config);
-//            party.receiveMessage();
+//            party.receivePacket();
 
         } else if (broadcast.equals("verifiable")) {
             VerifiablePartyConfig config = VerifiablePartyConfig.load(confPath);
@@ -117,13 +119,13 @@ public class CLIUtils {
 //        }
 //    }
 
-    public static void runReliableTestsThreaded(reliable.ClientMain c) throws IOException, NoSuchAlgorithmException, InterruptedException {
-        String msgs[] = new String[reliable.PartyMain.TEST_AMOUNT_MESSAGES];
-        for (int i = 0; i < reliable.PartyMain.TEST_AMOUNT_MESSAGES; i++) {
+    public static void runReliableTestsThreaded(Client c) throws IOException, NoSuchAlgorithmException, InterruptedException {
+        String msgs[] = new String[Party.TEST_AMOUNT_MESSAGES];
+        for (int i = 0; i < Party.TEST_AMOUNT_MESSAGES; i++) {
             msgs[i] = udp.RandomGenerator.generateString(10);
         }
 
-        for (int i = 0; i < reliable.PartyMain.TEST_AMOUNT_MESSAGES; i++) {
+        for (int i = 0; i < Party.TEST_AMOUNT_MESSAGES; i++) {
             TimeUnit.MILLISECONDS.sleep(1);
 //            System.out.println("sending message: " + msgs[i]);
             c.sendMessage(msgs[i]);

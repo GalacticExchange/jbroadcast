@@ -8,7 +8,6 @@ import java.time.Instant;
 import java.util.Arrays;
 
 public class SkaleMessage {
-    private FragmentProto.SkaleMessage skaleMsg;
 
     public static final int NONCE_LEN = 8;
     private static final int COMMAND_LEN = 2;
@@ -21,13 +20,15 @@ public class SkaleMessage {
      * proto string key = 2 bytes
      * proto fixed32 key = 1 byte
      * proto bytes key = 3 bytes if bytes lengths > 127
-     * 2 + 2 + 1 + 1 + 3 = 10
+     * 2 + 2 + 1 + 1 + 3 = 9
      */
     private static final int KEYS_LEN = 9;
 
-    // todo: where 4 bytes came from?
     public static final int PACKET_LEN = NONCE_LEN + COMMAND_LEN + TIME_VAL_LEN + MESSAGE_LEN +
             MESSAGE_SIZE_LEN + KEYS_LEN;
+
+    private FragmentProto.SkaleMessage skaleMsg;
+    private String message;
 
     public SkaleMessage(String message, String command, String nonce) {
         FragmentProto.SkaleMessage.Builder builder = FragmentProto.SkaleMessage.newBuilder();
@@ -43,10 +44,13 @@ public class SkaleMessage {
         int sendTime = (int) Instant.now().getEpochSecond();
         builder.setSendTime(sendTime);
         skaleMsg = builder.build();
+        setMessage(message);
     }
 
-    private SkaleMessage() {
 
+    public SkaleMessage(FragmentProto.SkaleMessage skaleMsg) {
+        this.skaleMsg = skaleMsg;
+        setMessage(skaleMessageString(skaleMsg));
     }
 
     private byte[] getBufferedMessage(byte[] msg) {
@@ -54,6 +58,7 @@ public class SkaleMessage {
             throw new ArrayIndexOutOfBoundsException("Message is to big");
         }
         return Arrays.copyOfRange(msg, 0, MESSAGE_LEN);
+//        return msg;
     }
 
     private void setSkaleMsg(FragmentProto.SkaleMessage skaleMsg) {
@@ -78,10 +83,23 @@ public class SkaleMessage {
 
     //todo check
     public String getMessage() {
+//        byte[] bMsg = skaleMsg.getMessage().toByteArray();
+//        bMsg = Arrays.copyOfRange(bMsg, 0, skaleMsg.getMessageLength());
+//        return ByteUtils.byteArrToString(bMsg);
+        return message;
+
+    }
+
+    private void setMessage(String message) {
+        this.message = message;
+    }
+
+    private static String skaleMessageString(FragmentProto.SkaleMessage skaleMsg) {
         byte[] bMsg = skaleMsg.getMessage().toByteArray();
         bMsg = Arrays.copyOfRange(bMsg, 0, skaleMsg.getMessageLength());
         return ByteUtils.byteArrToString(bMsg);
     }
+
 
     public int getMessageLength() {
         return skaleMsg.getMessageLength();
@@ -93,13 +111,12 @@ public class SkaleMessage {
     }
 
     public static SkaleMessage parse(byte[] msg) throws InvalidProtocolBufferException {
-//        FragmentProto.SkaleMessage skaleMsg = null;
+        FragmentProto.SkaleMessage skaleMsg = FragmentProto.SkaleMessage.parseFrom(msg);
+        return new SkaleMessage(skaleMsg);
+    }
 
-        FragmentProto.SkaleMessage skaleMsg  = FragmentProto.SkaleMessage.parseFrom(msg);
-
-        SkaleMessage skl = new SkaleMessage();
-        skl.setSkaleMsg(skaleMsg);
-        return skl;
+    public FragmentProto.SkaleMessage getProtoObject() {
+        return skaleMsg;
     }
 
     public String getSendTime() {

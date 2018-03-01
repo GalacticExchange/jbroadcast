@@ -33,6 +33,12 @@ message SkaleMessage{
     required fixed32 sendTime = 5;
 }
 
+
+message BatchMessagesProto {
+    repeated SkaleMessage messages = 1;
+}
+
+
 //message Ztest{
 //    required bytes ztest = 1;
 //}
