@@ -146,9 +146,9 @@ public class ProcessorThread implements Runnable {
 
         if (readies == 2 * t + 1) {
             committedMessages.add(gm);
-            if (committedMessages.size() % 10000 == 0) {
+//            if (committedMessages.size() % 10000 == 0) {
                 System.out.println(String.format("Committed amount: %s", committedMessages.size()));
-            }
+//            }
 
         }
     }
