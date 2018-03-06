@@ -126,7 +126,7 @@ public class CLIUtils {
         }
 
         for (int i = 0; i < Party.TEST_AMOUNT_MESSAGES; i++) {
-            TimeUnit.MILLISECONDS.sleep(1);
+//            TimeUnit.MILLISECONDS.sleep(1);
 //            System.out.println("sending message: " + msgs[i]);
             c.sendMessage(msgs[i]);
         }

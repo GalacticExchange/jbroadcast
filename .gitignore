@@ -6,3 +6,4 @@ parties
 __old
 dependency-reduced-pom.xml
 ops/ansible/inventory
+ops/ansible/inventory_local

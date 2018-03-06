@@ -4,8 +4,14 @@
 
   tasks:
 
+
+    - name: Get running processes
+      shell: "ps -ef |grep java | grep reliable | awk '{print $2}'"
+      register: reliable_process
+
     - name: kill party process
-      shell: "kill $(pgrep -f reliable)"
+      shell: "kill {{ item }}"
+      with_items: "{{ reliable_process.stdout_lines }}"
       ignore_errors: yes
 
 # sysctl -w net.ipv4.udp_mem='4096 87380 8388608'
