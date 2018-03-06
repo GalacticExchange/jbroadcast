@@ -8,8 +8,7 @@ import java.util.concurrent.BlockingQueue;
 
 public class ReaderThread implements Runnable {
 
-        private BlockingQueue<Packet> readerQueue;
-//    private BlockingQueue<SkaleMessage> readerQueue;
+    private BlockingQueue<Packet> readerQueue;
     private UDPClient udpClient;
 
     public ReaderThread(BlockingQueue<Packet> readerQueue, UDPClient udpClient) {
@@ -32,22 +31,5 @@ public class ReaderThread implements Runnable {
             }
         }
     }
-
-
-
-//    @Override
-//    public void run() {
-//        while (true) {
-//            SkaleMessage sm = null;
-//            try {
-//                sm = udpClient.receiveSkaleMessage();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            if (sm != null) {
-//                readerQueue.add(sm);
-//            }
-//        }
-//    }
 
 }

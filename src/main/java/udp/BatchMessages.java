@@ -32,10 +32,6 @@ public class BatchMessages {
     }
 
     private List<FragmentProto.SkaleMessage> getSkaleProtoList(List<SkaleMessage> list) {
-//        ArrayList<FragmentProto.SkaleMessage> messages = new ArrayList<>();
-//        list.forEach((m) -> messages.add(m.getProtoObject()));
-//
-//        return messages;
         return list.stream().map(SkaleMessage::getProtoObject).collect(Collectors.toList());
     }
 
@@ -63,12 +59,6 @@ public class BatchMessages {
         batchMessages.initFields(batchMessagesProto);
         return batchMessages;
     }
-
-//    public static BatchMessages packetToBatchMessages(Packet packet) throws InvalidProtocolBufferException {
-//        BatchMessages bm = new BatchMessages();
-//        bm.initFields(FragmentProto.BatchMessagesProto.parseFrom(packet.getRawData()));
-//        return bm;
-//    }
 
     public byte[] toByteArray() {
         return batchMessagesProto.toByteArray();

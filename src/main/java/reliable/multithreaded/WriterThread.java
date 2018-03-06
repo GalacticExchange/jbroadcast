@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
-import java.util.stream.Collectors;
 
 public class WriterThread implements Runnable {
 
@@ -35,15 +34,7 @@ public class WriterThread implements Runnable {
             }
 
 
-//            writerQueue.drainTo(pendingSend, 16);
             processPendingSend(pendingSend);
-
-//                HashMap<String, Object> map = writerQueue.take();
-//                SkaleMessage sm = (SkaleMessage) map.get("message");
-//                String address = (String) map.get("address");
-//                Integer port = (Integer) map.get("port");
-//                sendSkaleMessage(sm, address, port);
-
 
         }
     }
@@ -98,13 +89,6 @@ public class WriterThread implements Runnable {
 
 
     private void sendSkaleMessage(SkaleMessage gm, String address, int port) throws IOException {
-//        String nonce = RandomGenerator.generateString(GexMessage.NONCE_LEN);
-//        Packet[] packets = Packet.splitMessage(gm, nonce);
-//        for (Packet fp : packets) {
-//            sendPacket(fp, address, port);
-//        }
-
-//        byte [] data = new byte[SkaleMessage.PACKET_LEN];
         udpClient.sendData(gm.getBytes(), address, port);
     }
 

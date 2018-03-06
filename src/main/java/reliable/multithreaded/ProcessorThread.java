@@ -15,11 +15,9 @@ import java.util.concurrent.BlockingQueue;
 /**
  * Assemble fragments -> pass them to Writer or Commit
  */
-//public class ProcessorThread extends Messenger implements Runnable {
 public class ProcessorThread implements Runnable {
 
     private BlockingQueue<Packet> readerQueue;
-    //    private BlockingQueue<SkaleMessage> readerQueue;
     private BlockingQueue<HashMap<String, Object>> writerQueue;
 
     private HashMap<String, Integer> receivedEchos;
@@ -51,9 +49,6 @@ public class ProcessorThread implements Runnable {
         while (true) {
             try {
                 Packet packet = readerQueue.take();
-//                ArrayList<Packet> arr = new ArrayList<>();
-//                readerQueue.drainTo(arr, 10);
-
                 processPacket(packet);
             } catch (InterruptedException | InvalidProtocolBufferException e) {
                 e.printStackTrace();
@@ -62,21 +57,6 @@ public class ProcessorThread implements Runnable {
 
     }
 
-//    @Override
-//    public void run() {
-//        while (true) {
-//            try {
-//                SkaleMessage sm = readerQueue.take();
-////                ArrayList<Packet> arr = new ArrayList<>();
-////                readerQueue.drainTo(arr, 10);
-//
-//                processMessage(sm);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//    }
 
     private void processPacket(Packet packet) throws InvalidProtocolBufferException {
         BatchMessages batchMessages = BatchMessages.parse(packet.getData());
@@ -107,11 +87,9 @@ public class ProcessorThread implements Runnable {
     }
 
 
-    //    private void checkEcho(GexMessage gm) {
     private void checkEcho(SkaleMessage gm) {
 
         if (!receivedEchos.containsKey(gm.getNonce())) {
-//            receivedEchos.put(gm.getNonce(), new ArrayList<>());
             receivedEchos.put(gm.getNonce(), 1);
             return;
         }
@@ -126,10 +104,8 @@ public class ProcessorThread implements Runnable {
         }
     }
 
-    //    private void checkReady(GexMessage gm) {
     private void checkReady(SkaleMessage gm) {
         if (!receivedReadies.containsKey(gm.getNonce())) {
-//            receivedReadies.put(gm.getNonce(), new ArrayList<>());
             receivedReadies.put(gm.getNonce(), new LinkedList<>());
             return;
         }
@@ -154,7 +130,6 @@ public class ProcessorThread implements Runnable {
     }
 
 
-    //    private void sendToParties(GexMessage gm) {
     private void sendToParties(SkaleMessage sm) {
         for (Party p : parties) {
             HashMap<String, Object> map = new HashMap<>();
@@ -166,9 +141,7 @@ public class ProcessorThread implements Runnable {
     }
 
     private void checkTime() {
-//        TODO
         if (committedMessages.size() == Party.TEST_AMOUNT_MESSAGES) {
-//        if (committtedCount == Party.TEST_AMOUNT_MESSAGES) {
 
             Instant startTime = Instant.parse(committedMessages.get(0).getSendTime());
             Instant finishTime = Instant.now();

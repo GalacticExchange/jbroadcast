@@ -36,11 +36,9 @@ public class Party {
 
 
     public static final int TEST_AMOUNT_MESSAGES = 10_000;
-//    public static final int TEST_AMOUNT_MESSAGES = 10_000;
 
     public Party(String address, int port, String partyId) throws SocketException, UnknownHostException {
         this.partyId = partyId;
-//        committedMessages = new ArrayList<>();
         committedMessages = new LinkedList<>();
         parties = new LinkedList<>();
         initQueues();

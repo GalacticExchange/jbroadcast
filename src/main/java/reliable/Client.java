@@ -38,8 +38,6 @@ public class Client extends Communicator {
         SkaleMessage sm = new SkaleMessage(msg, "in", nonce);
 
         for (Party p : parties) {
-//            System.out.println(String.format("Sending message %s to party %s ", gm, p));
-//            sendMessage(sm, p.getAddress(), p.getPort());
             HashMap<String, Object> map = new HashMap<>();
             map.put("message", sm);
             map.put("address", p.getAddress());

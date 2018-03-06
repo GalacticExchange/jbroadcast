@@ -34,7 +34,6 @@ public class UDPClient {
      * blocks thread until message is received
      */
     public SkaleMessage receiveSkaleMessage() throws IOException {
-//        byte[] buffer = new byte[SkaleMessage.PACKET_LEN];
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
         socket.receive(packet);
         return SkaleMessage.parse(packet.getData());

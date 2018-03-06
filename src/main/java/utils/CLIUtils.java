@@ -74,9 +74,7 @@ public class CLIUtils {
         if (broadcast.equals("reliable")) {
 
             ReliableSenderConfig config = ReliableSenderConfig.load(confPath);
-//            reliable.Client client = reliable.Client.createClient(config);
-            Client client = Client.createClient(config);
-//            runReliableTests(client);
+            reliable.Client client = reliable.Client.createClient(config);
             runReliableTestsThreaded(client);
 
         } else if (broadcast.equals("verifiable")) {
@@ -105,19 +103,6 @@ public class CLIUtils {
             System.out.println("Unknown broadcast type");
         }
     }
-
-//    public static void runReliableTests(reliable.Client c) throws IOException, NoSuchAlgorithmException, InterruptedException {
-//        String msgs[] = new String[reliable.Party.TEST_AMOUNT_MESSAGES];
-//        for (int i = 0; i < reliable.Party.TEST_AMOUNT_MESSAGES; i++) {
-//            msgs[i] = udp.RandomGenerator.generateString(10);
-//        }
-//
-//        for (int i = 0; i < reliable.Party.TEST_AMOUNT_MESSAGES; i++) {
-//            TimeUnit.NANOSECONDS.sleep(200);
-////            System.out.println("sending message: " + msgs[i]);
-//            c.sendMessage(msgs[i]);
-//        }
-//    }
 
     public static void runReliableTestsThreaded(Client c) throws IOException, NoSuchAlgorithmException, InterruptedException {
         String msgs[] = new String[Party.TEST_AMOUNT_MESSAGES];

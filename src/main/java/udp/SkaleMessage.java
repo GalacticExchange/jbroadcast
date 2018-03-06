@@ -58,7 +58,6 @@ public class SkaleMessage {
             throw new ArrayIndexOutOfBoundsException("Message is to big");
         }
         return Arrays.copyOfRange(msg, 0, MESSAGE_LEN);
-//        return msg;
     }
 
     private void setSkaleMsg(FragmentProto.SkaleMessage skaleMsg) {
@@ -83,9 +82,6 @@ public class SkaleMessage {
 
     //todo check
     public String getMessage() {
-//        byte[] bMsg = skaleMsg.getMessage().toByteArray();
-//        bMsg = Arrays.copyOfRange(bMsg, 0, skaleMsg.getMessageLength());
-//        return ByteUtils.byteArrToString(bMsg);
         return message;
 
     }
