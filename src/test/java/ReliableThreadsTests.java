@@ -1,14 +1,13 @@
+import reliable.Client;
+import reliable.Party;
+import udp.RandomGenerator;
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
-import reliable.Party;
-import reliable.Client;
-import udp.RandomGenerator;
-
-public class ReliableRound {
-
-    public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
+public class ReliableThreadsTests {
+    public static void main(String[] args) throws IOException {
         ArrayList<Party> parties = new ArrayList<>();
 
         int amountNodes = 5;
@@ -26,28 +25,19 @@ public class ReliableRound {
                 }
             }
         }
-        for (Party p : parties) {
-
-            new Thread(() -> {
-                try {
-                    p.receiveMessage();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        }
-
 
         Client c = new Client("127.0.0.1", 1515, parties);
 
 
         String msgs[] = new String[Party.TEST_AMOUNT_MESSAGES];
         for (int i = 0; i < Party.TEST_AMOUNT_MESSAGES; i++) {
-            msgs[i] = RandomGenerator.generateString(10);
+            msgs[i] = RandomGenerator.generateString(9);
         }
 
         for (int i = 0; i < Party.TEST_AMOUNT_MESSAGES; i++) {
-            c.sendMessage(msgs[i]);
+//            TimeUnit.NANOSECONDS.sleep(1);
+            c.sendMessage(i + msgs[i]);
         }
+        System.out.println("Client finished sending messages");
     }
 }

@@ -1,47 +1,50 @@
 package reliable;
 
 import config.ReliablePartyConfig;
-import udp.Communicator;
-import udp.GexMessage;
+import reliable.multithreaded.ProcessorThread;
+import reliable.multithreaded.ReaderThread;
+import reliable.multithreaded.WriterThread;
+import udp.Packet;
+import udp.SkaleMessage;
+import udp.UDPClient;
 
-import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.security.NoSuchAlgorithmException;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
-public class Party extends Communicator {
+public class Party {
+    private List<Party> parties;
 
-    private ArrayList<Party> parties;
 
-    private HashMap<String, ArrayList<GexMessage>> receivedEchos;
+    private List<SkaleMessage> committedMessages;
 
-    private HashMap<String, ArrayList<GexMessage>> receivedReadies;
+    private UDPClient udpClient;
 
-    private Set<String> sentReadies;
+    private BlockingQueue<Packet> readerQueue;
+//    private BlockingQueue<SkaleMessage> readerQueue;
+    private BlockingQueue<HashMap<String, Object>> writerQueue;
 
-    private ArrayList<GexMessage> committedMessages;
+    private Runnable reader;
+    private Runnable processor;
+    private Runnable writer;
 
+    private String address;
+    private int port;
     private String partyId;
 
-    private int n = 5;
-    private int t = 1;
 
-    public static final int TEST_AMOUNT_MESSAGES = 10;
+    public static final int TEST_AMOUNT_MESSAGES = 10_000;
 
-    public Party(String addr, int port, String partyId) throws SocketException, UnknownHostException {
-        super(addr, port);
+    public Party(String address, int port, String partyId) throws SocketException, UnknownHostException {
         this.partyId = partyId;
-
-        parties = new ArrayList<>();
-
-        receivedEchos = new HashMap<>();
-        receivedReadies = new HashMap<>();
-        sentReadies = new HashSet<>();
-        committedMessages = new ArrayList<>();
-
+        committedMessages = new LinkedList<>();
+        parties = new LinkedList<>();
+        initQueues();
+        initUDP(address, port);
+        initThreads();
+        start();
     }
 
     private Party() {
@@ -65,95 +68,53 @@ public class Party extends Communicator {
         parties.add(p);
     }
 
-    @Override
-    public void processMessage(GexMessage gm, String address, int port) {
-        //todo
-        System.out.println("Got message:\n" + gm);
-        try {
+    private void initQueues() {
+        readerQueue = new LinkedBlockingQueue<>();
+        writerQueue = new LinkedBlockingQueue<>();
 
-            switch (gm.getCommand()) {
-                case "in":
-                    GexMessage echo = new GexMessage(gm.getMessage(), "ec", gm.getNonce());
-                    sendToParties(echo);
-                    break;
-
-                case "ec":
-                    checkEcho(gm);
-                    break;
-
-                case "rd":
-                    checkReady(gm);
-                    checkTime();
-
-                    break;
-            }
-        } catch (NoSuchAlgorithmException | IOException e) {
-            e.printStackTrace();
-        }
     }
 
-    private void checkEcho(GexMessage gm) throws IOException, NoSuchAlgorithmException {
-
-        if (!receivedEchos.containsKey(gm.getNonce())) {
-            receivedEchos.put(gm.getNonce(), new ArrayList<>());
-            return;
-        }
-
-        receivedEchos.get(gm.getNonce()).add(gm);
-
-        int echos = receivedEchos.get(gm.getNonce()).size();
-
-        if (echos >= (n + t + 1) / 2 && !sentReadies.contains(gm.getNonce())) {
-            GexMessage ready = new GexMessage(gm.getMessage(), "rd", gm.getNonce());
-            sendToParties(ready);
-            sentReadies.add(gm.getNonce());
-        }
+    private void initUDP(String address, int port) throws SocketException, UnknownHostException {
+        this.address = address;
+        this.port = port;
+        udpClient = new UDPClient(address, port);
     }
 
-    private void checkReady(GexMessage gm) throws IOException, NoSuchAlgorithmException {
-        if (!receivedReadies.containsKey(gm.getNonce())) {
-            receivedReadies.put(gm.getNonce(), new ArrayList<>());
-            return;
-        }
-
-        receivedReadies.get(gm.getNonce()).add(gm);
-        int readies = receivedReadies.get(gm.getNonce()).size();
-
-        if (readies >= t + 1 && !sentReadies.contains(gm.getNonce())) {
-            GexMessage ready = new GexMessage(gm.getMessage(), "rd", gm.getNonce());
-            sendToParties(ready);
-            sentReadies.add(gm.getNonce());
-        }
-
-        if (readies >= 2 * t + 1) {
-            committedMessages.add(gm);
-        }
+    private void initThreads() {
+        reader = new ReaderThread(readerQueue, udpClient);
+        processor = new ProcessorThread(readerQueue, writerQueue, parties, committedMessages);
+        writer = new WriterThread(writerQueue, udpClient);
     }
 
-
-    private void sendToParties(GexMessage gm) throws IOException, NoSuchAlgorithmException {
-        for (Party p : parties) {
-            sendMessage(gm, p.getAddress(), p.getPort());
-        }
+    private void start() {
+        new Thread(reader).start();
+        new Thread(processor).start();
+        Thread t = new Thread(writer);
+//        t.setPriority(3);
+        t.start();
     }
 
-    private void checkTime() {
-        if (committedMessages.size() == TEST_AMOUNT_MESSAGES) {
+    public String getAddress() {
+        return address;
+    }
 
-            Instant startTime = Instant.parse(committedMessages.get(0).getSendTime());
-            Instant finishTime = Instant.now();
-
-            Duration timeElapsed = Duration.between(startTime, finishTime);
-
-
-            System.out.println(String.format("Party %s : %s messages elapsed time: %s ", this,
-                    TEST_AMOUNT_MESSAGES, timeElapsed));
-        }
+    public int getPort() {
+        return port;
     }
 
     public String getPartyId() {
         return partyId;
     }
+
+
+    private void setAddress(String address) {
+        this.address = address;
+    }
+
+    private void setPort(int port) {
+        this.port = port;
+    }
+
 
     private void setPartyId(String partyId) {
         this.partyId = partyId;
@@ -173,6 +134,5 @@ public class Party extends Communicator {
 
         return party;
     }
-
 
 }

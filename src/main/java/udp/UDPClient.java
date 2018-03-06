@@ -6,7 +6,7 @@ import java.net.*;
 public class UDPClient {
 
     private DatagramSocket socket;
-
+    private byte[] buffer = new byte[SkaleMessage.PACKET_LEN];
     public UDPClient(String addr, int port) throws UnknownHostException, SocketException {
         InetAddress address = InetAddress.getByName(addr);
         socket = new DatagramSocket(port, address);
@@ -20,14 +20,23 @@ public class UDPClient {
 
 
     /**
-     * blocks thread until message is received*
+     * blocks thread until message is received
      */
-    public FragmentPacket receiveMessage() throws IOException {
-        byte[] buffer = new byte[FragmentPacket.PACKET_LEN];
+    public Packet receivePacket() throws IOException {
+        byte[] buffer = new byte[Packet.PACKET_LEN];
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
         socket.receive(packet);
 
-        return new FragmentPacket(packet.getData(), packet.getAddress().getHostAddress(), packet.getPort());
+        return new Packet(packet.getData(), packet.getAddress().getHostAddress(), packet.getPort());
+    }
+
+    /**
+     * blocks thread until message is received
+     */
+    public SkaleMessage receiveSkaleMessage() throws IOException {
+        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+        socket.receive(packet);
+        return SkaleMessage.parse(packet.getData());
     }
 
     public String getAddress() {

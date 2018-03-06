@@ -1,34 +1,48 @@
 package reliable;
 
 import config.ReliableSenderConfig;
+import reliable.multithreaded.WriterThread;
 import udp.Communicator;
 import udp.GexMessage;
 import udp.RandomGenerator;
+import udp.SkaleMessage;
 
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Client extends Communicator {
-
     private ArrayList<Party> parties;
+
+    private BlockingQueue<HashMap<String, Object>> writerQueue;
+    private Runnable writer;
 
     public Client(String addr, int port, ArrayList<Party> parties) throws SocketException, UnknownHostException {
         super(addr, port);
         this.parties = parties;
+
+        writerQueue = new LinkedBlockingQueue<>();
+        writer = new WriterThread(writerQueue, udpClient);
+
+        new Thread(writer).start();
     }
 
 
-    public void sendMessage(String msg) throws IOException, NoSuchAlgorithmException {
-        String nonce = RandomGenerator.generateString(GexMessage.NONCE_LEN);
-        GexMessage gm = new GexMessage(msg, "in", nonce);
+    public void sendMessage(String msg) throws IOException {
+        String nonce = RandomGenerator.generateString(SkaleMessage.NONCE_LEN);
+        SkaleMessage sm = new SkaleMessage(msg, "in", nonce);
 
         for (Party p : parties) {
-//            System.out.println(String.format("Sending message %s to party %s ", gm, p));
-            sendMessage(gm, p.getAddress(), p.getPort());
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("message", sm);
+            map.put("address", p.getAddress());
+            map.put("port", p.getPort());
+            writerQueue.add(map);
         }
     }
 

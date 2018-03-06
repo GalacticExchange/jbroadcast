@@ -10,7 +10,6 @@ public class PartySend {
         Party party = new Party("localhost", 1401, "party0");
 
         String msg = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
-//        party.sendSignMessage(msg, "localhost", 1414);
         party.sendMessage(new GexMessage(msg, "ch", RandomGenerator.generateString(GexMessage.NONCE_LEN)),
                 "localhost", 1400);
 

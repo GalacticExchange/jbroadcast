@@ -10,7 +10,7 @@ message Fragment {
     required fixed32 index = 2;
     required fixed32 amount = 3;
     required fixed32 lengthTotal = 4;
-    required bytes nonce = 5;
+    required string nonce = 5;
     required bytes data = 6;
 
 }
@@ -24,3 +24,21 @@ message GexMessage {
     map <string, string> signs = 5;
 
 }
+
+message SkaleMessage{
+    required bytes message = 1;
+    required fixed32 message_length = 2;
+    required string command = 3;
+    required string nonce = 4;
+    required fixed32 sendTime = 5;
+}
+
+
+message BatchMessagesProto {
+    repeated SkaleMessage messages = 1;
+}
+
+
+//message Ztest{
+//    required bytes ztest = 1;
+//}

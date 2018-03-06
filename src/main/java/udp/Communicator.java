@@ -12,8 +12,8 @@ import java.util.Map;
 
 public abstract class Communicator {
 
-    private UDPClient udpClient;
-    private Map<Integer, ArrayList<FragmentPacket>> receivedFragments;
+    protected UDPClient udpClient;
+    private Map<String, ArrayList<Packet>> receivedFragments;
 
     private String address;
     private int port;
@@ -35,17 +35,17 @@ public abstract class Communicator {
      */
     public void receiveMessage() throws IOException {
         while (true) {
-            FragmentPacket fp = udpClient.receiveMessage();
-            int nonceHashCode = fp.getNonceHashCode();
+            Packet fp = udpClient.receivePacket();
+            String nonce = fp.getNonce();
 
-            if (!receivedFragments.containsKey(nonceHashCode)) {
-                receivedFragments.put(nonceHashCode, new ArrayList<>());
+            if (!receivedFragments.containsKey(nonce)) {
+                receivedFragments.put(nonce, new ArrayList<>());
             }
 
-            receivedFragments.get(nonceHashCode).add(fp);
+            receivedFragments.get(nonce).add(fp);
 
             if (isLastPacket(fp)) {
-                GexMessage gm = assembleMessage(fp.getNonceHashCode());
+                GexMessage gm = assembleMessage(fp.getNonce());
                 processMessage(gm, fp.getAddress(), fp.getPort());
             }
 
@@ -53,31 +53,37 @@ public abstract class Communicator {
 
     }
 
-    private boolean isLastPacket(FragmentPacket fp) {
+    private boolean isLastPacket(Packet fp) {
         // TODO the order could not be guaranteed.. check HashMap[nonce] length or smth...
         return fp.getIndex() + 1 == fp.getAmount();
     }
 
-    private GexMessage assembleMessage(int nonceHashCode) throws InvalidProtocolBufferException {
+    private GexMessage assembleMessage(String nonce) throws InvalidProtocolBufferException {
 
-        FragmentPacket[] packets = new FragmentPacket[receivedFragments.get(nonceHashCode).size()];
-        receivedFragments.get(nonceHashCode).toArray(packets);
+        Packet[] packets = new Packet[receivedFragments.get(nonce).size()];
+        receivedFragments.get(nonce).toArray(packets);
 
-        GexMessage assembled = FragmentPacket.assembleMessage(packets);
-//        System.out.println("GOT assembled message: " + assembled);
+//        GexMessage assembled = Packet.assembleMessage(packets);
 
-        return assembled;
+        return Packet.assembleMessage(packets);
     }
 
     public void sendMessage(GexMessage gm, String addr, int port) throws NoSuchAlgorithmException, IOException {
-        byte[] NONCE = RandomGenerator.generateByteArray(FragmentPacket.NONCE_LEN);
+//        byte[] NONCE = RandomGenerator.generateByteArray(Packet.NONCE_LEN);
+        String NONCE = RandomGenerator.generateString(Packet.NONCE_LEN);
 
-        FragmentPacket[] fPackets = FragmentPacket.splitMessage(gm, NONCE);
+        Packet[] fPackets = Packet.splitMessage(gm, NONCE);
 
-        for (FragmentPacket fp : fPackets) {
+        for (Packet fp : fPackets) {
             udpClient.sendData(fp.getBytes(), addr, port);
         }
     }
+
+//    public void sendMessage(SkaleMessage sm, String addr, int port) throws IOException {
+////        byte[] NONCE = RandomGenerator.generateByteArray(Packet.NONCE_LEN);
+//        int length = sm.getBytes().length;
+//        udpClient.sendData(sm.getBytes(), addr, port);
+//    }
 
     public String getAddress() {
         return address;
